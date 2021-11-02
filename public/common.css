@@ -1,0 +1,23 @@
+:root {
+	--btn: #1da0fb;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	width: 100vw;
+	min-height: 100vh;
+	background-color: #fafafa;
+}
+
+body>* {
+	box-shadow: 0 0.25rem 0.25rem rgba(136, 136, 136, 0.2);
+}
+
+img {
+	width: 100%;
+	height: 100%;
+}
