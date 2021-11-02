@@ -11,7 +11,6 @@
 				<a>用户名</a>
 				<el-dropdown>
 					<span class="el-dropdown-link">
-
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
@@ -25,7 +24,10 @@
 
 <script>
 	export default {
-		name: 'Header'
+		name: 'Header',
+		data() {
+			return {}
+		}
 	}
 </script>
 
@@ -37,10 +39,13 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		box-shadow: 0 0.25rem 0.25rem rgba(141, 141, 141, 0.25);
 	}
 
 	header .warp {
-		width: 75rem;
+		width: 100%;
+		max-width: 75rem;
+		min-width: 18rem;
 		height: 100%;
 		display: flex;
 		flex-direction: row;
