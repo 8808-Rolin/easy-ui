@@ -7,17 +7,18 @@
 				<div class="">
 					<h3>登录</h3>
 					<div class="login_way">
-						<div class="no_login">
+						<div class="no_login" :class="{'active': show}" @click="noOrPhone" :disabled="show">
 							学号登录
 						</div>
-						<div class="phone_login">
+						<div class="phone_login" :class="{'active':!show}" @click="noOrPhone" :disabled="!show">
 							手机登录
 						</div>
 					</div>
 
 					<div class="login_form">
-						<el-input type="text" placeholder="学号" prefix-icon="el-icon-user"></el-input>
-						<el-input type="password" placeholder="密码" prefix-icon="el-icon-key"></el-input>
+						<el-input type="text" placeholder="学   号" prefix-icon="el-icon-user" v-show="show" v-model="username"></el-input>
+						<el-input type="text" placeholder="手机号" prefix-icon="el-icon-mobile-phone" v-show="!show" v-model="username"></el-input>
+						<el-input type="password" placeholder="密   码" prefix-icon="el-icon-key" v-model="password"></el-input>
 						<div class="remember">
 							<el-checkbox v-model="checked">记住密码</el-checkbox>
 						</div>
@@ -41,11 +42,23 @@
 		name: 'Login',
 		data() {
 			return {
-				checked: true
+				show: true,
+				checked: false,
+				loginType: 0,
+				username: '',
+				password: '',
 			};
 		},
 		components: {
 			HeaderNoRight
+		},
+		methods: {
+			noOrPhone: function() {
+				this.show = !this.show;
+				this.loginType = (this.loginType + 1) % 2;
+				this.username = '';
+				this.password = '';
+			}
 		}
 	}
 </script>
@@ -99,6 +112,7 @@
 
 	.login_way>div {
 		width: 4rem;
+		cursor: pointer;
 	}
 
 	.login_form {
@@ -131,5 +145,11 @@
 	.easy_photo {
 		background: url(../assets/logo-imgalpha-nologo-600px.png) no-repeat;
 		background-size: cover;
+	}
+	
+	.active {
+		pointer-events: none;
+		border-bottom: #1DA0FB solid 0.125rem;
+		color: #1DA0FB;
 	}
 </style>
