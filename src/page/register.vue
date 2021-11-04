@@ -46,7 +46,7 @@
 							<div slot="tip" class="el-upload__tip">上传jpg/png头像，且不超过500kb</div>
 						</el-upload>
 
-						<el-input type="password" placeholder="密      码" prefix-icon="el-icon-key"
+						<el-input :class="{mistaken: !passwordLen}" type="password" placeholder="密码(至少8位)" prefix-icon="el-icon-key" @input="checkPasswordLen"
 							v-model="loginMessage.password" v-show="percentage == 100"></el-input>
 						<el-input
 							:class="{mistaken:!isTruePassword}"
@@ -126,6 +126,7 @@
 				isTrueSNo: true,
 				isTruePhone: true,
 				isTrueMail: true,
+				passwordLen: true,
 				isTruePassword: true
 			};
 		},
@@ -169,7 +170,11 @@
 				if (this.loginMessage.sNo.length > 8) {
 					if(this.loginMessage.sNo.length > 15) {
 						this.isTrueSNo = false
-						this.$alert("亲，请输入合法的学号！","输入信息有误")
+						// this.$alert("亲，请输入合法的学号！","输入信息有误")
+						this.$notify.error({
+						          title: '输入信息有误',
+						          message: '亲，请输入合法的学号！',
+						        });
 					}else {
 						// 发送请求给后端,验证学号是否已经注册
 						// 未注册 this.isTrueSNo = true
@@ -183,7 +188,11 @@
 				if(this.loginMessage.phone.length == 11) {
 					if(!regMobile.test(this.loginMessage.phone)) {
 						this.isTruePhone = false
-						this.$alert("亲，请输入正确的手机号码！", "输入信息有误")
+						// this.$alert("亲，请输入正确的手机号码！", "输入信息有误")
+						this.$notify.error({
+						          title: '输入信息有误',
+						          message: '亲，请输入正确的手机号码！',
+						        });
 					}else {
 						// 发送请求给后端,验证手机号码是否已经注册过
 						// 未注册 this.isTruePhone = true
@@ -196,19 +205,32 @@
 			// 邮箱
 			checkMail() {
 				const regEmail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
-				if (regEmail.test(this.loginMessage.mail)) {
-					this.isTrueMail = true
-				}else {
+				if (this.loginMessage.mail != "" && !regEmail.test(this.loginMessage.mail)) {
 					this.isTrueMail = false
+				}else {
+					this.isTrueMail = true
 				}
 			},
+			// 密码长度
+			checkPasswordLen() {
+				if (this.loginMessage.password != "" && this.loginMessage.password.length < 8) {
+					this.passwordLen = false
+				}else {
+					this.passwordLen = true
+				}
+			},
+			// 确认密码
 			checkPassword() {
 				if (this.loginMessage.isPassword.length > 0 && this.loginMessage.password == this.loginMessage.isPassword) {
 					this.isTruePassword = true
 				}else {
 					this.isTruePassword = false
 					if (this.loginMessage.isPassword.length == this.loginMessage.password.length) {
-						this.$alert("亲，请重新确认密码！", "两次密码不一致")
+						// this.$alert("亲，请重新确认密码！", "两次密码不一致")
+						this.$notify.error({
+						          title: '密码不一致',
+						          message: '亲，请重新确认密码！',
+						        });
 						this.loginMessage.isPassword = ''
 					}
 				}

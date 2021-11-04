@@ -4,7 +4,7 @@
 			<span>卡片名称</span>
 			<el-button style="float: right; padding: 3px 0" type="text" icon="el-icon-more-outline"></el-button>
 		</div>
-		<div v-for="notice in notices" :key="notice" class="text item">
+		<div v-for="(notice, index) in notices" :key="index" class="text item">
 			<a class="notice_title">{{notice.title}}</a>
 			<a>{{notice.time}}</a>
 		</div>
@@ -43,10 +43,11 @@
 	}
 	
 	.notice_title {
-		max-width: 80%;
+		width: 80%;
 		max-height: 1.05rem;
 		overflow: hidden;
 		word-wrap: normal;
+		text-align: left;
 	}
 
 	.clearfix:before,
