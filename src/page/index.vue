@@ -5,7 +5,7 @@
 			<div class="index_left"></div>
 			
 			<div class="index_right">
-				
+				<Notice></Notice>
 			</div>
 		</div>
 	</div>
@@ -13,6 +13,7 @@
 
 <script>
 	import Header from '../components/Header.vue'
+	import Notice from '../components/notice.vue'
 	
 	export default {
 		name: 'Index',
@@ -22,7 +23,8 @@
 			}
 		},
 		components: {
-			Header
+			Header,
+			Notice
 		},
 		methods:{
 			
