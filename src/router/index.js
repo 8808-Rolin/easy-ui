@@ -16,6 +16,10 @@ const router = new Router({
 		name: 'Register',
 		path: '/Register',
 		component: () => import('@/page/register')
+	},{
+		name: 'Forget',
+		path: '/Forget',
+		component: () => import('@/page/forget')
 	}]
 })
 

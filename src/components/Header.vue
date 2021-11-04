@@ -18,7 +18,7 @@
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
-			<div class="login_and_register">
+			<div class="login_and_register" v-show="!existUser">
 				<a href="#">登录</a>
 				<a href="#">注册</a>
 			</div>

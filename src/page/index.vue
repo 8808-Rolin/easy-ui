@@ -6,6 +6,7 @@
 			
 			<div class="index_right">
 				<Notice></Notice>
+				<el-button>进入交流社区==></el-button>
 			</div>
 		</div>
 	</div>
@@ -56,6 +57,17 @@
 	}
 	
 	.index_right {
-		background-color: #1DA0FB;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+	}
+	
+	.index_right>.el-button {
+		border-color: transparent;
+		font-size: 2.5rem;
+		font-weight: bold;
+		font-style: italic;
+		background-color: transparent;
 	}
 </style>

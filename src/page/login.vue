@@ -93,8 +93,8 @@
 	.login>div {
 		width: 21.875rem;
 		height: 25rem;
-		border: 0.0625rem solid rgba(0, 0, 0, .25);
 		border-top: 0.75rem solid #1da0fb;
+		box-shadow: var(--box-shadow2);
 		border-radius: 1.5rem;
 		display: flex;
 		flex-direction: column;
