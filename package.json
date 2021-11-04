@@ -9,7 +9,9 @@
   "dependencies": {
     "axios": "^0.24.0",
     "core-js": "^2.6.5",
+    "crypto": "^1.0.1",
     "element-ui": "^2.15.6",
+    "qs": "^6.10.1",
     "vue": "^2.6.10",
     "vue-puzzle-vcode": "^1.1.9",
     "vue-router": "^3.5.3"
