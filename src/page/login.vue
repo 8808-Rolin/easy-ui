@@ -7,27 +7,32 @@
 				<div class="">
 					<h3>登录</h3>
 					<div class="login_way">
-						<div class="no_login" :class="{'active': show}" @click="noOrPhone" :disabled="show">
+						<div class="no_login" :class="{'active': !user.loginType}" @click="noOrPhone"
+							:disabled="!user.loginType">
 							学号登录
 						</div>
-						<div class="phone_login" :class="{'active':!show}" @click="noOrPhone" :disabled="!show">
+						<div class="phone_login" :class="{'active':user.loginType}" @click="noOrPhone"
+							:disabled="user.loginType">
 							手机登录
 						</div>
 					</div>
 
 					<div class="login_form">
-						<el-input type="text" placeholder="学   号" prefix-icon="el-icon-user" v-show="show" v-model="username"></el-input>
-						<el-input type="text" placeholder="手机号" prefix-icon="el-icon-mobile-phone" v-show="!show" v-model="username"></el-input>
-						<el-input type="password" placeholder="密   码" prefix-icon="el-icon-key" v-model="password"></el-input>
+						<el-input type="text" placeholder="学   号" prefix-icon="el-icon-user" v-show="!user.loginType"
+							v-model="user.account"></el-input>
+						<el-input type="text" placeholder="手机号" prefix-icon="el-icon-mobile-phone"
+							v-show="user.loginType" v-model="user.account"></el-input>
+						<el-input type="password" @keyup.enter.native="Commit" placeholder="密   码" prefix-icon="el-icon-key" v-model="password">
+						</el-input>
 						<div class="remember">
 							<el-checkbox v-model="checked">记住密码</el-checkbox>
 						</div>
-						<el-button id="login_btn" type="primary">登&emsp;录</el-button>
+						<el-button id="login_btn" @click="Commit" type="primary">登&emsp;录</el-button>
 					</div>
 
 					<div class="login_links">
-						<el-link href="#" :underline="false">忘记密码？</el-link>
-						<el-link href="#" :underline="false">还没有账号？前往注册</el-link>
+						<router-link :to="{path:'/register'}" :underline="false">忘记密码？</router-link>
+						<router-link :to="{path:'/register'}" :underline="false">还没有账号？前往注册</router-link>
 					</div>
 				</div>
 			</div>
@@ -37,16 +42,21 @@
 
 <script>
 	import HeaderNoRight from '../components/HeaderNoRight.vue'
+	import crypto from 'crypto'
+	import qs from 'qs'
+	import LocalStorage from '../utils/LocalStorage'
 
 	export default {
 		name: 'Login',
 		data() {
 			return {
-				show: true,
 				checked: false,
-				loginType: 0,
-				username: '',
-				password: '',
+				password: null,
+				user: {
+					loginType: 0,
+					account: '',
+					password: '',
+				}
 			};
 		},
 		components: {
@@ -54,10 +64,55 @@
 		},
 		methods: {
 			noOrPhone: function() {
-				this.show = !this.show;
-				this.loginType = (this.loginType + 1) % 2;
-				this.username = '';
+				this.user.loginType = this.user.loginType === 0 ? 1 : 0;
+				this.user.account = '';
 				this.password = '';
+			},
+			Commit() {
+				this.user.password = this.password
+				if (this.checked) {
+					LocalStorage.setItem({
+						name: 'password',
+						value: {
+							...this.user,
+							checked: this.checked
+						},
+						expires: 60,
+					})
+				}
+				let md5 = crypto.createHash("md5"); //md5加密对象
+				md5.update(this.password) //需要加密的密码
+				this.user.password = md5.digest('hex'); //password 加密完的密码
+				this.$http
+					.post('http://rolin.icu:11119/api/user/login', qs.stringify({
+						...this.user
+					}), {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					})
+					.then(response => {
+						localStorage
+						console.log(response.data.data.token)
+						LocalStorage.setItem({
+							name: 'token',
+							value: {
+								token:response.data.data.token
+							},
+							expires: 60,
+						})
+					})
+					.catch(error => {
+						console.log(error.data)
+					})
+			}
+		},
+		beforeMount() {
+			let val = LocalStorage.getItem("password")
+			this.user.loginType = 0
+			if (val) {
+				this.password = val.password
+				this.user.account = val.account
+				this.checked = val.checked
+				this.user.loginType = val.loginType;
 			}
 		}
 	}
@@ -123,18 +178,18 @@
 		justify-content: space-around;
 		align-items: center;
 	}
-	
+
 	.login_form .remember {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
 	}
-	
+
 	.login_form #login_btn {
 		width: 12rem;
 	}
-	
+
 	.login_links {
 		width: 100%;
 		display: flex;
@@ -142,11 +197,21 @@
 		justify-content: space-around;
 	}
 
+	.login_links a {
+		color: inherit;
+		font-size: 14px;
+	}
+
+	.login_links a:hover {
+		color: #1DA0FB;
+		font-size: 14px;
+	}
+
 	.easy_photo {
 		background: url(../assets/logo-imgalpha-nologo-600px.png) no-repeat;
 		background-size: cover;
 	}
-	
+
 	.active {
 		pointer-events: none;
 		border-bottom: #1DA0FB solid 0.125rem;
