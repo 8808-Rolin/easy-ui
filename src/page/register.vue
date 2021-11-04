@@ -7,10 +7,10 @@
 				<div class="">
 					<h3>注册</h3>
 					<div class="register_form">
-						<el-input type="text" placeholder="学  号" prefix-icon="el-icon-user" v-model="loginMessage.sNo"
+						<el-input :class="{mistaken:!isTrueSNo}" type="text" placeholder="学  号" prefix-icon="el-icon-user" @input="checkSNo" v-model="loginMessage.sNo"
 							v-show="percentage == 25">
 						</el-input>
-						<el-input type="text" placeholder="手机号" prefix-icon="el-icon-mobile-phone"
+						<el-input :class="{mistaken:!isTruePhone}" type="text" placeholder="手机号" prefix-icon="el-icon-mobile-phone" @input="checkPhone"
 							v-model="loginMessage.phone" v-show="percentage == 25"></el-input>
 						<el-input type="text" placeholder="昵  称" prefix-icon="el-icon-user-solid"
 							v-model="loginMessage.name" v-show="percentage == 25"></el-input>
@@ -24,7 +24,7 @@
 						<el-input type="text" placeholder="真实姓名" prefix-icon="el-icon-user"
 							v-model="loginMessage.realName" v-show="percentage == 50">
 						</el-input>
-						<el-input type="text" placeholder="电子邮箱" prefix-icon="el-icon-message"
+						<el-input :class="{mistaken:!isTrueMail}" type="text" placeholder="电子邮箱" prefix-icon="el-icon-message" @input="checkMail"
 							v-model="loginMessage.mail" v-show="percentage == 50"></el-input>
 
 						<div class="register_3" v-show="percentage == 75">
@@ -49,8 +49,8 @@
 						<el-input type="password" placeholder="密      码" prefix-icon="el-icon-key"
 							v-model="loginMessage.password" v-show="percentage == 100"></el-input>
 						<el-input
-							:class="{mistaken:((loginMessage.isPassword != '') && (loginMessage.password != loginMessage.isPassword))}"
-							type="password" placeholder="确认密码" prefix-icon="el-icon-key"
+							:class="{mistaken:!isTruePassword}"
+							type="password" placeholder="确认密码" prefix-icon="el-icon-key" @input="checkPassword"
 							v-model="loginMessage.isPassword" v-show="percentage == 100"></el-input>
 						<div v-show="percentage == 100">
 							<PuzzleVcode></PuzzleVcode>
@@ -103,7 +103,7 @@
 					label: '女'
 				}],
 
-				action: "#", // 头像上传地址
+				action: "http://easy.rolin.icu:11119/api/tool/upload-image", // 头像上传地址
 				percentage: 25, // 进度条初始数据
 				customColor: '#f2a373', // 进度条颜色
 
@@ -121,6 +121,12 @@
 					password: '',
 					isPassword: '',
 				},
+				
+				// 验证
+				isTrueSNo: true,
+				isTruePhone: true,
+				isTrueMail: true,
+				isTruePassword: true
 			};
 		},
 		components: {
@@ -157,6 +163,56 @@
 				}
 				return isJPG && isLt2M;
 			},
+			// 验证
+			// 学号
+			checkSNo() {
+				if (this.loginMessage.sNo.length > 8) {
+					if(this.loginMessage.sNo.length > 15) {
+						this.isTrueSNo = false
+						this.$alert("亲，请输入合法的学号！","输入信息有误")
+					}else {
+						// 发送请求给后端,验证学号是否已经注册
+						// 未注册 this.isTrueSNo = true
+						// 已注册 this.isTrueSNo = false    this.$alert("亲，请输入其他学号！", "学号已被注册")
+					}
+				}
+			},
+			// 手机号
+			checkPhone() {
+				const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/ 
+				if(this.loginMessage.phone.length == 11) {
+					if(!regMobile.test(this.loginMessage.phone)) {
+						this.isTruePhone = false
+						this.$alert("亲，请输入正确的手机号码！", "输入信息有误")
+					}else {
+						// 发送请求给后端,验证手机号码是否已经注册过
+						// 未注册 this.isTruePhone = true
+						// 已注册 this.isTruePhone = false     this.$alert("亲，请输入其他手机号码！", "手机号码已被注册")
+					}
+				}else {
+					this.isTruePhone = true
+				}
+			},
+			// 邮箱
+			checkMail() {
+				const regEmail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
+				if (regEmail.test(this.loginMessage.mail)) {
+					this.isTrueMail = true
+				}else {
+					this.isTrueMail = false
+				}
+			},
+			checkPassword() {
+				if (this.loginMessage.isPassword.length > 0 && this.loginMessage.password == this.loginMessage.isPassword) {
+					this.isTruePassword = true
+				}else {
+					this.isTruePassword = false
+					if (this.loginMessage.isPassword.length == this.loginMessage.password.length) {
+						this.$alert("亲，请重新确认密码！", "两次密码不一致")
+						this.loginMessage.isPassword = ''
+					}
+				}
+			}
 		}
 	}
 </script>

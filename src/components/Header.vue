@@ -4,7 +4,7 @@
 			<div class="logo">
 				<a href="#" title="Easy社团">Easy社团</a>
 			</div>
-			<div class="user">
+			<div class="user" v-show="existUser">
 				<div class="profile">
 					<img src="../assets/profile.jpg">
 				</div>
@@ -18,6 +18,11 @@
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
+			<div class="login_and_register">
+				<a href="#">登录</a>
+				<a href="#">注册</a>
+			</div>
+			
 		</div>
 	</header>
 </template>
@@ -26,7 +31,9 @@
 	export default {
 		name: 'Header',
 		data() {
-			return {}
+			return {
+				existUser: false
+			}
 		}
 	}
 </script>
@@ -39,7 +46,7 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		box-shadow: 0 0.25rem 0.25rem rgba(141, 141, 141, 0.25);
+		box-shadow: var(--box-shadow2);
 	}
 
 	header .warp {
@@ -90,5 +97,18 @@
 
 	.el-icon-arrow-down {
 		font-size: 12px;
+	}
+	
+	.login_and_register {
+		width: 6.25rem;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+	}
+	
+	.login_and_register a{
+		width: 3rem;
+		text-decoration: none;
 	}
 </style>
