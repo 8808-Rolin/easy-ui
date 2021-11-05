@@ -75,15 +75,19 @@
 
 	.button_box {
 		width: 50%;
-		height: 3.5rem;
+		height: 6rem;
+		border-top-left-radius: 0.375rem;
+		border-bottom-left-radius: 0.375rem;
+		border: #1DA0FB 0.0625rem solid;
 		position: fixed;
 		right: -35%;
-		bottom: 6.25rem;
+		bottom: 4.5rem;
 		overflow: hidden;
 		transition: 1.33s;
 	}
 
 	.button_box div {
+		height: 100%;
 		position: absolute;
 		float: left;
 		font-size: 2.5rem;
@@ -91,17 +95,26 @@
 		transition: 1.33s;
 	}
 
+	.button_box div::before {
+		display: inline-block;
+		content: "";
+		height: 100%;
+		vertical-align: middle;
+	}
+
 	.enter {
 		width: 30%;
 		left: 0;
-		background-color: #42B983;
+		background-color: #fff;
+		color: #1DA0FB;
 		z-index: -1;
 	}
 
 	.community {
 		width: 100%;
 		right: -30%;
-		background-color: #8C939D;
+		background-color: #1DA0FB;
+		color: #fff;
 		font-style: italic;
 	}
 
@@ -140,16 +153,6 @@
 
 		66.6% {
 			--r: 1.33;
-		}
-	}
-	
-	@keyframes change-width{
-		0% {
-			width: 30%;
-		}
-		100% {
-			width: 0;
-			height: 0;
 		}
 	}
 </style>
