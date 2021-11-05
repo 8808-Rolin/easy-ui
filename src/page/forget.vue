@@ -8,14 +8,14 @@
 					<h3>找回密码</h3>
 
 					<div class="forget_form">
-						<el-input :class="{mistaken: !isTrueSNo}" type="text" placeholder="学       号" prefix-icon="el-icon-user" v-model="user.sNo" @input="checkSNo">
+						<el-input :class="{mistaken: !isTrueSNo}" type="text" placeholder="学       号" prefix-icon="el-icon-user" v-model="user.studentID" @input="checkSNo">
 						</el-input>
 						<el-input :class="{mistaken: !isTruePhone}" type="text" placeholder="手  机  号" prefix-icon="el-icon-mobile-phone" @input="checkPhone"
 							v-model="user.phone"></el-input>
-						<el-input :class="{mistaken: !isTrueMail}" type="text" placeholder="电子邮箱" prefix-icon="el-icon-message" @input="checkMail" v-model="user.mail">
+						<el-input :class="{mistaken: !isTrueMail}" type="text" placeholder="电子邮箱" prefix-icon="el-icon-message" @input="checkMail" v-model="user.email">
 						</el-input>
 						<el-input :class="{mistaken: !passwordLen}" type="password" placeholder="新  密  码" prefix-icon="el-icon-key" @input="checkPasswordLen"
-							v-model="user.newPassword">
+							v-model="user.password">
 						</el-input>
 
 						<el-button id="forget_btn" type="primary">找回密码</el-button>
@@ -39,10 +39,10 @@
 		data() {
 			return {
 				user: {
-					sNo: '',
+					studentID: '',
 					phone: '',
-					mail: '',
-					newPassword: '',
+					email: '',
+					password: '',
 				},
 				
 				// 验证
@@ -100,7 +100,7 @@
 			// 邮箱
 			checkMail() {
 				const regEmail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
-				if (this.user.mail != "" && !regEmail.test(this.user.mail)) {
+				if (this.user.email != "" && !regEmail.test(this.user.email)) {
 					this.isTrueMail = false
 				} else {
 					this.isTrueMail = true

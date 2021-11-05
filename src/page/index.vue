@@ -3,10 +3,21 @@
 		<Header></Header>
 		<div class="index_box">
 			<div class="index_left"></div>
-			
+
 			<div class="index_right">
 				<Notice></Notice>
-				<el-button>进入交流社区==></el-button>
+
+			</div>
+		</div>
+
+		<div class="button_box">
+			<div class="enter">
+				<span>进入</span>
+			</div>
+			<div class="community">
+				交流社区<i class="el-icon-arrow-right el-icon--right" style="--i:3"></i><i
+					class="el-icon-arrow-right el-icon--right" style="--i:2"></i><i
+					class="el-icon-arrow-right el-icon--right" style="--i:1"></i>
 			</div>
 		</div>
 	</div>
@@ -15,59 +26,130 @@
 <script>
 	import Header from '../components/Header.vue'
 	import Notice from '../components/notice.vue'
-	
+
 	export default {
 		name: 'Index',
 		data() {
 			return {
-				
+
 			}
 		},
 		components: {
 			Header,
 			Notice
 		},
-		methods:{
-			
+		methods: {
+
 		}
 	}
 </script>
 
 <style>
 	.index_box {
-		width: 75rem;
+		width: 80%;
 		height: 37.5rem;
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		transform: translate(-50%, -50%);
+		transform: translate(-50%, -45%);
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
 	}
-	
+
 	.index_box>div {
-		width: 50%;
 		height: 100%;
 	}
-	
+
 	.index_left {
+		width: 37.5rem;
 		background: url(../assets/logo-imgalpha-nologo-600px.png);
 		background-size: cover;
 	}
-	
+
 	.index_right {
 		display: flex;
 		flex-direction: column;
-		justify-content: space-around;
 		align-items: center;
 	}
-	
-	.index_right>.el-button {
-		border-color: transparent;
+
+	.button_box {
+		width: 50%;
+		height: 3.5rem;
+		position: fixed;
+		right: -35%;
+		bottom: 6.25rem;
+		overflow: hidden;
+		transition: 1.33s;
+	}
+
+	.button_box div {
+		position: absolute;
+		float: left;
 		font-size: 2.5rem;
 		font-weight: bold;
+		transition: 1.33s;
+	}
+
+	.enter {
+		width: 30%;
+		left: 0;
+		background-color: #42B983;
+		z-index: -1;
+	}
+
+	.community {
+		width: 100%;
+		right: -30%;
+		background-color: #8C939D;
 		font-style: italic;
-		background-color: transparent;
+	}
+
+	.button_box:hover {
+		transform: translateX(-70%);
+		transition: 1.33s;
+	}
+
+	.button_box:hover .enter {
+		left: -30%;
+		transition: 1.33s;
+	}
+
+	.button_box:hover .community {
+		width: 100%;
+		right: 0;
+		transition: 1.33s;
+	}
+
+	.community i {
+		--r: 0.1;
+		--t: calc(var(--r) * var(--i));
+		color: rgba(0, 0, 0, var(--t));
+		animation: changeColor 1s linear infinite;
+	}
+
+	@keyframes changeColor {
+
+		0 {
+			--r: 0.1;
+		}
+
+		33.3% {
+			--r: 0.4;
+		}
+
+		66.6% {
+			--r: 1.33;
+		}
+	}
+	
+	@keyframes change-width{
+		0% {
+			width: 30%;
+		}
+		100% {
+			width: 0;
+			height: 0;
+		}
 	}
 </style>

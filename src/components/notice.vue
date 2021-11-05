@@ -1,13 +1,13 @@
 <template>
 	<el-card class="box-card">
 		<div slot="header" class="clearfix">
-			<span><strong>论坛公告</strong></span>
+			<span>论坛公告</span>
 			<el-button style="float: right; padding: 0.1875rem 0" type="text" icon="el-icon-more-outline"></el-button>
 		</div>
 		<div class="notice">
 			<div v-for="(notice, index) in notices" :key="index" class="text item">
-				<a class="notice_title">{{notice.title}}</a>
-				<a>{{notice.time}}</a>
+				<a class="notice_title"><strong>{{notice.title}}</strong></a>
+				<a><small>{{notice.time}}</small></a>
 			</div>
 		</div>
 
@@ -78,7 +78,10 @@
 	}
 
 	.item {
+		width: 98%;
+		height: 1.875rem;
 		margin-bottom: 18px;
+		border-bottom: 0.0625rem solid rgba(0,0,0,.25);
 	}
 
 	.notice_title {
@@ -90,11 +93,9 @@
 	}
 
 	.el-card__header {
-		position: -webkit-sticky;
-		position: sticky;
-		top: 0;
-		background-color: #fff;
+		width: 100%;
 		z-index: 100;
+		padding: 0.5rem 1.25rem;
 	}
 
 	.clearfix:before,
@@ -108,10 +109,13 @@
 	}
 
 	.box-card {
-		width: 480px;
+		width: 37.5rem;
 		height: 25rem;
 		border-top: #1DA0FB solid 0.75rem;
 		border-radius: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 	
 	.el-card__body {
