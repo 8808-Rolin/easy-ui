@@ -4,6 +4,14 @@
 			<div class="logo">
 				<a href="#" title="Easy社团">Easy社团</a>
 			</div>
+
+			<div class="seach_box">
+				<el-input placeholder="请输入内容" v-model="search.keyword" class="input-with-select">
+					<el-button slot="append" icon="el-icon-search"></el-button>
+				</el-input>
+
+			</div>
+
 			<div class="user" v-show="existUser">
 				<div class="profile">
 					<img src="../assets/profile.jpg">
@@ -32,7 +40,11 @@
 		name: 'Header',
 		data() {
 			return {
-				existUser: false
+				existUser: false,
+				search: {
+					type: 0,
+					keyword: ''
+				}
 			}
 		}
 	}
@@ -110,5 +122,23 @@
 	.login_and_register a {
 		width: 3rem;
 		text-decoration: none;
+	}
+
+	/* 搜索框 */
+	.el-input__inner {
+		width: 12.5rem;
+		transition: width .5s;
+	}
+
+	.el-input__inner:focus {
+		width: 20rem;
+		transition: width .5s;
+	}
+
+	.el-input-group__append,
+	.el-input-group__prepend {
+		background-color: #1DA0FB;
+		color: #fff;
+		border-color: #1DA0FB;
 	}
 </style>
