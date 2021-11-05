@@ -22,7 +22,7 @@
 				<a href="#">登录</a>
 				<a href="#">注册</a>
 			</div>
-			
+
 		</div>
 	</header>
 </template>
@@ -98,7 +98,7 @@
 	.el-icon-arrow-down {
 		font-size: 12px;
 	}
-	
+
 	.login_and_register {
 		width: 6.25rem;
 		display: flex;
@@ -106,8 +106,8 @@
 		justify-content: space-around;
 		align-items: center;
 	}
-	
-	.login_and_register a{
+
+	.login_and_register a {
 		width: 3rem;
 		text-decoration: none;
 	}

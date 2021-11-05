@@ -8,16 +8,16 @@
 					<h3>注册</h3>
 					<div class="register_form">
 						<el-input :class="{mistaken:!isTrueSNo}" type="text" placeholder="学  号"
-							prefix-icon="el-icon-user" @input="checkSNo" v-model="loginMessage.studentID"
+							prefix-icon="el-icon-user" @change="checkSNo" v-model="loginMessage.studentID"
 							v-show="percentage == 25">
 						</el-input>
 						<el-input :class="{mistaken:!isTruePhone}" type="text" placeholder="手机号"
-							prefix-icon="el-icon-mobile-phone" @input="checkPhone" v-model="loginMessage.phone"
+							prefix-icon="el-icon-mobile-phone" @change="checkPhone" v-model="loginMessage.phone"
 							v-show="percentage == 25"></el-input>
 						<el-input type="text" placeholder="昵  称" prefix-icon="el-icon-user-solid"
-							v-model="loginMessage.name" v-show="percentage == 25"></el-input>
+							v-model="loginMessage.userName" v-show="percentage == 25"></el-input>
 
-						<el-select class="faculty" v-model="loginMessage.faculty" placeholder="请选择院系"
+						<el-select class="college" v-model="loginMessage.college" placeholder="请选择院系"
 							prefix-icon="el-icon-location-outline" v-show="percentage == 50">
 							<el-option v-for="item in faculties" :key="item.value" :label="item.label"
 								:value="item.label">
@@ -27,36 +27,36 @@
 							v-model="loginMessage.realName" v-show="percentage == 50">
 						</el-input>
 						<el-input :class="{mistaken:!isTrueMail}" type="text" placeholder="电子邮箱"
-							prefix-icon="el-icon-message" @input="checkMail" v-model="loginMessage.mail"
+							prefix-icon="el-icon-message" @change="checkMail" v-model="loginMessage.email"
 							v-show="percentage == 50"></el-input>
 
 						<div class="register_3" v-show="percentage == 75">
-							<el-select class="gender" v-model="loginMessage.gender" placeholder="性别"
+							<el-select class="sex" v-model="loginMessage.sex" placeholder="性别"
 								prefix-icon="el-icon-location-outline">
-								<el-option v-for="item in genders" :key="item.value" :label="item.label"
+								<el-option v-for="item in sexs" :key="item.value" :label="item.label"
 									:value="item.label">
 								</el-option>
 							</el-select>
-							<el-date-picker class="date" v-model="loginMessage.date" type="date" placeholder="生日"
+							<el-date-picker class="date" v-model="loginMessage.birth" type="date" placeholder="生日"
 								format="yyyy-MM-dd" value-format="yyyy-MM-dd">
 							</el-date-picker>
 						</div>
-						<el-upload class="avatar-uploader" :action="action" :http-request="HttpRequest"
+						<el-upload class="avatar-uploader" action="#" :http-request="HttpRequest"
 							:show-file-list="false" :on-success="handleAvatarSuccess"
 							:before-upload="beforeAvatarUpload" v-show="percentage == 75">
-							<img v-if="loginMessage.imageUrl" :src="loginMessage.imageUrl" class="avatar">
+							<img v-if="loginMessage.headImage" :src="loginMessage.headImage" class="avatar">
 							<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 							<div slot="tip" class="el-upload__tip">上传jpg/png头像，且不超过500kb</div>
 						</el-upload>
 
-						<el-input :class="{mistaken: !passwordLen}" type="password" placeholder="密码(至少8位)"
-							prefix-icon="el-icon-key" @input="checkPasswordLen" v-model="loginMessage.password"
-							v-show="percentage == 100"></el-input>
+						<el-input :class="{mistaken: !passwordLen}" auto-complete="new-password" type="password"
+							placeholder="密码(至少8位)" prefix-icon="el-icon-key" @change="checkPasswordLen"
+							v-model="loginMessage.password" v-show="percentage == 100"></el-input>
 						<el-input :class="{mistaken:!isTruePassword}" type="password" placeholder="确认密码"
-							prefix-icon="el-icon-key" @input="checkPassword" v-model="loginMessage.isPassword"
+							prefix-icon="el-icon-key" @input="checkPassword" v-model="isPassword"
 							v-show="percentage == 100"></el-input>
 						<div v-show="percentage == 100">
-							<PuzzleVcode></PuzzleVcode>
+							<PuzzleVcode :onCode.sync="isVerify"></PuzzleVcode>
 						</div>
 
 						<el-button-group>
@@ -64,7 +64,7 @@
 								v-if="percentage > 25">上一步</el-button>
 							<el-button type="primary" @click="increase" v-if="percentage <= 75">下一步<i
 									class="el-icon-arrow-right el-icon--right"></i></el-button>
-							<el-button type="primary" @click="increase" v-if="percentage == 100">立即注册<i
+							<el-button type="primary" @click="submit" v-if="percentage == 100">立即注册<i
 									class="el-icon-arrow-right el-icon--right"></i></el-button>
 						</el-button-group>
 					</div>
@@ -86,9 +86,13 @@
 	import HeaderNoRight from '../components/HeaderNoRight.vue'
 	import PuzzleVcode from "../components/PuzzleVcode.vue"
 	import qs from 'qs'
+	import crypto from 'crypto'
+	import {
+		Loading
+	} from 'element-ui';
 
 	export default {
-		name: 'Register',
+		userName: 'Register',
 		data() {
 			return {
 				faculties: [{
@@ -99,7 +103,7 @@
 					label: '艺术设计学院'
 				}],
 
-				genders: [{
+				sexs: [{
 					value: '选项1',
 					label: '男'
 				}, {
@@ -107,23 +111,23 @@
 					label: '女'
 				}],
 
-				action: "http://easy.rolin.icu:11119/api/tool/upload-image", // 头像上传地址
+				time: null, //防抖
+				notify: null,
 				percentage: 25, // 进度条初始数据
 				customColor: '#f2a373', // 进度条颜色
-
+				isPassword: '',
 				// 登录数据， 差最后的验证
 				loginMessage: {
 					studentID: '',
 					phone: '',
-					name: '',
-					faculty: '',
+					userName: '',
+					college: '',
 					realName: '',
-					mail: '',
-					gender: '',
-					date: '',
-					imageUrl: '',
+					email: '',
+					sex: '',
+					birth: '',
+					headImage: '',
 					password: '',
-					isPassword: '',
 				},
 
 				// 验证
@@ -131,7 +135,8 @@
 				isTruePhone: true,
 				isTrueMail: true,
 				passwordLen: true,
-				isTruePassword: true
+				isTruePassword: true,
+				isVerify: 0
 			};
 		},
 		components: {
@@ -145,8 +150,10 @@
 			increase() {
 				let percentage = this.percentage
 				// 判断学号与手机号码是否唯一
-				console.log(this.loginMessage.studentID)
-				if (percentage == 25) {
+				if (percentage == 25 && this.notNull && this.standart) {
+					let loadingInstance1 = Loading.service({
+						fullscreen: true
+					});
 					this.$http.get('http://rolin.icu:11119/api/tool/uni-variable', {
 							params: {
 								studentID: this.loginMessage.studentID,
@@ -154,6 +161,7 @@
 							}
 						})
 						.then(response => {
+							loadingInstance1.close()
 							if (response.data.data.code !== 0) {
 								this.percentage = 25
 								this.$notify.error({
@@ -164,9 +172,10 @@
 							}
 						})
 						.catch(error => {
+							loadingInstance1.close()
 							console.log(error.data)
 						})
-				} else {
+				} else if (this.notNull && this.standart) {
 					this.percentage += 25;
 					if (this.percentage > 100) {
 						this.percentage = 100;
@@ -185,21 +194,23 @@
 
 			// 上传文件之前的钩子，参数为上传的文件，若返回 false，则停止上传。
 			beforeAvatarUpload(file) {
-				const isJPG = file.type === 'image/jpeg';
-				const isLt2M = file.size / 1024 / 1024 < 2;
-				if (!isJPG) {
-					this.$message.error('上传头像图片只能是 JPG 格式!');
+				const isJPGandPNG = file.type === 'image/jpeg' || file.type === 'image/png';
+				const isLt500k = file.size / 1024 / 1024 < 0.5;
+				if (isJPGandPNG && isLt500k) {
+					let filereader = new FileReader();
+					filereader.readAsDataURL(file)
+					filereader.onload = () => {
+						this.loginMessage.headImage = filereader.result
+						console.log(this.loginMessage.headImage)
+					}
+				} else {
+					if (!isJPGandPNG) {
+						this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+					}
+					if (!isLt500k) {
+						this.$message.error('上传头像图片大小不能超过 2MB!');
+					}
 				}
-				if (!isLt2M) {
-					this.$message.error('上传头像图片大小不能超过 2MB!');
-				}
-				let filereader = new FileReader();
-				filereader.readAsDataURL(file)
-				filereader.onload = () => {
-					this.loginMessage.imageUrl = filereader.result
-					console.log(this.loginMessage.imageUrl)
-				}
-
 				return false;
 			},
 			// 覆盖默认的上传行为，可以自定义上传的实现
@@ -208,32 +219,45 @@
 			},
 			// 文件上传成功时的钩子
 			handleAvatarSuccess(res, file) {
-				this.imageUrl = URL.createObjectURL(file.raw);
+				this.headImage = URL.createObjectURL(file.raw);
 			},
 
 			/* 验证 **/
 
 			// 学号长度校验 
 			checkSNo() {
-				if (this.loginMessage.sNo.length > 8) {
-					if (this.loginMessage.sNo.length > 15) {
-						this.isTrueSNo = false
-						// this.$alert("亲，请输入合法的学号！","输入信息有误")
-						this.$notify.error({
+				let len = this.loginMessage.studentID.length
+				if (this.notify != null)
+					this.notify.close()
+				if (len > 15 || len < 8) {
+					this.isTrueSNo = false
+					if (len > 15) {
+						this.notify = this.$notify.error({
 							title: '输入信息有误',
-							message: '亲，请输入合法的学号！',
+							message: '亲，输入的学号过长！',
+						});
+					} else {
+						this.notify = this.$notify.error({
+							title: '输入信息有误',
+							message: '亲，输入的学号过短！',
 						});
 					}
+				} else {
+					this.isTrueSNo = true
 				}
+				if (this.loginMessage.studentID === '')
+					this.isTrueSNo = true
 			},
 			// 手机号正则校验 
 			checkPhone() {
 				const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
-				if (this.loginMessage.phone.length == 11) {
+				let phone = this.loginMessage.phone.length
+				if (this.notify != null)
+					this.notify.close()
+				if (this.loginMessage.phone !== '' && (phone > 11 || phone < 11)) {
 					if (!regMobile.test(this.loginMessage.phone)) {
 						this.isTruePhone = false
-						// this.$alert("亲，请输入正确的手机号码！", "输入信息有误")
-						this.$notify.error({
+						this.notify = this.$notify.error({
 							title: '输入信息有误',
 							message: '亲，请输入正确的手机号码！',
 						});
@@ -244,8 +268,8 @@
 			},
 			// 邮箱正则校验 
 			checkMail() {
-				const regEmail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
-				if (this.loginMessage.mail != "" && !regEmail.test(this.loginMessage.mail)) {
+				const regEemail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
+				if (this.loginMessage.email != "" && !regEemail.test(this.loginMessage.email)) {
 					this.isTrueMail = false
 				} else {
 					this.isTrueMail = true
@@ -255,28 +279,96 @@
 			checkPasswordLen() {
 				if (this.loginMessage.password != "" && this.loginMessage.password.length < 8) {
 					this.passwordLen = false
+					this.notify = this.$notify.error({
+						title: '密码格式错误',
+						message: '密码不少于8位字符！',
+					});
 				} else {
 					this.passwordLen = true
 				}
 			},
 			// 确认密码
 			checkPassword() {
-				if (this.loginMessage.isPassword.length > 0 && this.loginMessage.password == this.loginMessage
-					.isPassword) {
-					this.isTruePassword = true
-				} else {
-					this.isTruePassword = false
-					if (this.loginMessage.isPassword.length == this.loginMessage.password.length) {
-						// this.$alert("亲，请重新确认密码！", "两次密码不一致")
-						this.$notify.error({
-							title: '密码不一致',
-							message: '亲，请重新确认密码！',
-						});
-						this.loginMessage.isPassword = ''
+				if (this.time != null)
+					clearTimeout(this.time)
+				this.time = setTimeout(() => {
+					if (this.notify != null)
+						this.notify.close()
+					if (this.isPassword.length > 0 && this.loginMessage.password === this.isPassword) {
+						this.isTruePassword = true
+					} else {
+						this.isTruePassword = false
+						if (this.isPassword.length == this.loginMessage.password.length) {
+							this.notify = this.$notify.error({
+								title: '密码不一致',
+								message: '亲，请重新确认密码！',
+							});
+						}
 					}
+				}, 600)
+			},
+
+			/* 发送请求 **/
+			submit() {
+				if (this.standart && this.notNull) {
+					let md5 = crypto.createHash("md5"); //md5加密对象
+					md5.update(this.loginMessage.password) //需要加密的密码
+					this.loginMessage.password = md5.digest('hex'); //password 加密完的密码
+					console.log("在发请求")
+					this.$http
+						.post('http://rolin.icu:11119/api/user/register', qs.stringify({
+							...this.loginMessage
+						}), {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						})
+						.then(response => {
+							this.$notify.success({
+								title: '请求状态',
+								message: '请求成功！',
+							})
+							this.$router.push({
+								path: '/Login'
+							})
+						})
+						.catch(error => {
+							console.log(error.data)
+						})
 				}
 			}
-		}
+		},
+		computed: {
+			/* 当所有数据验证成功后返回true **/
+			standart() {
+				let bool = false
+				if (this.percentage === 25)
+					bool = this.isTrueSNo && this.isTruePhone
+				else if (this.percentage === 50)
+					bool = this.isTrueMail
+				else if (this.percentage === 75)
+					bool = true
+				else if (this.percentage === 100)
+					bool = this.passwordLen && this.isTruePassword && this.isVerify === 1
+				return bool
+			},
+			/* 当数据不存在空字符串时返回true **/
+			notNull() {
+				let bool = false
+				let arr = Object.values(this.loginMessage).filter(item => {
+					if (item !== '') {
+						return true
+					}
+				})
+				if (this.percentage === 25)
+					bool = arr.length >= 3
+				else if (this.percentage === 50)
+					bool = arr.length >= 6
+				else if (this.percentage === 75)
+					bool = arr.length >= 9
+				else if (this.percentage === 100)
+					bool = arr.length >= 10
+				return bool
+			}
+		},
 	}
 </script>
 
@@ -353,7 +445,7 @@
 		font-size: 14px;
 	}
 
-	.el-select.faculty {
+	.el-select.college {
 		width: 100%;
 	}
 
@@ -397,7 +489,7 @@
 		display: block;
 	}
 
-	.register_3 .gender {
+	.register_3 .sex {
 		width: 35%;
 	}
 

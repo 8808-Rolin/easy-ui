@@ -32,7 +32,7 @@
 					</div>
 
 					<div class="login_links">
-						<router-link :to="{path:'/register'}" :underline="false">忘记密码？</router-link>
+						<router-link :to="{path:'/Forget'}" :underline="false">忘记密码？</router-link>
 						<router-link :to="{path:'/register'}" :underline="false">还没有账号？前往注册</router-link>
 					</div>
 				</div>
@@ -102,6 +102,7 @@
 								},
 								expires: 60,
 							})
+							this.$router.push({ path:'/'})
 						} else {
 							LocalStorage.removeItem("token")
 							LocalStorage.removeItem("password")
@@ -159,8 +160,8 @@
 	.login>div {
 		width: 21.875rem;
 		height: 25rem;
-		border: 0.0625rem solid rgba(0, 0, 0, .25);
 		border-top: 0.75rem solid #1da0fb;
+		box-shadow: var(--box-shadow2);
 		border-radius: 1.5rem;
 		display: flex;
 		flex-direction: column;
