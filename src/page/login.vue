@@ -22,7 +22,8 @@
 							v-model="user.account"></el-input>
 						<el-input type="text" placeholder="手机号" prefix-icon="el-icon-mobile-phone"
 							v-show="user.loginType" v-model="user.account"></el-input>
-						<el-input type="password" @keyup.enter.native="Commit" placeholder="密   码" prefix-icon="el-icon-key" v-model="password">
+						<el-input type="password" @keyup.enter.native="Commit" placeholder="密   码"
+							prefix-icon="el-icon-key" v-model="password">
 						</el-input>
 						<div class="remember">
 							<el-checkbox v-model="checked">记住密码</el-checkbox>
@@ -63,13 +64,16 @@
 			HeaderNoRight
 		},
 		methods: {
+			/* 切换表单 **/
 			noOrPhone: function() {
 				this.user.loginType = this.user.loginType === 0 ? 1 : 0;
 				this.user.account = '';
 				this.password = '';
 			},
+			/* 提交数据 **/
 			Commit() {
 				this.user.password = this.password
+				/* 记住密码实现 **/
 				if (this.checked) {
 					LocalStorage.setItem({
 						name: 'password',
@@ -77,7 +81,7 @@
 							...this.user,
 							checked: this.checked
 						},
-						expires: 60,
+						expires: 60, //缓存时间
 					})
 				}
 				let md5 = crypto.createHash("md5"); //md5加密对象
@@ -90,21 +94,28 @@
 						'Content-Type': 'application/x-www-form-urlencoded'
 					})
 					.then(response => {
-						localStorage
-						console.log(response.data.data.token)
-						LocalStorage.setItem({
-							name: 'token',
-							value: {
-								token:response.data.data.token
-							},
-							expires: 60,
-						})
+						if (response.data.data.token != undefined) {
+							LocalStorage.setItem({
+								name: 'token',
+								value: {
+									token: response.data.data.token
+								},
+								expires: 60,
+							})
+						} else {
+							LocalStorage.removeItem("token")
+							LocalStorage.removeItem("password")
+							this.$notify.error({
+								message: response.data.data.msg,
+							});
+						}
 					})
 					.catch(error => {
 						console.log(error.data)
 					})
 			}
 		},
+		/* 缓存读取 **/
 		beforeMount() {
 			let val = LocalStorage.getItem("password")
 			this.user.loginType = 0
