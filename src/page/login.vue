@@ -33,7 +33,7 @@
 
 					<div class="login_links">
 						<router-link :to="{path:'/Forget'}" :underline="false">忘记密码？</router-link>
-						<router-link :to="{path:'/register'}" :underline="false">还没有账号？前往注册</router-link>
+						<router-link :to="{path:'/Register'}" :underline="false">还没有账号？前往注册</router-link>
 					</div>
 				</div>
 			</div>
@@ -53,6 +53,7 @@
 			return {
 				checked: false,
 				password: null,
+				message:null, // 消息提示框
 				user: {
 					loginType: 0,
 					account: '',
@@ -72,6 +73,8 @@
 			},
 			/* 提交数据 **/
 			Commit() {
+				if(this.message !== null)
+					this.message.close()
 				this.user.password = this.password
 				/* 记住密码实现 **/
 				if (this.checked) {
@@ -94,7 +97,8 @@
 						'Content-Type': 'application/x-www-form-urlencoded'
 					})
 					.then(response => {
-						if (response.data.data.token != undefined) {
+						console.log(response.data.data.token)
+						if (response.data.data.token !== undefined) {
 							LocalStorage.setItem({
 								name: 'token',
 								value: {
@@ -106,9 +110,9 @@
 						} else {
 							LocalStorage.removeItem("token")
 							LocalStorage.removeItem("password")
-							this.$notify.error({
+							this.message = this.$message.error({
 								message: response.data.data.msg,
-							});
+							})
 						}
 					})
 					.catch(error => {

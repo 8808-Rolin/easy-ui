@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import LocalStorage from '../utils/LocalStorage'
 
 Vue.use(Router)
 
@@ -25,6 +26,23 @@ const router = new Router({
 		path: '/Community',
 		component: () => import('@/page/community')
 	}]
+})
+
+router.beforeEach(async(to, from, next) => {
+	const localstorage = LocalStorage.getItem("token")
+	let path = ['/Login', '/', '/Register', '/Forget']
+	if(path.indexOf(to.path) >= 0){
+		if(localstorage !== null && to.path !== '/')
+			next('/')
+		else
+			next()
+	}
+	else{
+		if(localstorage != null)
+			next()
+		else
+			next('/Login')
+	}	
 })
 
 export default router

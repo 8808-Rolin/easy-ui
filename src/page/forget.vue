@@ -17,7 +17,7 @@
 							prefix-icon="el-icon-message" @input="checkMail" v-model="user.email">
 						</el-input>
 						<el-input :class="{mistaken: !passwordLen}" type="password" placeholder="新  密  码"
-							prefix-icon="el-icon-key" @input="checkPasswordLen" v-model="user.password">
+							prefix-icon="el-icon-key" @input="checkPasswordLen" v-model="password">
 						</el-input>
 
 						<el-button id="forget_btn" @click="submit" type="primary">找回密码</el-button>
@@ -37,13 +37,14 @@
 	import HeaderNoRight from '../components/HeaderNoRight.vue'
 	import qs from 'qs'
 	import crypto from 'crypto'
-	
+
 	export default {
 		name: 'Forget',
 		data() {
 			return {
 				time: null, //防抖
 				notify: null,
+				password: '',
 				user: {
 					studentID: '',
 					phone: '',
@@ -88,7 +89,7 @@
 					}
 					if (this.user.studentID === '')
 						this.isTrueSNo = true
-				}, 600)
+				}, 800)
 			},
 			/* 验证手机号 **/
 			checkPhone() {
@@ -110,7 +111,7 @@
 					} else {
 						this.isTruePhone = true
 					}
-				}, 600)
+				}, 800)
 			},
 			/* 验证邮箱 **/
 			checkMail() {
@@ -138,7 +139,7 @@
 				this.time = setTimeout(() => {
 					if (this.notify != null)
 						this.notify.close()
-					if (this.user.password != "" && this.user.password.length < 8) {
+					if (this.password != "" && this.password.length < 8) {
 						this.passwordLen = false
 						this.notify = this.$notify.error({
 							title: '输入信息有误',
@@ -147,16 +148,17 @@
 					} else {
 						this.passwordLen = true
 					}
-				}, 600)
+				}, 800)
 			},
 			/* 发送请求 **/
 			submit() {
+				if (this.notify != null)
+					this.notify.close()
 				console.log(this.standart, this.notNull)
 				if (this.standart && this.notNull) {
 					let md5 = crypto.createHash("md5"); //md5加密对象
-					md5.update(this.user.password) //需要加密的密码
+					md5.update(this.password) //需要加密的密码
 					this.user.password = md5.digest('hex'); //password 加密完的密码
-					console.log("在发请求")
 					this.$http
 						.post('http://rolin.icu:11119/api/user/forget-password', qs.stringify({
 							...this.user
@@ -165,7 +167,22 @@
 						})
 						.then(response => {
 							console.log(response.data)
-							this.$router.push({ path:'/Login'})
+							if (response.data.data.code === 0) {
+								this.$alert(`\n你修改后的密码是:${this.password}`, response.data.data.msg, {
+									confirmButtonText: '确定',
+									callback: action => {
+										this.$message({
+											type: 'success',
+											message: `${response.data.data.msg}`
+										});
+									}
+								});
+								this.$router.push({
+									path: '/Login'
+								})
+							} else {
+								this.notify = this.$message.error(response.data.data.msg)
+							}
 						})
 						.catch(error => {
 							console.log(error.data)
@@ -186,7 +203,7 @@
 						return true
 					}
 				})
-				return arr.length === 4
+				return arr.length >= 3 && this.password !== ''
 			}
 		},
 	}

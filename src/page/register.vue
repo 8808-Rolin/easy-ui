@@ -19,8 +19,8 @@
 
 						<el-select class="college" v-model="loginMessage.college" placeholder="请选择院系"
 							prefix-icon="el-icon-location-outline" v-show="percentage == 50">
-							<el-option v-for="item in faculties" :key="item.value" :label="item.label"
-								:value="item.label">
+							<el-option v-for="item in faculties" :key="item.coid" :label="item.name"
+								:value="item.coid">
 							</el-option>
 						</el-select>
 						<el-input type="text" placeholder="真实姓名" prefix-icon="el-icon-user"
@@ -34,7 +34,7 @@
 							<el-select class="sex" v-model="loginMessage.sex" placeholder="性别"
 								prefix-icon="el-icon-location-outline">
 								<el-option v-for="item in sexs" :key="item.value" :label="item.label"
-									:value="item.label">
+									:value="item.value">
 								</el-option>
 							</el-select>
 							<el-date-picker class="date" v-model="loginMessage.birth" type="date" placeholder="生日"
@@ -51,7 +51,7 @@
 
 						<el-input :class="{mistaken: !passwordLen}" auto-complete="new-password" type="password"
 							placeholder="密码(至少8位)" prefix-icon="el-icon-key" @change="checkPasswordLen"
-							v-model="loginMessage.password" v-show="percentage == 100"></el-input>
+							v-model="password" v-show="percentage == 100"></el-input>
 						<el-input :class="{mistaken:!isTruePassword}" type="password" placeholder="确认密码"
 							prefix-icon="el-icon-key" @input="checkPassword" v-model="isPassword"
 							v-show="percentage == 100"></el-input>
@@ -96,18 +96,15 @@
 		data() {
 			return {
 				faculties: [{
-					value: '选项1',
-					label: '信息技术学院'
-				}, {
-					value: '选项2',
-					label: '艺术设计学院'
+					coid: '',
+					name: ''
 				}],
 
 				sexs: [{
-					value: '选项1',
+					value: '0',
 					label: '男'
 				}, {
-					value: '选项2',
+					value: '1',
 					label: '女'
 				}],
 
@@ -116,6 +113,7 @@
 				percentage: 25, // 进度条初始数据
 				customColor: '#f2a373', // 进度条颜色
 				isPassword: '',
+				password: '',
 				// 登录数据， 差最后的验证
 				loginMessage: {
 					studentID: '',
@@ -148,6 +146,8 @@
 
 			// 下一步
 			increase() {
+				if (this.notify !== null)
+					this.notify.close()
 				let percentage = this.percentage
 				// 判断学号与手机号码是否唯一
 				if (percentage == 25 && this.notNull && this.standart) {
@@ -173,13 +173,22 @@
 						})
 						.catch(error => {
 							loadingInstance1.close()
-							console.log(error.data)
-						})
+							this.percentage = 25
+							console.log(error.response)
+							if (error.response !== undefined) {
+								this.$message.error({
+									dangerouslyUseHTMLString: true,
+									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
+								});
+							}
+						}) 
 				} else if (this.notNull && this.standart) {
 					this.percentage += 25;
 					if (this.percentage > 100) {
 						this.percentage = 100;
 					}
+				} else {
+					this.notify = this.$message.error("请确认填写信息！")
 				}
 			},
 			// 上一步
@@ -277,7 +286,7 @@
 			},
 			// 密码长度校验
 			checkPasswordLen() {
-				if (this.loginMessage.password != "" && this.loginMessage.password.length < 8) {
+				if (this.password != "" && this.password.length < 8) {
 					this.passwordLen = false
 					this.notify = this.$notify.error({
 						title: '密码格式错误',
@@ -294,11 +303,11 @@
 				this.time = setTimeout(() => {
 					if (this.notify != null)
 						this.notify.close()
-					if (this.isPassword.length > 0 && this.loginMessage.password === this.isPassword) {
+					if (this.isPassword.length > 0 && this.password === this.isPassword) {
 						this.isTruePassword = true
 					} else {
 						this.isTruePassword = false
-						if (this.isPassword.length == this.loginMessage.password.length) {
+						if (this.isPassword.length == this.password.length) {
 							this.notify = this.$notify.error({
 								title: '密码不一致',
 								message: '亲，请重新确认密码！',
@@ -310,9 +319,11 @@
 
 			/* 发送请求 **/
 			submit() {
+				if (this.notify !== null)
+					this.notify.close()
 				if (this.standart && this.notNull) {
 					let md5 = crypto.createHash("md5"); //md5加密对象
-					md5.update(this.loginMessage.password) //需要加密的密码
+					md5.update(this.password) //需要加密的密码
 					this.loginMessage.password = md5.digest('hex'); //password 加密完的密码
 					console.log("在发请求")
 					this.$http
@@ -322,17 +333,30 @@
 							'Content-Type': 'application/x-www-form-urlencoded'
 						})
 						.then(response => {
-							this.$notify.success({
-								title: '请求状态',
-								message: '请求成功！',
-							})
-							this.$router.push({
-								path: '/Login'
-							})
+							if (response.data.data.code === 0) {
+								this.$router.push({
+									path: '/Login'
+								})
+							} else {
+								this.$message.success({
+									title: '请求状态',
+									message: response.data.data.msg,
+								})
+							}
 						})
 						.catch(error => {
-							console.log(error.data)
+							if (error.response !== undefined) {
+								this.$message.error({
+									dangerouslyUseHTMLString: true,
+									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
+								});
+							}
 						})
+				} else {
+					if (this.isTruePassword && this.passwordLen && this.notNull)
+						this.notify = this.$message.error("请进行人机验证！")
+					else
+						this.notify = this.$message.error("请确认填写信息！")
 				}
 			}
 		},
@@ -365,10 +389,42 @@
 				else if (this.percentage === 75)
 					bool = arr.length >= 9
 				else if (this.percentage === 100)
-					bool = arr.length >= 10
+					bool = arr.length >= 9 && this.password !== '' && this.isPassword !== ''
 				return bool
 			}
 		},
+		watch: {
+			percentage(newVal) {
+				console.log(newVal)
+				if (newVal === 50) {
+					let loadingInstance1 = Loading.service({
+						fullscreen: true
+					});
+					this.$http.get('http://easy.30202.co:11119/api/tool/get-college-list', {
+							params: {}
+						})
+						.then(response => {
+							loadingInstance1.close()
+							if (response.data.data.result === -1) {
+								this.$message.error({
+									message: response.data.data.msg,
+								});
+							} else {
+								this.faculties = response.data.data.college
+							}
+						})
+						.catch(error => {
+							loadingInstance1.close()
+							if (error.response !== undefined) {
+								this.$message.error({
+									dangerouslyUseHTMLString: true,
+									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
+								});
+							}
+						})
+				}
+			}
+		}
 	}
 </script>
 
