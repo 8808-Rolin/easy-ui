@@ -6,6 +6,14 @@ Vue.use(Router)
 
 const router = new Router({
 	routes: [{
+		name: '404',
+		path: '/404',
+		component: () => import('@/page/404')
+	}, {
+		name: '500',
+		path: '/500',
+		component: () => import('@/page/500')
+	}, {
 		name: 'Index',
 		path: '',
 		component: () => import('@/page/index')
@@ -25,10 +33,6 @@ const router = new Router({
 		name: 'Community',
 		path: '/community',
 		component: () => import('@/page/community')
-	},{
-		name: 'error-500',
-		path: '/500',
-		component: () => import('@/page/500')
 	}]
 })
 
@@ -38,7 +42,7 @@ const router = new Router({
 **/
 router.beforeEach(async(to, from, next) => {
 	const localstorage = LocalStorage.getItem("token")
-	let path = ['/login', '/', '/register', '/forget']
+	let path = ['/login', '/', '/register', '/forget', '/500', '/404']
 	if(path.indexOf(to.path.toLowerCase()) >= 0){
 		if(localstorage !== null && to.path !== '/')
 			next('/')

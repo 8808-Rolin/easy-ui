@@ -5,9 +5,9 @@ Vue.use(Vuex)
 
 const request = {
 	state:{
-		myAddress:"http://rolin.icu:11119",
 		token:null,
 		network:false,
+		statusMes:null,
 	},
 	mutations: {
 		loginSuccess(state, val) {
@@ -15,6 +15,9 @@ const request = {
 		},
 		changeNetwork(state, val) {
 			state.Network = val
+		},
+		changeStatusMes(state, val) {
+			state.statusMes = val
 		}
 	}
 	
