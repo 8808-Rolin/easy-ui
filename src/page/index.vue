@@ -38,9 +38,7 @@
 			Header,
 			Notice
 		},
-		methods: {
-
-		}
+		methods: {},
 	}
 </script>
 

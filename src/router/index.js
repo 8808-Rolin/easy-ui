@@ -28,10 +28,14 @@ const router = new Router({
 	}]
 })
 
+/* 前置路由守卫：
+	未登录时：可以进入 登录，注册， 找回密码， 首页
+	登录成功后不能进行 登录，注册， 找回密码
+**/
 router.beforeEach(async(to, from, next) => {
 	const localstorage = LocalStorage.getItem("token")
-	let path = ['/Login', '/', '/Register', '/Forget']
-	if(path.indexOf(to.path) >= 0){
+	let path = ['/login', '/', '/register', '/forget']
+	if(path.indexOf(to.path.toLowerCase()) >= 0){
 		if(localstorage !== null && to.path !== '/')
 			next('/')
 		else

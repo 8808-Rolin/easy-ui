@@ -2,7 +2,7 @@
 	<header>
 		<div class="warp">
 			<div class="logo">
-				<a href="#" title="Easy社团">Easy社团</a>
+				<router-link :to="{path:'/'}" title="Easy社团">Easy社团</router-link>
 			</div>
 			<div class="user" v-show="existUser">
 				<div class="profile">
@@ -19,8 +19,8 @@
 				</el-dropdown>
 			</div>
 			<div class="login_and_register" v-show="!existUser">
-				<a href="#">登录</a>
-				<a href="#">注册</a>
+				<router-link :to="{path:'/Login'}">登录</router-link>
+				<router-link :to="{path:'/Register'}">注册</router-link>
 			</div>
 			
 		</div>
@@ -28,12 +28,20 @@
 </template>
 
 <script>
+	import LocalStorage from '../utils/LocalStorage'
+	
 	export default {
 		name: 'Header',
 		data() {
 			return {
 				existUser: false
 			}
+		},
+		methods:{},
+		beforeMount() {
+			const ls = LocalStorage.getItem("token")
+			if (ls !== null)
+				this.existUser = true
 		}
 	}
 </script>
@@ -107,8 +115,13 @@
 		align-items: center;
 	}
 	
-	.login_and_register a{
-		width: 3rem;
-		text-decoration: none;
+	.login_and_register a {
+		color: inherit;
+		font-size: 14px;
+	}
+	
+	.login_and_register a:hover {
+		color: #1DA0FB;
+		font-size: 14px;
 	}
 </style>

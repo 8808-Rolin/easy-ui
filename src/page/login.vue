@@ -32,7 +32,7 @@
 					</div>
 
 					<div class="login_links">
-						<router-link :to="{path:'/Forget'}" :underline="false">忘记密码？</router-link>
+						<router-link :to="{path:'/Rorget'}" :underline="false">忘记密码？</router-link>
 						<router-link :to="{path:'/Register'}" :underline="false">还没有账号？前往注册</router-link>
 					</div>
 				</div>
@@ -98,7 +98,8 @@
 					})
 					.then(response => {
 						console.log(response.data.data.token)
-						if (response.data.data.token !== undefined) {
+						if (response.data.data.code === 0) {
+							console.log(response.data.data)
 							LocalStorage.setItem({
 								name: 'token',
 								value: {
