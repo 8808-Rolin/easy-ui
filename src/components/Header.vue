@@ -47,6 +47,8 @@
 		justify-content: center;
 		align-items: center;
 		box-shadow: var(--box-shadow2);
+		background-color: #FFFFFF;
+		z-index: 9999;
 	}
 
 	header .warp {

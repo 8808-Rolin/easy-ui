@@ -25,6 +25,10 @@ const router = new Router({
 		name: 'Community',
 		path: '/Community',
 		component: () => import('@/page/community')
+	},{
+		name: 'error-500',
+		path: '/500',
+		component: () => import('@/page/500')
 	}]
 })
 
