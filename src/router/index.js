@@ -11,19 +11,19 @@ const router = new Router({
 		component: () => import('@/page/index')
 	}, {
 		name: 'Login',
-		path: '/Login',
+		path: '/login',
 		component: () => import('@/page/login')
 	}, {
 		name: 'Register',
-		path: '/Register',
+		path: '/register',
 		component: () => import('@/page/register')
 	},{
 		name: 'Forget',
-		path: '/Forget',
+		path: '/forget',
 		component: () => import('@/page/forget')
 	},{
 		name: 'Community',
-		path: '/Community',
+		path: '/community',
 		component: () => import('@/page/community')
 	}]
 })

@@ -73,7 +73,7 @@
 					</div>
 
 					<div class="register_links">
-						<router-link :to="{path:'/Login'}" :underline="false">已有账号？前往登录</router-link>
+						<router-link :to="{path:'/login'}" :underline="false">已有账号？前往登录</router-link>
 					</div>
 				</div>
 			</div>
@@ -110,7 +110,7 @@
 				customColor: '#f2a373', // 进度条颜色
 				isPassword: '',
 				password: '',
-				imageBASE64:'',
+				imageBASE64: '',
 				// 登录数据， 差最后的验证
 				loginMessage: {
 					studentID: '',
@@ -151,29 +151,29 @@
 					let loadingInstance1 = Loading.service({
 						fullscreen: true
 					});
-					this.$http.get('http://rolin.icu:11119/api/tool/uni-variable', {
-							params: {
-								studentID: this.loginMessage.studentID,
-								phone: this.loginMessage.phone
+					const params = {
+						studentID: this.loginMessage.studentID,
+						phone: this.loginMessage.phone
+					}
+					this.$api.uniVariable(params).then(
+							response => {
+								loadingInstance1.close()
+								if (response.data.data.code !== 0) {
+									this.percentage = 25
+									this.notify = this.$notify.error({
+										message: response.data.data.msg,
+									});
+								} else {
+									this.percentage += 25;
+								}
 							}
-						})
-						.then(response => {
-							loadingInstance1.close()
-							if (response.data.data.code !== 0) {
-								this.percentage = 25
-								this.$notify.error({
-									message: response.data.data.msg,
-								});
-							} else {
-								this.percentage += 25;
-							}
-						})
+						)
 						.catch(error => {
 							loadingInstance1.close()
 							this.percentage = 25
 							console.log(error.response)
 							if (error.response !== undefined) {
-								this.$message.error({
+								this.notify = this.$message.error({
 									dangerouslyUseHTMLString: true,
 									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
 								});
@@ -183,34 +183,32 @@
 					let loadingInstance1 = Loading.service({
 						fullscreen: true
 					});
-					this.$http
-						.post('http://rolin.icu:11119/api/tool/upload-image', qs.stringify({
-							imageBASE64:this.imageBASE64
-						}), {
-							'Content-Type': 'application/x-www-form-urlencoded'
-						})
-						.then(response => {
+					this.$api.uploadImage({imageBASE64: this.imageBASE64}).then(
+						response => {
 							loadingInstance1.close()
 							if (response.data.data.code === 0) {
 								this.percentage += 25
 								this.loginMessage.headImage = response.data.data.msg
 							} else {
 								this.percentage = 75
-								this.$message.error({
+								this.notify = this.$message.error({
 									message: response.data.data.msg,
 								});
 							}
-						})
-						.catch(error => {
+						}
+					)
+					.catch(
+						error => {
 							loadingInstance1.close()
 							this.percentage = 75
 							if (error.response !== undefined) {
-								this.$message.error({
+								this.notify = this.$message.error({
 									dangerouslyUseHTMLString: true,
 									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
 								});
 							}
-						})
+						}
+					)
 				} else if (this.notNull && this.standart) {
 					this.percentage += 25;
 					if (this.percentage > 100) {
@@ -264,10 +262,13 @@
 
 			// 学号长度校验 
 			checkSNo() {
+				let reg=/^\d{1,}$/
+				let pattern=new RegExp(reg);
 				let len = this.loginMessage.studentID.length
+				let bool = pattern.test(this.loginMessage.studentID)
 				if (this.notify != null)
 					this.notify.close()
-				if (len > 15 || len < 8) {
+				if ((len > 15 || len < 8) && bool) {
 					this.isTrueSNo = false
 					if (len > 15) {
 						this.notify = this.$notify.error({
@@ -281,7 +282,15 @@
 						});
 					}
 				} else {
-					this.isTrueSNo = true
+					if (!bool) {
+						this.isTrueSNo = false
+						this.notify = this.$notify.error({
+							title: '输入信息有误',
+							message: '亲，学号只能包含数字！',
+						});
+					}
+					else
+						this.isTrueSNo = true
 				}
 				if (this.loginMessage.studentID === '')
 					this.isTrueSNo = true
@@ -354,17 +363,15 @@
 					let md5 = crypto.createHash("md5"); //md5加密对象
 					md5.update(this.password) //需要加密的密码
 					this.loginMessage.password = md5.digest('hex'); //password 加密完的密码
-					console.log("在发请求")
-					this.$http
-						.post('http://rolin.icu:11119/api/user/register', qs.stringify({
-							...this.loginMessage
-						}), {
-							'Content-Type': 'application/x-www-form-urlencoded'
-						})
-						.then(response => {
+					this.$api.register(this.loginMessage).then(
+						response => {
 							if (response.data.data.code === 0) {
+								this.$message({
+									type: 'success',
+									message: `${response.data.data.msg}`
+								});
 								this.$router.push({
-									path: '/Login'
+									path: '/login'
 								})
 							} else {
 								this.$message.success({
@@ -372,15 +379,18 @@
 									message: response.data.data.msg,
 								})
 							}
-						})
-						.catch(error => {
+						}
+					)
+					.catch(
+						error => {
 							if (error.response !== undefined) {
 								this.$message.error({
 									dangerouslyUseHTMLString: true,
 									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
 								});
 							}
-						})
+						}
+					)
 				} else {
 					if (this.isTruePassword && this.passwordLen && this.notNull)
 						this.notify = this.$message.error("请进行人机验证！")
@@ -424,26 +434,24 @@
 		},
 		watch: {
 			percentage(newVal) {
-				console.log(newVal)
 				if (newVal === 50) {
 					let loadingInstance1 = Loading.service({
 						fullscreen: true
 					});
-					this.$http.get('http://rolin.icu:11119/api/tool/get-college-list', {
-							params: {}
-						})
-						.then(response => {
+					this.$api.getCollegeList().then(
+						response => {
 							loadingInstance1.close()
 							if (response.data.data.result === -1) {
 								this.$message.error({
 									message: response.data.data.msg,
 								});
 							} else {
-								console.log(response.data.data.college)
 								this.faculties = response.data.data.college
 							}
-						})
-						.catch(error => {
+						}
+					)
+					.catch(
+						error => {
 							loadingInstance1.close()
 							if (error.response !== undefined) {
 								this.$message.error({
@@ -451,7 +459,8 @@
 									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
 								});
 							}
-						})
+						}
+					)
 				}
 			}
 		}

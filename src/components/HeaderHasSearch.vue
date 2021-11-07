@@ -27,8 +27,8 @@
 				</el-dropdown>
 			</div>
 			<div class="login_and_register" v-show="!existUser">
-				<router-link :to="{path:'/Login'}">登录</router-link>
-				<router-link :to="{path:'/Register'}">注册</router-link>
+				<router-link :to="{path:'/login'}">登录</router-link>
+				<router-link :to="{path:'/register'}">注册</router-link>
 			</div>
 
 		</div>
@@ -51,8 +51,11 @@
 		methods:{},
 		beforeMount() {
 			const ls = LocalStorage.getItem("token")
-			if (ls !== null)
+			if (ls !== null) {
 				this.existUser = true
+				this.$store.state.token = ls
+				console.log(this.$store)
+			}
 		}
 	}
 </script>
