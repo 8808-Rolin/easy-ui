@@ -2,7 +2,7 @@
 	<div class="info_box">
 		<div class="info_mes">
 			<div class="info_photo">
-
+				<img src="../assets/profile.jpg" >
 			</div>
 			<div class="name_and_ID">
 				<strong>用户名</strong>

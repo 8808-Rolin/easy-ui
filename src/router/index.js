@@ -34,7 +34,7 @@ const router = new Router({
 
 router.beforeEach(async(to, from, next) => {
 	const localstorage = LocalStorage.getItem("token")
-	let path = ['/Login', '/', '/Register', '/Forget']
+	let path = ['/Login', '/', '/Register', '/Forget', '/500']
 	if(path.indexOf(to.path) >= 0){
 		if(localstorage !== null && to.path !== '/')
 			next('/')

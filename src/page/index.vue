@@ -15,9 +15,9 @@
 				<span>进入</span>
 			</div>
 			<div class="community">
-				交流社区<i class="el-icon-arrow-right el-icon--right" style="--i:3"></i><i
-					class="el-icon-arrow-right el-icon--right" style="--i:2"></i><i
-					class="el-icon-arrow-right el-icon--right" style="--i:1"></i>
+				交流社区&emsp;<i class="el-icon-arrow-right el-icon--right" style="--i:0.6"></i><i
+					class="el-icon-arrow-right el-icon--right" style="--i:0.3"></i><i
+					class="el-icon-arrow-right el-icon--right" style="--i:0"></i>
 			</div>
 		</div>
 	</div>
@@ -135,9 +135,10 @@
 	}
 
 	.community i {
-		--r: 0.1;
-		--t: calc(var(--r) * var(--i));
-		color: rgba(0, 0, 0, var(--t));
+		--r: 0.3;
+		--t: calc((var(--r) * var(--i)) % 1);
+		color: rgb(255, 255, 255);
+		opacity: var(--t);
 		animation: changeColor 1s linear infinite;
 	}
 
@@ -148,11 +149,11 @@
 		}
 
 		33.3% {
-			--r: 0.4;
+			--r: 0.3;
 		}
 
 		66.6% {
-			--r: 1.33;
+			--r: 0.6;
 		}
 	}
 </style>
