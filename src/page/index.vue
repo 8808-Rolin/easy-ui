@@ -5,8 +5,19 @@
 			<div class="index_left"></div>
 
 			<div class="index_right">
-				<Notice></Notice>
-
+				<el-card class="box-card">
+					<div slot="header" class="clearfix">
+						<span>论坛公告</span>
+						<el-button style="float: right; padding: 0.1875rem 0" type="text" icon="el-icon-more-outline"></el-button>
+					</div>
+					<div class="notice">
+						<div v-for="(notice, index) in notices" :key="index" class="text item">
+							<a class="notice_title"><strong>{{notice.title}}</strong></a>
+							<a><small>{{notice.time}}</small></a>
+						</div>
+					</div>
+				
+				</el-card>
 			</div>
 		</div>
 
@@ -24,21 +35,75 @@
 </template>
 
 <script>
-	import Header from '../components/Header.vue'
-	import Notice from '../components/notice.vue'
-
+	import Header from '../components/Header'
+	import LocalStorage from '../utils/LocalStorage'
+	
 	export default {
 		name: 'Index',
 		data() {
 			return {
-
+				notices: [{
+					title: '第一条公告,第一条公告,第一条公告,第一条公告,第一条公告,第一条公告,',
+					url: '',
+					time: '2021-10-4'
+				}, {
+					title: '第二条公告',
+					url: '',
+					time: '2021-10-4'
+				}, {
+					title: '第9条公告',
+					url: '',
+					time: '2021-10-4'
+				}, {
+					title: '第0条公告',
+					url: '',
+					time: '2021-10-4'
+				}, {
+					title: '第6条公告',
+					url: '',
+					time: '2021-10-4'
+				}, {
+					title: '第7条公告',
+					url: '',
+					time: '2021-10-4'
+				}, {
+					title: '第5条公告',
+					url: '',
+					time: '2021-10-4'
+				}, {
+					title: '第4条公告',
+					url: '',
+					time: '2021-10-4'
+				}, {
+					title: '第2条公告',
+					url: '',
+					time: '2021-10-4'
+				}, {
+					title: '第1条公告',
+					url: '',
+					time: '2021-10-4'
+				}, {
+					title: '第3条公告',
+					url: '',
+					time: '2021-10-4'
+				}]
 			}
 		},
 		components: {
 			Header,
-			Notice
 		},
 		methods: {},
+		beforeMount() {
+			this.$api.getSimpleNotice().then(
+				res => {
+					console.log(res.data.data)
+				}
+			).catch(
+				error => {
+					console.log(error.response)
+				}
+			)
+		}
 	}
 </script>
 

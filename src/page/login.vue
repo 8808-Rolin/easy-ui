@@ -98,7 +98,8 @@
 								LocalStorage.setItem({
 									name: 'token',
 									value: {
-										token: response.data.data.token
+										token: response.data.data.token,
+										uid: response.data.data.token.uid,
 									},
 									expires: 60,
 								})

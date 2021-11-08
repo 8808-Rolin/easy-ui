@@ -42,8 +42,17 @@
 			const ls = LocalStorage.getItem("token")
 			if (ls !== null) {
 				this.existUser = true
-				this.$store.state.token = ls
-				console.log(this.$store)
+				if (this.$store.state.message.user === null) {
+					this.$api.getCommonPersonInformation({uid:ls.uid}).then(
+						res => {
+							console.log(res.data.data)
+						}
+					).catch(
+						error => {
+							console.log(error.response)
+						}
+					)
+				}
 			}
 		}
 	}
