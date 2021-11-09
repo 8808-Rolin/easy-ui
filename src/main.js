@@ -5,7 +5,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import App from './App.vue'
 import router from './router'
+import store from './store'
+import api from './api' // 导入api接口
 
+Vue.prototype.$api = api; // 将api挂载到vue的原型上复制代码
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 Vue.withCredentials = true
@@ -14,5 +17,7 @@ Vue.use(ElementUI)
 
 new Vue({
 	router,
+	store,
 	render: h => h(App)
 }).$mount('#app')
+

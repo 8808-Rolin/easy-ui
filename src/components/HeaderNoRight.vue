@@ -2,7 +2,7 @@
 	<header>
 		<div class="warp">
 			<div class="logo">
-				<a href="#" title="Easy社团">Easy社团</a>
+				<router-link :to="{path:'/'}" title="Easy社团">Easy社团</router-link>
 			</div>
 		</div>
 	</header>
@@ -13,7 +13,8 @@
 		name: 'HeaderNoRight',
 		data() {
 			return {}
-		}
+		},
+		methods:{},
 	}
 </script>
 

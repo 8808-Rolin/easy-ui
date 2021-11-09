@@ -32,8 +32,8 @@
 					</div>
 
 					<div class="login_links">
-						<router-link :to="{path:'/Forget'}" :underline="false">忘记密码？</router-link>
-						<router-link :to="{path:'/Register'}" :underline="false">还没有账号？前往注册</router-link>
+						<router-link :to="{path:'/forget'}" :underline="false">忘记密码？</router-link>
+						<router-link :to="{path:'/register'}" :underline="false">还没有账号？前往注册</router-link>
 					</div>
 				</div>
 			</div>
@@ -53,7 +53,7 @@
 			return {
 				checked: false,
 				password: null,
-				message:null, // 消息提示框
+				message: null, // 消息提示框
 				user: {
 					loginType: 0,
 					account: '',
@@ -73,7 +73,7 @@
 			},
 			/* 提交数据 **/
 			Commit() {
-				if(this.message !== null)
+				if (this.message !== null)
 					this.message.close()
 				this.user.password = this.password
 				/* 记住密码实现 **/
@@ -90,34 +90,40 @@
 				let md5 = crypto.createHash("md5"); //md5加密对象
 				md5.update(this.password) //需要加密的密码
 				this.user.password = md5.digest('hex'); //password 加密完的密码
-				this.$http
-					.post('http://rolin.icu:11119/api/user/login', qs.stringify({
-						...this.user
-					}), {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					})
-					.then(response => {
-						console.log(response.data.data.token)
-						if (response.data.data.token !== undefined) {
-							LocalStorage.setItem({
-								name: 'token',
-								value: {
-									token: response.data.data.token
-								},
-								expires: 60,
-							})
-							this.$router.push({ path:'/'})
-						} else {
-							LocalStorage.removeItem("token")
-							LocalStorage.removeItem("password")
-							this.message = this.$message.error({
-								message: response.data.data.msg,
-							})
+				this.$api.login(this.user).then(
+						response => {
+							console.log(response.data.data.token)
+							if (response.data.data.code === 0) {
+								console.log(response.data.data)
+								LocalStorage.setItem({
+									name: 'token',
+									value: {
+										token: response.data.data.token
+									},
+									expires: 60,
+								})
+								this.$router.push({
+									path: '/'
+								})
+							} else {
+								LocalStorage.removeItem("token")
+								LocalStorage.removeItem("password")
+								this.message = this.$message.error({
+									message: response.data.data.msg,
+								})
+							}
 						}
-					})
-					.catch(error => {
-						console.log(error.data)
-					})
+					)
+					.catch(
+						error => {
+							if (error.response !== undefined) {
+								this.message = this.$message.error({
+									dangerouslyUseHTMLString: true,
+									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
+								});
+							}
+						}
+					)
 			}
 		},
 		/* 缓存读取 **/

@@ -19,8 +19,7 @@
 
 						<el-select class="college" v-model="loginMessage.college" placeholder="请选择院系"
 							prefix-icon="el-icon-location-outline" v-show="percentage == 50">
-							<el-option v-for="item in faculties" :key="item.coid" :label="item.name"
-								:value="item.coid">
+							<el-option v-for="item in faculties" :key="item.coid" :label="item.name" :value="item.coid">
 							</el-option>
 						</el-select>
 						<el-input type="text" placeholder="真实姓名" prefix-icon="el-icon-user"
@@ -44,7 +43,7 @@
 						<el-upload class="avatar-uploader" action="#" :http-request="HttpRequest"
 							:show-file-list="false" :on-success="handleAvatarSuccess"
 							:before-upload="beforeAvatarUpload" v-show="percentage == 75">
-							<img v-if="loginMessage.headImage" :src="loginMessage.headImage" class="avatar">
+							<img v-if="imageBASE64" :src="imageBASE64" class="avatar">
 							<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 							<div slot="tip" class="el-upload__tip">上传jpg/png头像，且不超过500kb</div>
 						</el-upload>
@@ -74,7 +73,7 @@
 					</div>
 
 					<div class="register_links">
-						<router-link :to="{path:'/Login'}" :underline="false">已有账号？前往登录</router-link>
+						<router-link :to="{path:'/login'}" :underline="false">已有账号？前往登录</router-link>
 					</div>
 				</div>
 			</div>
@@ -95,10 +94,7 @@
 		userName: 'Register',
 		data() {
 			return {
-				faculties: [{
-					coid: '',
-					name: ''
-				}],
+				faculties: null,
 
 				sexs: [{
 					value: '0',
@@ -114,6 +110,7 @@
 				customColor: '#f2a373', // 进度条颜色
 				isPassword: '',
 				password: '',
+				imageBASE64: '',
 				// 登录数据， 差最后的验证
 				loginMessage: {
 					studentID: '',
@@ -150,38 +147,68 @@
 					this.notify.close()
 				let percentage = this.percentage
 				// 判断学号与手机号码是否唯一
-				if (percentage == 25 && this.notNull && this.standart) {
+				if (percentage === 25 && this.notNull && this.standart) {
 					let loadingInstance1 = Loading.service({
 						fullscreen: true
 					});
-					this.$http.get('http://rolin.icu:11119/api/tool/uni-variable', {
-							params: {
-								studentID: this.loginMessage.studentID,
-								phone: this.loginMessage.phone
+					const params = {
+						studentID: this.loginMessage.studentID,
+						phone: this.loginMessage.phone
+					}
+					this.$api.uniVariable(params).then(
+							response => {
+								loadingInstance1.close()
+								if (response.data.data.code !== 0) {
+									this.percentage = 25
+									this.notify = this.$notify.error({
+										message: response.data.data.msg,
+									});
+								} else {
+									this.percentage += 25;
+								}
 							}
-						})
-						.then(response => {
-							loadingInstance1.close()
-							if (response.data.data.code !== 0) {
-								this.percentage = 25
-								this.$notify.error({
-									message: response.data.data.msg,
-								});
-							} else {
-								this.percentage += 25;
-							}
-						})
+						)
 						.catch(error => {
 							loadingInstance1.close()
 							this.percentage = 25
 							console.log(error.response)
 							if (error.response !== undefined) {
-								this.$message.error({
+								this.notify = this.$message.error({
 									dangerouslyUseHTMLString: true,
 									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
 								});
 							}
-						}) 
+						})
+				} else if (percentage === 75 && this.notNull && this.standart) {
+					let loadingInstance1 = Loading.service({
+						fullscreen: true
+					});
+					this.$api.uploadImage({imageBASE64: this.imageBASE64}).then(
+						response => {
+							loadingInstance1.close()
+							if (response.data.data.code === 0) {
+								this.percentage += 25
+								this.loginMessage.headImage = response.data.data.msg
+							} else {
+								this.percentage = 75
+								this.notify = this.$message.error({
+									message: response.data.data.msg,
+								});
+							}
+						}
+					)
+					.catch(
+						error => {
+							loadingInstance1.close()
+							this.percentage = 75
+							if (error.response !== undefined) {
+								this.notify = this.$message.error({
+									dangerouslyUseHTMLString: true,
+									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
+								});
+							}
+						}
+					)
 				} else if (this.notNull && this.standart) {
 					this.percentage += 25;
 					if (this.percentage > 100) {
@@ -209,8 +236,8 @@
 					let filereader = new FileReader();
 					filereader.readAsDataURL(file)
 					filereader.onload = () => {
-						this.loginMessage.headImage = filereader.result
-						console.log(this.loginMessage.headImage)
+						this.imageBASE64 = filereader.result
+						console.log(this.imageBASE64)
 					}
 				} else {
 					if (!isJPGandPNG) {
@@ -235,10 +262,13 @@
 
 			// 学号长度校验 
 			checkSNo() {
+				let reg=/^\d{1,}$/
+				let pattern=new RegExp(reg);
 				let len = this.loginMessage.studentID.length
+				let bool = pattern.test(this.loginMessage.studentID)
 				if (this.notify != null)
 					this.notify.close()
-				if (len > 15 || len < 8) {
+				if ((len > 15 || len < 8) && bool) {
 					this.isTrueSNo = false
 					if (len > 15) {
 						this.notify = this.$notify.error({
@@ -252,7 +282,15 @@
 						});
 					}
 				} else {
-					this.isTrueSNo = true
+					if (!bool) {
+						this.isTrueSNo = false
+						this.notify = this.$notify.error({
+							title: '输入信息有误',
+							message: '亲，学号只能包含数字！',
+						});
+					}
+					else
+						this.isTrueSNo = true
 				}
 				if (this.loginMessage.studentID === '')
 					this.isTrueSNo = true
@@ -325,17 +363,15 @@
 					let md5 = crypto.createHash("md5"); //md5加密对象
 					md5.update(this.password) //需要加密的密码
 					this.loginMessage.password = md5.digest('hex'); //password 加密完的密码
-					console.log("在发请求")
-					this.$http
-						.post('http://rolin.icu:11119/api/user/register', qs.stringify({
-							...this.loginMessage
-						}), {
-							'Content-Type': 'application/x-www-form-urlencoded'
-						})
-						.then(response => {
+					this.$api.register(this.loginMessage).then(
+						response => {
 							if (response.data.data.code === 0) {
+								this.$message({
+									type: 'success',
+									message: `${response.data.data.msg}`
+								});
 								this.$router.push({
-									path: '/Login'
+									path: '/login'
 								})
 							} else {
 								this.$message.success({
@@ -343,15 +379,18 @@
 									message: response.data.data.msg,
 								})
 							}
-						})
-						.catch(error => {
+						}
+					)
+					.catch(
+						error => {
 							if (error.response !== undefined) {
 								this.$message.error({
 									dangerouslyUseHTMLString: true,
 									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
 								});
 							}
-						})
+						}
+					)
 				} else {
 					if (this.isTruePassword && this.passwordLen && this.notNull)
 						this.notify = this.$message.error("请进行人机验证！")
@@ -369,7 +408,7 @@
 				else if (this.percentage === 50)
 					bool = this.isTrueMail
 				else if (this.percentage === 75)
-					bool = true
+					bool = this.imageBASE64 !== ''
 				else if (this.percentage === 100)
 					bool = this.passwordLen && this.isTruePassword && this.isVerify === 1
 				return bool
@@ -387,7 +426,7 @@
 				else if (this.percentage === 50)
 					bool = arr.length >= 6
 				else if (this.percentage === 75)
-					bool = arr.length >= 9
+					bool = arr.length >= 8
 				else if (this.percentage === 100)
 					bool = arr.length >= 9 && this.password !== '' && this.isPassword !== ''
 				return bool
@@ -395,15 +434,12 @@
 		},
 		watch: {
 			percentage(newVal) {
-				console.log(newVal)
 				if (newVal === 50) {
 					let loadingInstance1 = Loading.service({
 						fullscreen: true
 					});
-					this.$http.get('http://easy.30202.co:11119/api/tool/get-college-list', {
-							params: {}
-						})
-						.then(response => {
+					this.$api.getCollegeList().then(
+						response => {
 							loadingInstance1.close()
 							if (response.data.data.result === -1) {
 								this.$message.error({
@@ -412,8 +448,10 @@
 							} else {
 								this.faculties = response.data.data.college
 							}
-						})
-						.catch(error => {
+						}
+					)
+					.catch(
+						error => {
 							loadingInstance1.close()
 							if (error.response !== undefined) {
 								this.$message.error({
@@ -421,7 +459,8 @@
 									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
 								});
 							}
-						})
+						}
+					)
 				}
 			}
 		}

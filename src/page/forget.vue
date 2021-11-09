@@ -24,8 +24,8 @@
 					</div>
 
 					<div class="forget_links">
-						<router-link :to="{path:'/Login'}" :underline="false">返回登录</router-link>
-						<router-link :to="{path:'/Register'}" :underline="false">前往注册</router-link>
+						<router-link :to="{path:'/login'}" :underline="false">返回登录</router-link>
+						<router-link :to="{path:'/register'}" :underline="false">前往注册</router-link>
 					</div>
 				</div>
 			</div>
@@ -159,13 +159,8 @@
 					let md5 = crypto.createHash("md5"); //md5加密对象
 					md5.update(this.password) //需要加密的密码
 					this.user.password = md5.digest('hex'); //password 加密完的密码
-					this.$http
-						.post('http://rolin.icu:11119/api/user/forget-password', qs.stringify({
-							...this.user
-						}), {
-							'Content-Type': 'application/x-www-form-urlencoded'
-						})
-						.then(response => {
+					this.$api.forgetPassword(this.user).then(
+						response => {
 							console.log(response.data)
 							if (response.data.data.code === 0) {
 								this.$alert(`\n你修改后的密码是:${this.password}`, response.data.data.msg, {
@@ -178,15 +173,18 @@
 									}
 								});
 								this.$router.push({
-									path: '/Login'
+									path: '/login'
 								})
 							} else {
 								this.notify = this.$message.error(response.data.data.msg)
 							}
-						})
-						.catch(error => {
+						}
+					)
+					.catch(
+						error => {
 							console.log(error.data)
-						})
+						}
+					)
 				}
 			}
 

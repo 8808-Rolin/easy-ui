@@ -8,11 +8,7 @@
 						<a>500: 服务器错误</a>
 					</div>
 					<div class="error_mes">
-						<h1 style="color:chocolate;">Error Type : null</h1>
-						<br />
-						<h4>Error Details:</h4>
-						<p style="text-indent:2rem">java.lang.ArithmeticException: / by zero</p>
-						<p>icu.rolin.easy.EasyApplicationTests.exp(EasyApplicationTests.java:50)</p>
+						<div v-html="$store.state.request.statusMes"></div>
 					</div>
 				</div>
 
@@ -27,6 +23,7 @@
 
 <script>
 	import Header from '../components/Header.vue'
+	import { mapState } from 'vuex';
 
 	export default {
 		name: 'error-500',
@@ -37,6 +34,12 @@
 		},
 		components: {
 			Header
+		},
+		computed: {
+			...mapState(['statusMes'])
+		},
+		beforeMount() {
+			console.log(this.$store.state)
 		}
 	}
 </script>

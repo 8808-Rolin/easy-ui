@@ -6,47 +6,54 @@ Vue.use(Router)
 
 const router = new Router({
 	routes: [{
+		name: '404',
+		path: '/404',
+		component: () => import('@/page/404')
+	}, {
+		name: '500',
+		path: '/500',
+		component: () => import('@/page/500')
+	}, {
 		name: 'Index',
 		path: '',
 		component: () => import('@/page/index')
 	}, {
 		name: 'Login',
-		path: '/Login',
+		path: '/login',
 		component: () => import('@/page/login')
 	}, {
 		name: 'Register',
-		path: '/Register',
+		path: '/register',
 		component: () => import('@/page/register')
-	},{
+	}, {
 		name: 'Forget',
-		path: '/Forget',
+		path: '/forget',
 		component: () => import('@/page/forget')
-	},{
+	}, {
 		name: 'Community',
-		path: '/Community',
+		path: '/community',
 		component: () => import('@/page/community')
-	},{
-		name: 'error-500',
-		path: '/500',
-		component: () => import('@/page/500')
 	}]
 })
 
-router.beforeEach(async(to, from, next) => {
+/* 前置路由守卫：
+	未登录时：可以进入 登录，注册， 找回密码， 首页
+	登录成功后不能进行 登录，注册， 找回密码
+**/
+router.beforeEach(async (to, from, next) => {
 	const localstorage = LocalStorage.getItem("token")
-	let path = ['/Login', '/', '/Register', '/Forget', '/500']
-	if(path.indexOf(to.path) >= 0){
-		if(localstorage !== null && to.path !== '/')
+	let path = ['/Login', '/', '/Register', '/Forget', '/404', '/Community', '/500']
+	if (path.indexOf(to.path.toLowerCase()) >= 0) {
+		if (localstorage !== null && to.path !== '/')
 			next('/')
 		else
 			next()
-	}
-	else{
-		if(localstorage != null)
+	} else {
+		if (localstorage != null)
 			next()
 		else
 			next('/Login')
-	}	
+	}
 })
 
 export default router
