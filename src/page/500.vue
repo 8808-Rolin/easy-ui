@@ -3,7 +3,7 @@
 		<Header></Header>
 		<div class="error_500">
 			<div class="error">
-				<div class="">
+				<div class="mes_box">
 					<div class="error_code">
 						<a>500: 服务器错误</a>
 					</div>
@@ -48,10 +48,10 @@
 	.error_500 {
 		width: 100%;
 		max-width: 75rem;
-		height: 40rem;
+		height: calc(100vh - 4rem);
 		position: absolute;
 		left: 50%;
-		bottom: 0;
+		bottom: 1vh;
 		transform: translateX(-50%);
 		display: flex;
 		flex-direction: row;
@@ -68,8 +68,9 @@
 		justify-content: space-around;
 	}
 
-	.error>div {
+	.error .mes_box {
 		width: 100%;
+		height: 90%;
 		margin: auto;
 	}
 
@@ -89,7 +90,7 @@
 
 	.error_mes {
 		width: 100%;
-		height: 30rem;
+		height: calc(100% - 4.5rem);
 		padding: 0.5rem;
 		text-align: left;
 		border-radius: 0.5rem;
@@ -108,6 +109,11 @@
 		background: #1DA0FB;
 		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 		border-radius: 0.25rem;
+	}
+	
+	.go_back {
+		width: 100%;
+		height: 2rem;
 	}
 
 	.go_back .el-link {

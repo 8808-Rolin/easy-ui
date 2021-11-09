@@ -168,17 +168,6 @@
 								}
 							}
 						)
-						.catch(error => {
-							loadingInstance1.close()
-							this.percentage = 25
-							console.log(error.response)
-							if (error.response !== undefined) {
-								this.notify = this.$message.error({
-									dangerouslyUseHTMLString: true,
-									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
-								});
-							}
-						})
 				} else if (percentage === 75 && this.notNull && this.standart) {
 					let loadingInstance1 = Loading.service({
 						fullscreen: true
@@ -193,18 +182,6 @@
 								this.percentage = 75
 								this.notify = this.$message.error({
 									message: response.data.data.msg,
-								});
-							}
-						}
-					)
-					.catch(
-						error => {
-							loadingInstance1.close()
-							this.percentage = 75
-							if (error.response !== undefined) {
-								this.notify = this.$message.error({
-									dangerouslyUseHTMLString: true,
-									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
 								});
 							}
 						}
@@ -381,16 +358,6 @@
 							}
 						}
 					)
-					.catch(
-						error => {
-							if (error.response !== undefined) {
-								this.$message.error({
-									dangerouslyUseHTMLString: true,
-									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
-								});
-							}
-						}
-					)
 				} else {
 					if (this.isTruePassword && this.passwordLen && this.notNull)
 						this.notify = this.$message.error("请进行人机验证！")
@@ -447,17 +414,6 @@
 								});
 							} else {
 								this.faculties = response.data.data.college
-							}
-						}
-					)
-					.catch(
-						error => {
-							loadingInstance1.close()
-							if (error.response !== undefined) {
-								this.$message.error({
-									dangerouslyUseHTMLString: true,
-									message: `status:${error.response.data.status}\nerror:${error.response.data.error}`
-								});
 							}
 						}
 					)

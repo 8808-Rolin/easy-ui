@@ -30,6 +30,9 @@ const message = {
 	mutations:{
 		addUser(state, val) {
 			state.user = val
+		},
+		removeUser(state, val) {
+			state.user = val
 		}
 	}
 }

@@ -14,6 +14,7 @@
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item>个人空间</el-dropdown-item>
 						<el-dropdown-item>退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -37,21 +38,34 @@
 				existUser: false
 			}
 		},
-		methods:{},
+		methods:{
+			logout() {
+				this.$api.logout().then(
+					res => {
+						this.$store.commit("deletUser", null)
+						console.log(res.data)
+					}
+				)
+			}
+		},
 		beforeMount() {
 			const ls = LocalStorage.getItem("token")
 			if (ls !== null) {
-				this.existUser = true
-				if (this.$store.state.message.user === null) {
+				let user = this.$store.state.message.user
+				if (user === null || user === undefined) {
 					this.$api.getCommonPersonInformation({uid:ls.uid}).then(
 						res => {
-							console.log(res.data.data)
-						}
-					).catch(
-						error => {
-							console.log(error.response)
+							if (!res.data.data.code) {
+								this.$store.commit("addUser", res.data.data.user)
+								console.log(res)
+								this.existUser = true
+							} else {
+								
+							}
 						}
 					)
+				} else {
+					this.existUser = true
 				}
 			}
 		}

@@ -7,6 +7,11 @@ const user = {
     login(params) {        
         return axios.post(`${base.sq}/api/user/login`, qs.stringify(params));    
     },
+	
+	/* 登出 **/
+	logout() {
+	     return axios.get(`${base.sq}/api/user/logout`);    
+	},
 	   
     /* 注册 **/
 	
@@ -18,7 +23,7 @@ const user = {
 	// 获取学校列表
 	getCollegeList() {
 	     return axios.get(`${base.sq}/api/tool/get-college-list`);    
-	 },
+	},
 	// 上传头像
 	uploadImage(params) {
 	    return axios.post(`${base.sq}/api/tool/upload-image`, qs.stringify(params));    
