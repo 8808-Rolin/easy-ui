@@ -91,7 +91,6 @@
 
 					height: 500, //高度
 					placeholder: '在这里输入文字',
-					height: 500,
 					menubar: true, // 最上方menu菜单的显示隐藏
 					toolbar_drawer: true,
 					statusbar: false, // 隐藏编辑器底部的状态栏

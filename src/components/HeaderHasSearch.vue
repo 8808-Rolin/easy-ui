@@ -22,7 +22,6 @@
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>个人空间</el-dropdown-item>
 						<el-dropdown-item>退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -52,6 +51,7 @@
 		methods:{},
 		beforeMount() {
 			const ls = LocalStorage.getItem("token")
+			
 			if (ls !== null) {
 				this.existUser = true
 				this.$store.state.token = ls

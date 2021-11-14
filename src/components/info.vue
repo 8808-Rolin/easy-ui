@@ -6,12 +6,12 @@
 			</div>
 			<div class="name_and_ID">
 				<strong>用户名</strong>
+				&emsp;
 				<small><strong>学号：</strong>2019060703316</small>
 			</div>
-			<div id="intro">
+			<div class="intro">
 				<small><strong>简介：</strong>简介</small>
 			</div>
-
 		</div>
 
 		<div class="info_logo">
@@ -50,10 +50,43 @@
 
 	.info_mes {
 		width: calc(100% - 14rem);
-		background-color: #42B983;
+	}
+	
+	.info_mes>div {
+		position: absolute;
+	}
+	
+	.info_photo {
+		width: 6rem;
+		height: 6rem;
+		margin-top: 0.5rem;
+		border-radius: 0.75rem;
+		overflow: hidden;
+	}
+	
+	.info_photo img {
+		width: 100%;
+	}
+	
+	.name_and_ID {
+		height: 2rem;
+		left: 8.5rem;
+		margin-top: 1rem;
+	}
+	
+	.intro {
+		left: 8.5rem;
+		margin-top: 3rem;
 	}
 
 	.info_logo {
 		width: 7rem;
 	}
+	
+	.info_logo img {
+		width: 100%;
+		height: 100%;
+	}
+	
+	
 </style>

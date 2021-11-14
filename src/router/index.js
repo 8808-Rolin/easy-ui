@@ -44,7 +44,7 @@ const router = new Router({
 	未登录时：可以进入 登录，注册， 找回密码， 首页
 	登录成功后不能进行 登录，注册， 找回密码
 **/
-router.beforeEach(async (to, from, next) => {
+/* router.beforeEach(async (to, from, next) => {
 	const localstorage = LocalStorage.getItem("token")
 	let path = [ '/500', '/404', '/', '/register', '/forget', '/login', '/tinymec']
 	let bool = path.indexOf(to.path)
@@ -63,5 +63,5 @@ router.beforeEach(async (to, from, next) => {
 			next('/Login')
 	}
 })
-
+ */
 export default router
