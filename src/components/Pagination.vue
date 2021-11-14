@@ -38,6 +38,10 @@
 </script>
 
 <style scoped>
+	.block {
+		text-align: center;
+	}
+	
 	.pagination-container {
 		background: #fff;
 		padding: 32px 16px;

@@ -41,6 +41,10 @@ const router = new Router({
 		name: 'CommunityP',
 		path: '/p',
 		component: () => import('@/page/p')
+	}, {
+		name: 'emoji2',
+		path: '/emoji2',
+		component: () => import('@/components/emoji2')
 	}]
 })
 
