@@ -49,15 +49,6 @@
 			}
 		},
 		methods:{},
-		beforeMount() {
-			const ls = LocalStorage.getItem("token")
-			
-			if (ls !== null) {
-				this.existUser = true
-				this.$store.state.token = ls
-				console.log(this.$store)
-			}
-		}
 	}
 </script>
 
@@ -141,12 +132,12 @@
 	}
 
 	/* 搜索框 */
-	.el-input__inner {
+	.seach_box .el-input__inner {
 		width: 12.5rem;
 		transition: width .5s;
 	}
 
-	.el-input__inner:focus {
+	.seach_box .el-input__inner:focus {
 		width: 20rem;
 		transition: width .5s;
 	}

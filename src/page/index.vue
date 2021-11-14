@@ -13,7 +13,7 @@
 					</div>
 					<div class="notice">
 						<div v-for="(notice, index) in notices" :key="index" class="text item">
-							<a class="notice_title"><strong>{{notice.title}}</strong></a>
+							<router-link class="notice_title"><strong>{{notice.title}}</strong></router-link>
 							<a><small>{{notice.time}}</small></a>
 						</div>
 					</div>
@@ -47,6 +47,7 @@
 <script>
 	import Header from '../components/Header'
 	import LocalStorage from '../utils/LocalStorage'	
+
 	export default {
 		name: 'Index',
 		data() {
@@ -59,13 +60,14 @@
 		},
 		methods: {},
 		beforeMount() {
-			this.$api.getSimpleNotice().then(
+			console.log("数据加载处理.....")
+			/* this.$api.getSimpleNotice().then(
 				res => {
 					console.log(res.data.data.notice)
 					if (res.data.data.code > 0)
 						this.notices = res.data.data.notice
 				}
-			)
+			) */
 		}
 	}
 </script>
@@ -158,7 +160,7 @@
 		right: 1rem;
 		overflow: hidden;
 	}
-	
+
 	.community .point_box .points {
 		width: 100%;
 		height: 100%;
@@ -233,7 +235,9 @@
 		border-radius: 0.25rem;
 	}
 	@keyframes changeColor {
-		0, 100% {
+
+		0,
+		100% {
 			left: -6.25rem;
 		}
 		33.3% {

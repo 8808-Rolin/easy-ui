@@ -30,13 +30,17 @@ const router = new Router({
 		path: '/forget',
 		component: () => import('@/page/forget')
 	}, {
+		name: 'Public',
+		path: '/public',
+		component: () => import('@/page/public')
+	}, {
 		name: 'Community',
 		path: '/community',
 		component: () => import('@/page/community')
-	},{
-		name: 'Tinymec',
-		path: '/tinymec',
-		component: () => import('@/page/tinymec')
+	}, {
+		name: 'PublicCommunity',
+		path: '/publicommunity',
+		component: () => import('@/page/pcommunity')
 	}]
 })
 

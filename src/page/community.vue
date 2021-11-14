@@ -6,23 +6,45 @@
 			<Info></Info>
 
 			<div class="club">
-				<div class="my_club">
-					<div class="club_title">
-						我的社团
+				<!-- 左边社团信息 -->
+				<div class="club_mes">
+					<div class="club_logo">
+						<img src="../assets/profile.jpg">
 					</div>
-					<div class="club_img_name">
-						<div class="club_img">
-							<img src="../assets/profile.jpg">
+					<div class="mes">
+						<div class="name">
+							<div class="club_name">
+								<strong>社团名称</strong>
+							</div>
+							<div class="join_club">
+								<el-button>加入社团</el-button>
+							</div>
 						</div>
-						<div class="club_name">社团名称</div>
+						<div class="club_superior">
+							<strong>社团对接组织：</strong>社团联合会
+						</div>
+						<div class="club_intro">
+							<small><strong>简介：</strong>简介内容</small>
+						</div>
 					</div>
 				</div>
 
-				<div class="school_club">
-					<div class="club_title">
-						学校社团
-					</div>
+				<!-- 右边社团活动区 -->
+				<div class="club_action">
+					<el-card class="box-card">
+						<div slot="header" class="clearfix">
+							<span>社团活动</span>
+						</div>
+						<div v-for="o in 4" :key="o" class="text item">
+							<a class="notice_title"><strong>{{'列表内容 ' + o }}</strong></a>
+							<a><small>{{o}}</small></a>
+						</div>
+					</el-card>
 				</div>
+			</div>
+
+			<div class="notice_box">
+				<MakesNotice></MakesNotice>
 			</div>
 		</div>
 	</div>
@@ -31,6 +53,7 @@
 <script>
 	import HeaderHasSearch from '../components/HeaderHasSearch.vue'
 	import Info from '../components/info.vue'
+	import MakesNotice from '../components/MakesNotice.vue'
 
 	export default {
 		name: 'Community',
@@ -41,7 +64,8 @@
 		},
 		components: {
 			HeaderHasSearch,
-			Info
+			Info,
+			MakesNotice
 		},
 		methods: {
 
@@ -55,12 +79,12 @@
 		max-width: 75rem;
 		margin: auto;
 		position: relative;
-		top: 3.75rem;
+		top: 3rem;
 	}
 
 	.main_box .club {
 		width: 100%;
-		height: 10rem;
+		height: 12rem;
 		margin-top: 0.625rem;
 		border-bottom-left-radius: 1rem;
 		border-bottom-right-radius: 1rem;
@@ -69,53 +93,139 @@
 
 	.main_box .club>div {
 		position: absolute;
-		height: 8.5rem;
-		margin-top: 0.3125rem;
-		background-color: #F2A373;
+		height: 11rem;
 	}
 
-	.my_club {
-		width: 30%;
-		left: 0.3125rem;
+	.main_box .notice_box {
+		padding: 1rem;
+		margin-top: 3rem;
+		border-radius: 1rem;
+		box-shadow: var(--box-shadow2);
 	}
 
-	.my_club>div:not(0) {
-		width: 3.5rem;
-		height: 5rem;
-	}
-	
-	.club_img_name {
-		width: 4rem;
-		height: 5.5rem;
-		margin-top: 0.5rem;
-		margin-left: 1rem;
+	/* 左边信息框 */
+	.club_mes {
+		width: 70%;
+		left: 0;
+		padding: 0.3125rem;
+		display: flex;
+		align-items: center;
 	}
 
-	.club_img_name .club_img {
-		width: 4rem;
-		height: 4rem;
+	.club_mes .club_logo {
+		width: 9rem;
+		height: 9rem;
 		border-radius: 50%;
 		overflow: hidden;
 	}
 
-	.club_img_name .club_img img {
-		width: 100%;
-		height: 100%;
+	.club_mes .mes {
+		width: calc(100% - 10rem);
+		margin-left: 1.25rem;
+		display: block;
+		text-align: left;
+	}
+
+	.club_mes .mes .name {
+		height: 3rem;
+		font-size: 2rem;
+		display: flex;
+		justify-content: space-between;
 	}
 	
-	.club_img_name .club_name {
-		font-size: 0.75rem;
-	}
-
-	.school_club {
-		width: 65%;
-		right: 0.3125rem;
-	}
-
-	.club_title {
-		width: 6rem;
-		padding: 0.5rem;
+	.club_mes .mes .name .join_club .el-button {
 		background-color: #1DA0FB;
 		color: #FFFFFF;
+		border: none;
+		font-weight: bold;
+		box-shadow: var(--box-shadow1);
+	}
+
+	.club_mes .mes .club_superior {
+		height: 1.5rem;
+	}
+
+	.club_mes .mes .club_intro {
+		height: 4.5rem;
+	}
+
+
+	/* 右边活动框 */
+	.club_action {
+		width: 30%;
+		right: 0;
+		padding: 0.3125rem;
+	}
+
+	/* 活动卡片 */
+	.text {
+		font-size: 14px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
+	.item {
+		width: 100%;
+		padding: 0.5rem 0.25rem;
+		margin-bottom: 0.1875rem;
+		border-radius: 0.375rem;
+		box-shadow: var(--box-shadow1);
+	}
+
+	.notice_title {
+		width: 80%;
+		max-height: 1.05rem;
+		overflow: hidden;
+		word-wrap: normal;
+		text-align: left;
+	}
+
+	.el-card__header {
+		width: 100%;
+		background-color: #1DA0FB;
+		color: #fff;
+		z-index: 100;
+		padding: 0.5rem 1.25rem;
+	}
+
+	.clearfix:before,
+	.clearfix:after {
+		display: table;
+		content: "";
+	}
+
+	.clearfix:after {
+		clear: both
+	}
+
+	.box-card {
+		width: 100%;
+		height: 100%;
+		border-radius: 1rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.el-card__body {
+		width: 100%;
+		height: 100%;
+		padding: 0.625rem;
+		overflow-y: scroll;
+		background-color: #FAFAFA;
+	}
+
+	/**滚动条的宽度*/
+	.el-card__body::-webkit-scrollbar {
+		width: 0.5rem;
+		height: 100%;
+	}
+
+	/* 滚动条的滑块 */
+	.el-card__body::-webkit-scrollbar-thumb {
+		background: #1DA0FB;
+		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+		border-radius: 0.25rem;
 	}
 </style>

@@ -1,0 +1,142 @@
+<template>
+	<div>
+		<el-table :data="tableData" stripe style="width: 100%">
+			<el-table-column prop="date" label="类型" width="150">
+			</el-table-column>
+			<el-table-column prop="name" label="标题" width="400">
+			</el-table-column>
+			<el-table-column prop="date" label="发帖用户" width="150">
+			</el-table-column>
+			<el-table-column prop="date" label="回复数" width="120">
+			</el-table-column>
+			<el-table-column prop="date" label="最后回复时间" width="150">
+			</el-table-column>
+			<el-table-column prop="date" label="发布时间" width="150">
+			</el-table-column>
+		</el-table>
+
+		<div style="margin-top: 0.625rem;">
+			<Pagination></Pagination>
+		</div>
+
+		<el-divider></el-divider>
+
+		<div class="meal_wrap">
+			<div class="">
+				<div class="title_makes_notice"><i class="el-icon-s-promotion"></i>&ensp;发表新帖</div>
+				<div class="tinymce-btn">
+					<!-- <button type="ghost" @click="tinymceClose">清空</button> -->
+					<button type="primary" @click="tinymceSave">发&emsp;表</button>
+				</div>
+			</div>
+			<div class="tinymce-box">
+				<TEditor ref="tinymceRef"></TEditor>
+			</div>
+			<!-- <div>富文本框内容：{{tinymceObj}}</div> -->
+
+		</div>
+	</div>
+
+</template>
+
+<script>
+	import TEditor from '@/components/tinymce'
+	import Pagination from './Pagination.vue'
+
+	export default {
+		components: {
+			TEditor,
+			Pagination
+		},
+		data() {
+			return {
+				tableData: [{
+					date: '2016-05-02',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1518 弄'
+				}, {
+					date: '2016-05-04',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1517 弄'
+				}, {
+					date: '2016-05-01',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1519 弄'
+				}, {
+					date: '2016-05-03',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1516 弄'
+				}],
+				pText: null,
+				html: null,
+			};
+		},
+		methods: {
+			dutyDetailClick() {
+				this.$nextTick(() => {
+					let html =
+						'<p><span style="color: rgb(224, 62, 45);" data-mce-style="color: #e03e2d;">1、方便；</span></p><p>2、快捷；</p>';
+					if (!html) {
+						html = '';
+					}
+					// 给富文本框赋值
+					this.$refs.tinymceRef.$el.querySelector('iframe').contentDocument.querySelector('body')
+						.innerHTML = html;
+				});
+			},
+
+			tinymceClose() {
+				// 清空富文本框
+				this.$refs.tinymceRef.$el.querySelector('iframe').contentDocument.querySelector('body').innerHTML = '';
+			},
+			tinymceSave() {
+				//富文本框保存获取值
+				this.pText = this.$refs.tinymceRef.$el.querySelector('iframe').contentDocument.querySelectorAll('p');
+				this.html = this.$refs.tinymceRef.$el.querySelector('iframe').contentDocument.querySelector('body')
+					.innerHTML;
+
+			}
+
+		}
+	};
+</script>
+
+<style>
+	.meal_wrap>div:first-child {
+		height: 4rem;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.title_makes_notice {
+		margin-left: 0.75rem;
+		font-size: 1.5rem;
+		color: #333;
+	}
+
+	.tinymce-btn {
+		height: 3rem;
+		padding: 1rem 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.tinymce-btn button {
+		border-radius: 0.375rem;
+		padding: 0.5rem 2rem;
+		font-weight: bold;
+		background-color: #1DA0FB;
+		color: #fff;
+		border: #1DA0FB solid 0.0625rem;
+		outline: none;
+		box-shadow: var(--box-shadow1);
+	}
+	
+	textarea  {
+		border-bottom-left-radius: 1rem;
+		border-bottom-right-radius: 1rem;
+	}
+</style>

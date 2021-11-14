@@ -40,17 +40,20 @@
 		},
 		methods:{
 			logout() {
-				this.$api.logout().then(
+				console.log("退出登录处理.....")
+				/* this.$api.logout().then(
 					res => {
 						this.$store.commit("deletUser", null)
 						console.log(res.data)
 					}
-				)
+				) */
 			}
 		},
 		beforeMount() {
-			const ls = LocalStorage.getItem("token")
+			console.log("数据加载处理.....")
+			/* const ls = LocalStorage.getItem("token")
 			if (ls !== null) {
+				this.$store.commit.commit('updateToken', ls.token)
 				let user = this.$store.state.message.user
 				if (user === null || user === undefined) {
 					this.$api.getCommonPersonInformation({uid:ls.uid}).then(
@@ -67,7 +70,7 @@
 				} else {
 					this.existUser = true
 				}
-			}
+			} */
 		}
 	}
 </script>
