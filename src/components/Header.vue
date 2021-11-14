@@ -38,13 +38,35 @@
 				existUser: false
 			}
 		},
-		methods:{},
+		methods:{
+			logout() {
+				this.$api.logout().then(
+					res => {
+						this.$store.commit("deletUser", null)
+						console.log(res.data)
+					}
+				)
+			}
+		},
 		beforeMount() {
 			const ls = LocalStorage.getItem("token")
 			if (ls !== null) {
-				this.existUser = true
-				this.$store.state.token = ls
-				console.log(this.$store)
+				let user = this.$store.state.message.user
+				if (user === null || user === undefined) {
+					this.$api.getCommonPersonInformation({uid:ls.uid}).then(
+						res => {
+							if (!res.data.data.code) {
+								this.$store.commit("addUser", res.data.data.user)
+								console.log(res)
+								this.existUser = true
+							} else {
+								
+							}
+						}
+					)
+				} else {
+					this.existUser = true
+				}
 			}
 		}
 	}

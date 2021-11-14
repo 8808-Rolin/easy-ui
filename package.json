@@ -7,11 +7,16 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@tinymce/tinymce-vue": "^3.2.0",
     "axios": "^0.24.0",
     "core-js": "^2.6.5",
     "crypto": "^1.0.1",
     "element-ui": "^2.15.6",
     "es6-promise": "^4.2.8",
+    "js-cookie": "^3.0.1",
+    "less": "^4.1.2",
+    "less-loader": "^6.2.0",
+    "plugins": "^0.4.2",
     "qs": "^6.10.1",
     "vant": "^2.12.31",
     "vue": "^2.6.10",
@@ -22,6 +27,8 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-service": "^3.8.0",
+    "tinymce": "^5.5.1",
+    "tinymce-vue": "^1.0.0",
     "vue-template-compiler": "^2.6.10"
   }
 }

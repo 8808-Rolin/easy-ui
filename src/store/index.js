@@ -23,10 +23,23 @@ const request = {
 	
 }
 
-
+const message = {
+	state:{
+		user:null,
+	},
+	mutations:{
+		addUser(state, val) {
+			state.user = val
+		},
+		removeUser(state, val) {
+			state.user = val
+		}
+	}
+}
 const store = new Vuex.Store({
 	modules: {
 		request,
+		message,
 	}
 })
 

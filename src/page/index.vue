@@ -44,63 +44,29 @@
 </template>
 
 <script>
-	import Header from '../components/Header.vue'
+	import Header from '../components/Header'
+	import LocalStorage from '../utils/LocalStorage'
 
 	export default {
 		name: 'Index',
 		data() {
 			return {
-				notices: [{
-					title: '第一条公告,第一条公告,第一条公告,第一条公告,第一条公告,第一条公告,',
-					url: '',
-					time: '2021-10-4'
-				}, {
-					title: '第二条公告',
-					url: '',
-					time: '2021-10-4'
-				}, {
-					title: '第9条公告',
-					url: '',
-					time: '2021-10-4'
-				}, {
-					title: '第0条公告',
-					url: '',
-					time: '2021-10-4'
-				}, {
-					title: '第6条公告',
-					url: '',
-					time: '2021-10-4'
-				}, {
-					title: '第7条公告',
-					url: '',
-					time: '2021-10-4'
-				}, {
-					title: '第5条公告',
-					url: '',
-					time: '2021-10-4'
-				}, {
-					title: '第4条公告',
-					url: '',
-					time: '2021-10-4'
-				}, {
-					title: '第2条公告',
-					url: '',
-					time: '2021-10-4'
-				}, {
-					title: '第1条公告',
-					url: '',
-					time: '2021-10-4'
-				}, {
-					title: '第3条公告',
-					url: '',
-					time: '2021-10-4'
-				}]
+				notices: [],
 			}
 		},
 		components: {
-			Header
+			Header,
 		},
 		methods: {},
+		beforeMount() {
+			this.$api.getSimpleNotice().then(
+				res => {
+					console.log(res.data.data.notice)
+					if (res.data.data.code > 0)
+						this.notices = res.data.data.notice
+				}
+			)
+		}
 	}
 </script>
 
@@ -204,7 +170,7 @@
 		right: 1rem;
 		overflow: hidden;
 	}
-	
+
 	.community .point_box .points {
 		width: 100%;
 		height: 100%;
@@ -291,7 +257,9 @@
 	}
 
 	@keyframes changeColor {
-		0, 100% {
+
+		0,
+		100% {
 			left: -6.25rem;
 		}
 
