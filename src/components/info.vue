@@ -10,7 +10,7 @@
 				<small><strong>学号：</strong>2019060703316</small>
 			</div>
 			<div class="intro">
-				<small><strong>简介：</strong>简介</small>
+				<small>简介</small>
 			</div>
 		</div>
 
@@ -73,12 +73,16 @@
 	.name_and_ID {
 		height: 2rem;
 		left: 8.5rem;
-		margin-top: 1rem;
+		margin-top: 0.5rem;
+	}
+	
+	.name_and_ID>strong {
+		font-size: 2rem;
 	}
 	
 	.intro {
 		left: 8.5rem;
-		margin-top: 3rem;
+		margin-top: 3.125rem;
 	}
 
 	.info_logo {

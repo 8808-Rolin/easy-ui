@@ -59,13 +59,13 @@
 		},
 		methods: {},
 		beforeMount() {
-			this.$api.getSimpleNotice().then(
-				res => {
-					console.log(res.data.data.notice)
-					if (res.data.data.code > 0)
-						this.notices = res.data.data.notice
-				}
-			)
+			// this.$api.getSimpleNotice().then(
+			// 	res => {
+			// 		// console.log(res.data.data.notice)
+			// 		if (res.data.data.code > 0)
+			// 			this.notices = res.data.data.notice
+			// 	}
+			// )
 		}
 	}
 </script>

@@ -45,6 +45,21 @@ const router = new Router({
 		name: 'emoji2',
 		path: '/emoji2',
 		component: () => import('@/components/emoji2')
+	}, {
+		name: 'Search',
+		path: '/search',
+		component: () => import('@/page/search/index'),
+		children: [{
+				name: 'user',
+				path: '/search/',
+				component: () => import('@/page/search/components/user')
+			},
+			{
+				name: 'Posts',
+				path: '/search/Posts',
+				component: () => import('@/page/search/components/Posts')
+			}
+		]
 	}]
 })
 
