@@ -41,6 +41,8 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
+		background: url(../assets/topbar.png) no-repeat;
+		background-size: cover;
 	}
 
 	.info_box>div {

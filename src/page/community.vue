@@ -59,7 +59,9 @@
 		name: 'Community',
 		data() {
 			return {
-
+				user:{}, 
+				MassOrganization:{},
+				massOrganizationActive:[]
 			}
 		},
 		components: {

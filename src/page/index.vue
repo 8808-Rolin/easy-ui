@@ -13,7 +13,7 @@
 					</div>
 					<div class="notice">
 						<div v-for="(notice, index) in notices" :key="index" class="text item">
-							<router-link class="notice_title"><strong>{{notice.title}}</strong></router-link>
+							<router-link :to="{path:'/'}" class="notice_title"><strong>{{notice.title}}</strong></router-link>
 							<a><small>{{notice.time}}</small></a>
 						</div>
 					</div>
@@ -26,7 +26,7 @@
 			<div class="enter">
 				<span>进入</span>
 			</div>
-			<div class="community">
+			<div class="community" @click="toPublic">
 				交流社区&emsp;
 				<div class="point_box">
 					<div class="points">
@@ -36,7 +36,6 @@
 						<i class="el-icon-arrow-right el-icon--right" style="--i:0.4"></i>
 						<i class="el-icon-arrow-right el-icon--right" style="--i:0.1"></i>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -58,7 +57,11 @@
 		components: {
 			Header,
 		},
-		methods: {},
+		methods: {
+			toPublic() {
+				this.$router.push({path: '/public'})
+			}
+		},
 		beforeMount() {
 			console.log("数据加载处理.....")
 			/* this.$api.getSimpleNotice().then(

@@ -4,6 +4,16 @@ import LocalStorage from '../utils/LocalStorage'
 
 Vue.use(Router)
 
+/* 解决中断当前的导航时控制台报错 **/
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location, onResolve, onReject) {
+	if (onResolve || onReject) {
+		return originalPush.call(this, location, onResolve, onReject)
+	}
+	return originalPush.call(this, location).catch(err => err)
+}
+
+
 const router = new Router({
 	routes: [{
 		name: '404',
@@ -41,6 +51,10 @@ const router = new Router({
 		name: 'PublicCommunity',
 		path: '/publicommunity',
 		component: () => import('@/page/pcommunity')
+	}, {
+		name: 'emoji2',
+		path: '/emoji2',
+		component: () => import('@/components/emoji2')
 	}]
 })
 
@@ -50,22 +64,22 @@ const router = new Router({
 **/
 /* router.beforeEach(async (to, from, next) => {
 	const localstorage = LocalStorage.getItem("token")
-	let path = [ '/500', '/404', '/', '/register', '/forget', '/login', '/tinymec']
+	let path = ['/500', '/404', '/', '/register', '/forget', '/login']
 	let bool = path.indexOf(to.path)
 	if (bool >= 0) {
 		if (bool > 2)
 			if (localstorage != null)
 				next('/')
-			else
-				next()
+		else
+			next()
 		else
 			next()
 	} else {
 		if (localstorage != null)
 			next()
 		else
-			next('/Login')
+			next('/login')
 	}
-})
- */
+}) */
+
 export default router

@@ -65,7 +65,9 @@
 		name: 'Public',
 		data() {
 			return {
-
+				myMassOrganization:[],
+				schoolMassOrganization:[],
+				user:{}
 			}
 		},
 		components: {

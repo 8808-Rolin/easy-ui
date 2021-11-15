@@ -22,12 +22,18 @@
 		<el-divider></el-divider>
 
 		<div class="meal_wrap">
-			<div class="">
+			<div>
 				<div class="title_makes_notice"><i class="el-icon-s-promotion"></i>&ensp;发表新帖</div>
 				<div class="tinymce-btn">
-					<!-- <button type="ghost" @click="tinymceClose">清空</button> -->
 					<button type="primary" @click="tinymceSave">发&emsp;表</button>
 				</div>
+			</div>
+			<div class="title">
+				<el-select v-model="value" placeholder="请选择">
+					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+					</el-option>
+				</el-select>
+				<el-input v-model="input" placeholder="请输入内容"></el-input>
 			</div>
 			<div class="tinymce-box">
 				<TEditor ref="tinymceRef"></TEditor>
@@ -69,7 +75,10 @@
 				}],
 				pText: null,
 				html: null,
-			};
+				input:"",
+				value:"",
+				options:[],
+			}
 		},
 		methods: {
 			dutyDetailClick() {
@@ -110,6 +119,17 @@
 		align-items: center;
 	}
 	
+	.meal_wrap .title {
+		padding: 0.5rem 0;
+		display: flex;
+		align-items: center;
+	}
+	
+	.meal_wrap .title .el-select {
+		width: 12.5rem;
+		margin-right: 0.625rem;
+	}
+
 	.title_makes_notice {
 		margin-left: 0.75rem;
 		font-size: 1.5rem;
@@ -134,8 +154,8 @@
 		outline: none;
 		box-shadow: var(--box-shadow1);
 	}
-	
-	textarea  {
+
+	textarea {
 		border-bottom-left-radius: 1rem;
 		border-bottom-right-radius: 1rem;
 	}
