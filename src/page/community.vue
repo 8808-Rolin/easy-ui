@@ -46,6 +46,8 @@
 			<div class="notice_box">
 				<MakesNotice></MakesNotice>
 			</div>
+			<!-- 废物div -->
+			<div style="height: 1rem;"></div>
 		</div>
 	</div>
 </template>

@@ -22,17 +22,45 @@
 						<div class="user_photo">
 							<img src="../assets/profile.jpg">
 						</div>
-						<p>用户名</p>
+						<p><big><strong>用户名</strong></big></p>
 						<p>UID: 0662</p>
 						<p>院系：信息技术学院</p>
 					</div>
 					<div class="p_content">
 						<div class="content">
-							帖子内容
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
+							<p>Post content</p>
 						</div>
 						<div class="operation">
-							<i class="el-icon-star-off"></i>
-							<i class="el-icon-star-on"></i>
+							<div>
+								<el-tag :key="tag" v-for="tag in dynamicTags">
+									{{tag}}
+								</el-tag>
+							</div>
+							<div>
+								<i class="el-icon-star-off"></i>
+								<i class="el-icon-star-on"></i>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -65,8 +93,9 @@
 			<!-- 废物div -->
 			<div style="height: 1rem;"></div>
 		</div>
-
-
+		<!-- 废物div -->
+		<div style="height: 1rem;"></div>
+	</div>
 	</div>
 </template>
 
@@ -76,29 +105,31 @@
 	import EmojiInput from '../components/EmojiInput.vue'
 	import Pagination from '../components/Pagination.vue'
 	import analysisEmoji from '../utils/analysisEmoji.js'
-	
+
 	export default {
 		name: 'CommunityP',
 		data() {
 			return {
-				user:{},
-				post:{},
-				discuss:[{
-					name:"用户名",
-					content:"评论内容",
-					date:"2021-11-14",
-				},
-				{
-					name:"用户名",
-					content:"评论内容",
-					date:"2021-11-14",
-				},
-				{
-					name:"用户名",
-					content:"评论内容",
-					date:"2021-11-14",
-				}],
-				myDiscuss:"",
+				user: {},
+				post: {},
+				discuss: [{
+						name: "用户名",
+						content: "评论内容",
+						date: "2021-11-14",
+					},
+					{
+						name: "用户名",
+						content: "评论内容",
+						date: "2021-11-14",
+					},
+					{
+						name: "用户名",
+						content: "评论内容",
+						date: "2021-11-14",
+					}
+				],
+				myDiscuss: "",
+				dynamicTags: ['标签一', '标签二', '标签三'],
 			}
 		},
 		components: {
@@ -107,14 +138,14 @@
 			EmojiInput,
 			Pagination
 		},
-		methods:{
+		methods: {
 			/* 解析表情 **/
 			analyEmoji(content) {
 				let str = analysisEmoji(content)
 				this.discuss.push({
-					name:"用户名",
-					content:str,
-					date:"2021-11-14",
+					name: "用户名",
+					content: str,
+					date: "2021-11-14",
 				})
 			},
 		},
@@ -137,7 +168,7 @@
 
 			.p_title {
 				padding: 0.5rem;
-				border-bottom: #1DA0FB99 0.0625rem solid;
+				border-bottom: #cdcdcf 0.0625rem solid;
 
 				div {
 					padding: 0.1875rem 0.5rem;
@@ -159,19 +190,23 @@
 				display: flex;
 
 				.p_user {
+					width: 12.5rem;
 					padding: 1rem 1.5rem;
 					text-align: center;
-					border-right: #1DA0FB99 0.0625rem solid;
+					border-right: #cdcdcf 0.0625rem solid;
 
 					.user_photo {
 						width: 6rem;
 						height: 6rem;
+						border: 0.25rem solid #c8c8d7;
 						border-radius: 50%;
 						margin: 1rem auto;
 						overflow: hidden;
 					}
 
 					p {
+						width: 10rem;
+						overflow: hidden;
 						margin-bottom: 1rem;
 					}
 				}
@@ -180,7 +215,7 @@
 					flex: 1;
 
 					.content {
-						min-height: calc(100% - 2.5rem);
+						min-height: calc(100% - 5rem);
 						padding: 1rem 1.5rem;
 					}
 
@@ -188,7 +223,12 @@
 						font-size: 1.5rem;
 						color: #ffaa00;
 						padding: 0.5rem;
-						text-align: right;
+						display: flex;
+						justify-content: space-between;
+
+						.el-tag+.el-tag {
+							margin-left: 10px;
+						}
 					}
 				}
 			}
@@ -198,50 +238,63 @@
 			width: 100%;
 			margin-top: 1rem;
 			margin-bottom: 1rem;
+			border-bottom-left-radius: 1rem;
+			border-bottom-right-radius: 1rem;
 			box-shadow: var(--box-shadow2);
 
 			.publish {
-				padding: 1rem;
-				border-bottom: rgba(0, 0, 0, .3) 0.0625rem solid;
+				padding: 2rem 1rem 0;
+				// border-bottom: rgba(0, 0, 0, .3) 0.0625rem solid;
 			}
 
-			.discuss {
-				padding: 0.5rem 1rem;
-				display: flex;
+			.discuss_all {
+				margin-top: 2rem;
 
-				.left {
-					width: 4rem;
-					height: 4rem;
-					border-radius: 50%;
-					overflow: hidden;
-				}
+				.discuss {
+					width: 70%;
+					margin: 1rem auto 0;
+					padding: 0.5rem 1rem;
+					display: flex;
 
-				.right {
-					flex: 1;
-					margin-left: 1rem;
-					border-bottom: rgba(0, 0, 0, .3) 0.0625rem solid;
-
-					div {
-						padding: 0.1875rem 0;
+					.left {
+						width: 4rem;
+						height: 4rem;
+						border-radius: 50%;
+						overflow: hidden;
 					}
 
-					.name {
-						font-weight: bold;
-					}
+					.right {
+						flex: 1;
+						margin-left: 1rem;
+						border-bottom: rgba(0, 0, 0, .3) 0.0625rem solid;
 
-					.content {
-						color: #666;
-						img {
-							width: 1.875rem;
-							height: 1.875rem;
+						div {
+							padding: 0.1875rem 0;
+						}
+
+						.name {
+							font-weight: bold;
+						}
+
+						.content {
+							color: #666;
+
+							img {
+								width: 1.875rem;
+								height: 1.875rem;
+							}
+						}
+
+						.time_other {
+							font-size: 0.75rem;
+							color: #999;
+							display: flex;
+							justify-content: space-between;
 						}
 					}
 
-					.time_other {
-						font-size: 0.75rem;
-						color: #999;
-						display: flex;
-						justify-content: space-between;
+					&:last-child .right {
+						border: none;
 					}
 				}
 			}

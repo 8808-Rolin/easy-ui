@@ -1,3 +1,20 @@
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@lpc528150 
+8808-Rolin
+/
+easy-ui
+Public
+1
+20
+Code
+Issues
+Pull requests
 <template>
 	<div>
 		<Header></Header>
@@ -46,7 +63,6 @@
 <script>
 	import Header from '../components/Header'
 	import LocalStorage from '../utils/LocalStorage'	
-
 	export default {
 		name: 'Index',
 		data() {
@@ -163,7 +179,6 @@
 		right: 1rem;
 		overflow: hidden;
 	}
-
 	.community .point_box .points {
 		width: 100%;
 		height: 100%;
@@ -238,7 +253,6 @@
 		border-radius: 0.25rem;
 	}
 	@keyframes changeColor {
-
 		0,
 		100% {
 			left: -6.25rem;

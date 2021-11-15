@@ -59,8 +59,11 @@
 
 	.el-popover__reference-wrapper .el-button {
 		font-size: 0.75rem;
+		border: none;
 		margin-top: 0.5rem;
 		margin-left: 6.25rem;
+		padding: 0.5rem 1rem;
+		box-shadow: 0 0 0.1875rem rgba(0,0,0,.3);
 		font-weight: bolder;
 	}
 
