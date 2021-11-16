@@ -99,6 +99,71 @@
 							</div>
 						</div>
 					</div>
+					<div class="discuss">
+						<div class="left">
+							<img src="../assets/profile.jpg">
+						</div>
+						<div class="right">
+							<div class="name">用户名</div>
+							<div class="content">评论内容</div>
+							<div class="time_other">
+								<div>发表时间：2021-11-14</div>
+								<i class="el-icon-more"></i>
+							</div>
+						</div>
+					</div>
+					<div class="discuss">
+						<div class="left">
+							<img src="../assets/profile.jpg">
+						</div>
+						<div class="right">
+							<div class="name">用户名</div>
+							<div class="content">评论内容</div>
+							<div class="time_other">
+								<div>发表时间：2021-11-14</div>
+								<i class="el-icon-more"></i>
+							</div>
+						</div>
+					</div>
+					<div class="discuss">
+						<div class="left">
+							<img src="../assets/profile.jpg">
+						</div>
+						<div class="right">
+							<div class="name">用户名</div>
+							<div class="content">评论内容</div>
+							<div class="time_other">
+								<div>发表时间：2021-11-14</div>
+								<i class="el-icon-more"></i>
+							</div>
+						</div>
+					</div>
+					<div class="discuss">
+						<div class="left">
+							<img src="../assets/profile.jpg">
+						</div>
+						<div class="right">
+							<div class="name">用户名</div>
+							<div class="content">评论内容</div>
+							<div class="time_other">
+								<div>发表时间：2021-11-14</div>
+								<i class="el-icon-more"></i>
+							</div>
+						</div>
+					</div>
+					<div class="discuss">
+						<div class="left">
+							<img src="../assets/profile.jpg">
+						</div>
+						<div class="right">
+							<div class="name">用户名</div>
+							<div class="content">评论内容</div>
+							<div class="time_other">
+								<div>发表时间：2021-11-14</div>
+								<i class="el-icon-more"></i>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div style="padding: 1rem 0;">
 					<Pagination></Pagination>
@@ -227,7 +292,9 @@
 
 			.publish {
 				padding: 2rem 1rem 0;
-				// border-bottom: rgba(0, 0, 0, .3) 0.0625rem solid;
+				position: sticky;
+				top: 0;
+				background-image: linear-gradient(#fafafa 90%, rgba(0, 0, 0, 0));
 			}
 
 			.discuss_all {

@@ -60,6 +60,19 @@ const router = new Router({
 				component: () => import('@/page/search/components/Posts')
 			}
 		]
+	}, {
+		name: 'HomePage',
+		path: '/home-page',
+		component: () => import('@/page/user/index'),
+		children: [{
+			name: 'MyHome',
+			path: '/home-page/',
+			component: () => import('@/page/user/components/my')
+		}, {
+			name: 'HisHome',
+			path: '/home-page/his-page',
+			component: () => import('@/page/user/components/his')
+		}]
 	}]
 })
 
