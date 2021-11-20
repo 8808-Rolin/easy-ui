@@ -12,26 +12,11 @@
 					</div>
 					<div class="club_box">
 						<!-- 社团logo和名称 -->
-						<div class="club_img_name">
-							
+						<div class="club_img_name" v-for="item in myMassOrganization" :key="item.aid" @click="toCommunity(item.aid)">
 							<div class="club_img">
-								<img src="../assets/profile.jpg">
+								<img :src="assImage(item.assImage)">
 							</div>
-							<div class="club_name">社团名称</div>
-						</div>
-						
-						<div class="club_img_name">
-							<div class="club_img">
-								<img src="../assets/profile.jpg">
-							</div>
-							<div class="club_name">社团名称</div>
-						</div>
-						
-						<div class="club_img_name">
-							<div class="club_img">
-								<img src="../assets/profile.jpg">
-							</div>
-							<div class="club_name">社团名称</div>
+							<div class="club_name">{{item.assName}}</div>
 						</div>
 					</div>
 
@@ -43,14 +28,13 @@
 					</div>
 					
 					<div class="club_box">
-						<div>文学社</div>
-						<div>轻风文学社</div>
+						<div v-for="item in schoolMassOrganization" :key="item.aid" @click="toCommunity(item.aid)">{{item.assName}}</div>
 					</div>
 				</div>
 			</div>
 			
 			<div class="notice_box">
-				<MakesNotice></MakesNotice>
+				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="paid"></MakesNotice>
 			</div>
 			
 			<!-- 废物div -->
@@ -63,6 +47,7 @@
 	import HeaderHasSearch from '../components/HeaderHasSearch.vue'
 	import Info from '../components/info.vue'
 	import MakesNotice from '../components/MakesNotice.vue'
+	import base from '../api/request/base.js'
 
 	export default {
 		name: 'Public',
@@ -70,16 +55,77 @@
 			return {
 				myMassOrganization:[],
 				schoolMassOrganization:[],
-				user:{}
+				posts:[],
+				firstposts:[],
+				user:{},
+				code:0,
+				page:1,
+				limit:7,
+				notisSize:0,
+				paid:0,
 			}
 		},
+		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid'],
 		components: {
 			HeaderHasSearch,
 			Info,
 			MakesNotice
 		},
 		methods: {
-
+			getAssociationList() {
+				this.$api.getShowData({uid:2}).then(
+					res => {
+						if (res.data.data.code > 0) {
+							this.schoolMassOrganization = this.arrayUnique(res.data.data.ass, 0)
+							this.myMassOrganization = this.arrayUnique(res.data.data.ass, 1)
+						}
+					}
+				)
+			},
+			arrayUnique(arr, isJoin) {
+				const ass = arr.filter((item) => {
+					if (item.isJoin === isJoin) 
+						return true
+				})
+				return ass
+			},
+			getFistPostList() {
+				this.$api.getPostList({aid:0,type:1,page:null,limit:null}).then(
+					res => {
+						this.firstposts = res.data.data.posts
+						this.notisSize = res.data.data.code
+						this.code = this.code + this.notisSize
+					}
+				)
+			},
+			getPostList(aid, type, page, limit) {
+				this.$api.getPostList({aid,type,page,limit}).then(
+					res => {
+						console.log(res.data.data.posts)
+						this.posts = res.data.data.posts
+						this.code = res.data.data.code
+						this.code = this.code + this.notisSize
+					}
+				)
+			},
+			assImage(assImage) {
+				return `${base.sq}${assImage}`
+			},
+			toCommunity(param) {
+				console.log(param)
+				this.$router.push({name:'Community', params:{'aid':param}})
+			},
+		},
+		mounted(){
+			this.$bus.$on('getPostList',this.getPostList)
+		},
+		beforeMount() {
+			this.getAssociationList()
+			this.getFistPostList()
+			this.getPostList(0,2,this.page,this.limit)
+		},
+		beforeDestroy() {
+			this.$bus.$off('getPostList')
 		}
 	}
 </script>

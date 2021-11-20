@@ -23,7 +23,7 @@
 					</span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>个人空间</el-dropdown-item>
-						<el-dropdown-item>退出登录</el-dropdown-item>
+						<el-dropdown-item  @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
@@ -47,7 +47,6 @@
 		name: 'Header',
 		data() {
 			return {
-				existUser: false,
 				search: {
 					type: 0,
 					keyword: ''
@@ -57,38 +56,42 @@
 		methods: {
 			logout() {
 				console.log("退出登录处理.....")
-				this.$api.logout().then(
-					res => {
-						this.$store.commit("deletUser", null)
-						console.log(res.data)
-					}
-				)
+				this.$store.commit("removeUser", '')
+				LocalStorage.removeItem('token')
+				this.$store.commit('updateExistUser', false)
+				this.$router.push({
+					path: '/login'
+				})
 			},
 			checkLogin() {
 				const ls = LocalStorage.getItem("token")
 				if (ls !== null) {
 					this.$store.commit('updateToken', ls.token)
+					this.$store.commit('updateUid', ls.uid)
 					let user = this.$store.state.message.user
-					if (user === '' || user === undefined || user === null) {
+					if (user.headImage === '' || user.headImage === undefined || user.headImage === null) {
 						this.$api.getCommonPersonInformation({
 							uid: ls.uid
 						}).then(
 							res => {
 								if (!res.data.data.code) {
 									this.$store.commit("addUser", res.data.data.user)
-									this.existUser = true
+									this.$store.commit('updateExistUser', true)
 								}
 							}
 						)
 					} else {
-						this.existUser = true
+						this.$store.commit('updateExistUser', true)
 					}
+				} else {
+					this.$store.commit('updateExistUser', false)
 				}
 			}
 		},
 		computed: {
 			...mapState({
-				user:state => state.message.user
+				user:state => state.message.user,
+				existUser:state => state.message.existUser,
 			}),
 			headImage() {
 				return `${base.sq}${this.user.headImage}`

@@ -19,14 +19,16 @@
 				console.log(`每页 ${val} 条`);
 			},
 			handleCurrentChange(val) {
+				this.$bus.$emit('getPostList', 0,2,val,this.PageSize-3)
 				console.log(`当前页: ${val}`);
 			}
 		},
+		props:['total'],
 		data() {
 			return {
-				PageSizes: [10, 20, 30, 40],
+				PageSizes: [10],
 				currentPage: 1,
-				total: 400,
+				//total: 400,
 				PageSize: 10,
 				msg: {
 					name: 1,

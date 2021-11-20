@@ -9,22 +9,22 @@
 				<!-- 左边社团信息 -->
 				<div class="club_mes">
 					<div class="club_logo">
-						<img src="../assets/profile.jpg">
+						<img :src="assImage(ass.assImage)">
 					</div>
 					<div class="mes">
 						<div class="name">
 							<div class="club_name">
-								<strong>社团名称</strong>
+								<strong>{{ass.assName}}</strong>
 							</div>
-							<div class="join_club">
+							<div class="join_club" v-show="permissionCode === 0">
 								<el-button>加入社团</el-button>
 							</div>
 						</div>
 						<div class="club_superior">
-							<strong>社团对接组织：</strong>社团联合会
+							<strong>社团对接组织：</strong>{{ass.assOrg}}
 						</div>
 						<div class="club_intro">
-							<small><strong>简介：</strong>简介内容</small>
+							<small><strong>简介：</strong>{{ass.assIntro}}</small>
 						</div>
 					</div>
 				</div>
@@ -35,16 +35,16 @@
 						<div slot="header" class="clearfix">
 							<span>社团活动</span>
 						</div>
-						<div v-for="o in 4" :key="o" class="text item">
-							<a class="notice_title"><strong>{{'列表内容 ' + o }}</strong></a>
-							<a><small>{{o}}</small></a>
+						<div v-for="item in actionOverview" :key="item.actid" class="text item">
+							<a class="notice_title"><strong>{{item.title}}</strong></a>
+							<a><small>{{item.date}}</small></a>
 						</div>
 					</el-card>
 				</div>
 			</div>
 
 			<div class="notice_box">
-				<MakesNotice></MakesNotice>
+				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="$route.params.aid"></MakesNotice>
 			</div>
 			<!-- 废物div -->
 			<div style="height: 1rem;"></div>
@@ -56,14 +56,31 @@
 	import HeaderHasSearch from '../components/HeaderHasSearch.vue'
 	import Info from '../components/info.vue'
 	import MakesNotice from '../components/MakesNotice.vue'
-
+	import base from '../api/request/base.js'
+	import {
+		mapState
+	} from 'vuex'
+	
 	export default {
 		name: 'Community',
+		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid'],
 		data() {
 			return {
 				user:{}, 
-				MassOrganization:{},
-				massOrganizationActive:[]
+				permissionCode:3,
+				ass:[],
+				options: [{
+					label:'社团公告',
+					value:1,
+				}],
+				actionOverview:[],
+				posts:[],
+				firstposts:[],
+				user:{},
+				code:0,
+				page:1,
+				limit:8,
+				notisSize:0,
 			}
 		},
 		components: {
@@ -72,8 +89,66 @@
 			MakesNotice
 		},
 		methods: {
-
-		}
+			getMassOrganization() {
+				let uid = this.uid
+				let aid = this.$route.params.aid
+				this.$api.getAssInformation({uid,aid}).then(
+					res => {
+						this.permissionCode = res.data.data.permissionCode
+						this.ass = res.data.data.ass
+					}
+				)
+			},
+			getActionOverview() {
+				let uid = this.uid
+				let aid = this.$route.params.aid
+				this.$api.getActionOverview({uid,aid}).then(
+					res => {
+						this.actionOverview = res.data.data.action
+					}
+				)
+			},
+			getFistPostList(type, page, limit) {
+				let aid = this.$route.params.aid
+				this.$api.getPostList({aid,type,page,limit}).then(
+					res => {
+						this.posts = res.data.data.posts
+						this.code = res.data.data.code
+						this.code = this.code + this.notisSize
+					}
+				)
+			},
+			getPostList(type, page, limit) {
+				let aid = this.$route.params.aid
+				this.$api.getPostList({aid,type,page,limit}).then(
+					res => {
+						this.firstposts = res.data.data.posts
+						this.notisSize = res.data.data.code
+						this.code = this.code + this.notisSize
+					}
+				)
+			},
+			assImage(assImage) {
+				return `${base.sq}${assImage}`
+			},
+		},
+		computed: {
+			...mapState({
+				uid:state => state.request.uid,
+			}),
+		},
+		created() {
+			this.getMassOrganization()
+			this.getActionOverview()
+			this.getFistPostList(2, this.page, this.limit)
+			this.getPostList(1, this.page, this.limit)
+		},
+		mounted(){
+			this.$bus.$on('getPostList',this.getPostList)
+		},
+		beforeDestroy() {
+			this.$bus.$off('getPostList')
+		},
 	}
 </script>
 

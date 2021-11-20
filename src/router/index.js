@@ -45,12 +45,18 @@ const router = new Router({
 		component: () => import('@/page/public')
 	}, {
 		name: 'Community',
-		path: '/community',
-		component: () => import('@/page/community')
+		path: '/community/:aid',
+		component: () => import('@/page/community'),
+		props($route){
+			return {aid:$route.params.aid}
+		}
 	}, {
 		name: 'PublicCommunity',
-		path: '/publicommunity',
-		component: () => import('@/page/pcommunity')
+		path: '/publicommunity/:aid/:pid',
+		component: () => import('@/page/pcommunity'),
+		props($route){
+			return {aid:$route.params.aid,pid:$route.params.pid}
+		}
 	}, {
 		name: 'emoji2',
 		path: '/emoji2',
@@ -70,6 +76,19 @@ const router = new Router({
 				component: () => import('@/page/search/components/Posts')
 			}
 		]
+	}, {
+		name: 'HomePage',
+		path: '/home-page',
+		component: () => import('@/page/user/index'),
+		children: [{
+			name: 'MyHome',
+			path: '/home-page/',
+			component: () => import('@/page/user/components/my')
+		}, {
+			name: 'HisHome',
+			path: '/home-page/his-page',
+			component: () => import('@/page/user/components/his')
+		}]
 	}]
 })
 

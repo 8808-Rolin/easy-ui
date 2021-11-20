@@ -2,15 +2,15 @@
 	<div class="info_box">
 		<div class="info_mes">
 			<div class="info_photo">
-				<img src="../assets/profile.jpg" >
+				<img :src="userImage" >
 			</div>
 			<div class="name_and_ID">
-				<strong>用户名</strong>
+				<strong>{{user.userName}}</strong>
 				&emsp;
-				<small><strong>学号：</strong>2019060703316</small>
+				<small><strong>学号：</strong>{{user.studentID}}</small>
 			</div>
 			<div class="intro">
-				<small>简介</small>
+				<small>{{user.intro}}</small>
 			</div>
 		</div>
 
@@ -21,13 +21,25 @@
 </template>
 
 <script>
+	import {
+		mapState
+	} from 'vuex'
+	import base from '../api/request/base.js'
 	export default {
 		name: 'info',
 		data() {
 			return {
-
+				
 			}
-		}
+		},
+		computed:{
+			...mapState({
+				user:state => state.message.user,
+			}),
+			userImage() {
+				return `${base.sq}${this.user.headImage}`
+			},
+		},
 	}
 </script>
 

@@ -8,7 +8,7 @@
 
 				<div class="search">
 
-					<el-input placeholder="请输入内容" v-model="input3">
+					<el-input placeholder="请输入内容" v-model="input">
 						<el-switch slot="prepend" v-model="value" active-text="用户" inactive-text="帖子"></el-switch>
 						<el-button slot="append" icon="el-icon-search"></el-button>
 					</el-input>

@@ -5,6 +5,7 @@
 </template>
 
 <script>
+	import base from '../api/request/base.js'; 
 	import axios from "axios";
 	import tinymce from 'tinymce/tinymce' //tinymce默认hidden，不引入不显示
 	import Editor from '@tinymce/tinymce-vue' //编辑器引入
@@ -88,12 +89,12 @@
 						blockquote subscript superscript removeformat |\
 						alignleft aligncenter alignright alignjustify outdent indent lineheight formatpainter |\
 						bullist numlist |\
-						table image link charmap hr pagebreak insertdatetime |\
+						table image charmap hr pagebreak insertdatetime |\
 						bdmap fullscreen preview searchreplace |\
 						formatselect fontselect fontsizeselect"
 			}
 		},
-		data() {
+		data(vm) {
 			return {
 				//初始化配置
 				tinymceId: 'tinymce',
@@ -120,7 +121,7 @@
 					elementpath: false, //禁用下角的当前标签路径
 
 					branding: false, //隐藏右下角技术支持
-					//图片上传
+					/* 图片上传 */
 					images_upload_handler: function(blobInfo, success, failure) {
 						let reader = new FileReader();
 						let size = Math.floor(blobInfo.blob().size / 1024);
@@ -128,42 +129,46 @@
 							failure('请选择1M以内的图片！')
 						} else {
 							reader.readAsDataURL(blobInfo.blob())
-							reader.onload = function() {
-								console.log(this);
-								success(this.result);
+							reader.onload = function(a,b) {
+								vm.$api.uploadImage({imageBASE64: this.result}).then(
+									res => {
+										console.log(res)
+										success(`${base.sq}${res.data.data.msg}`)
+									}
+								)
 							}
 						}
 					},
-					// 文件上传
+					/* 文件上传 */
 					// file_picker_types: 'file image media', // 指定允许上传的类型
 					file_picker_types: 'file', // 指定允许上传的类型
 					file_picker_callback: function(callback, value, meta) {
 						console.log(meta.filetype)
 						console.log(343434)
 						// // 要先模拟出一个input用于上传本地文件
-						var input = document.createElement('input')
+						let input = document.createElement('input')
 						input.setAttribute('type', 'file')
 						// 你可以给input加accept属性来限制上传的文件类型
 						// 例如：input.setAttribute('accept', '.jpg,.png')
 						input.setAttribute('accept', '.doc,.docx,.ppt,.pptx,.pdf,.xlsx')
 						input.click()
 						input.onchange = function() {
-							var file = this.files[0]
-							console.log(this.files)
+							let file = this.files[0]
+							/* console.log(this.files)
 							console.log(file)
 							console.log(file.name)
 							// 下方被注释掉的是官方的一个例子
-							// 放到下面给大家参考
-							var reader = new FileReader()
+							// 放到下面给大家参考 */
+							let reader = new FileReader()
 							reader.onload = function() {
 								console.log(window.tinymce)
 								// Note: Now we need to register the blob in TinyMCEs image blob
 								// registry. In the next release this part hopefully won't be
 								// necessary, as we are looking to handle it internally.
-								var id = 'blobid' + (new Date()).getTime()
-								var blobCache = window.tinymce.activeEditor.editorUpload.blobCache
-								var base64 = reader.result.split(',')[1]
-								var blobInfo = blobCache.create(id, file, base64)
+								let id = 'blobid' + (new Date()).getTime()
+								let blobCache = window.tinymce.activeEditor.editorUpload.blobCache
+								let base64 = reader.result.split(',')[1]
+								let blobInfo = blobCache.create(id, file, base64)
 								console.log(id)
 								console.log(file)
 								console.log(base64)
@@ -171,7 +176,11 @@
 								console.log(blobInfo)
 								console.log(blobInfo.blobUri())
 								blobCache.add(blobInfo)
-
+								/* vm.$api.uploadFile({file}).then(
+									res => {
+										consl
+									}
+								) */
 								// call the callback and populate the Title field with the file name
 								callback(blobInfo.blobUri(), {
 									text: file.name,
@@ -192,7 +201,9 @@
 			myValue(newValue) {
 				if (this.triggerChange) {
 					this.$emit('change', newValue)
+					this.updateMyValue(newValue)
 				} else {
+					this.updateMyValue(newValue)
 					this.$emit('input', newValue)
 				}
 			}
@@ -209,6 +220,9 @@
 			clear() {
 				this.myValue = ''
 			},
+			updateMyValue(val) {
+				this.$emit('update:updateContent', val)
+			}
 		}
 	}
 </script>

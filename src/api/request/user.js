@@ -77,7 +77,6 @@ const user = {
 	     return axios.get(`${base.sq}/api/tool/get-post-type`);    
 	},
 	
-	
 	/* 首页相关接口 **/
 	
 	// 获取公告列表 

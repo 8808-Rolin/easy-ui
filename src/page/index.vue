@@ -13,7 +13,7 @@
 					</div>
 					<div class="notice">
 						<div v-for="(notice, index) in notices" :key="index" class="text item">
-							<router-link :to="{path:'/publicommunity'}" class="notice_title"><strong>【系统公告】{{notice.title}}</strong>
+							<router-link :to="{name:'PublicCommunity', params:{aid:0, pid:notice.pid}}" class="notice_title"><strong>【系统公告】{{notice.title}}</strong>
 							</router-link>
 							<a><small>{{notice.date}}</small></a>
 						</div>
@@ -51,7 +51,7 @@
 		name: 'Index',
 		data() {
 			return {
-				notices: [],
+				notices:[],
 			}
 		},
 		components: {
@@ -204,13 +204,16 @@
 
 	.item {
 		width: 98%;
-		height: 1.875rem;
-		margin-bottom: 18px;
+		height: 1.5rem;
+		margin-bottom: 1rem;
+		padding: 0.1875rem;
 		border-bottom: 0.0625rem solid rgba(0, 0, 0, .25);
+		transition: .3s;
 	}
 
 	.notice_title {
 		width: calc(100% - 4rem);
+		width: calc(100% - 5rem);
 		max-height: 1.05rem;
 		overflow: hidden;
 		word-wrap: normal;
@@ -247,6 +250,11 @@
 		width: 100%;
 		height: 20rem;
 		overflow-y: scroll;
+	}
+
+	.el-card__body .notice .item:hover {
+		transform: scale(1.048);
+		transform-origin: 0% 0;
 	}
 
 	/**滚动条的宽度*/

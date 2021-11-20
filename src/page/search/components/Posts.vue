@@ -59,7 +59,8 @@
 		width: 100%;
 		padding: 1rem;
 		.Posts_box {
-			width: 100%;
+			width: 90%;
+			margin: auto;
 			.Posts {
 				margin-bottom: 0.75rem;
 				padding: 0.5rem;
@@ -82,6 +83,10 @@
 						display: flex;
 						align-items: center;
 					}
+				}
+				
+				&:last-child {
+					border: none;
 				}
 			}
 		}

@@ -105,6 +105,7 @@
 							this.$router.push({
 								path: '/'
 							})
+							this.$store.commit('updateExistUser', true)
 						} else {
 							LocalStorage.removeItem("token")
 							LocalStorage.removeItem("password")

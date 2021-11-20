@@ -1,22 +1,22 @@
 <template>
 	<div>
-		<el-table :data="tableData" stripe style="width: 100%">
-			<el-table-column prop="date" label="类型" width="150">
+		<el-table :data="posts" stripe style="width: 100%" @row-click="toP">
+			<el-table-column prop="postType" label="类型" width="150">
 			</el-table-column>
-			<el-table-column prop="name" label="标题" width="400">
+			<el-table-column prop="postTitle" label="标题" width="400">
 			</el-table-column>
-			<el-table-column prop="date" label="发帖用户" width="150">
+			<el-table-column prop="postAuthor" label="发帖用户" width="150">
 			</el-table-column>
-			<el-table-column prop="date" label="回复数" width="120">
+			<el-table-column prop="replies" label="回复数" width="120">
 			</el-table-column>
-			<el-table-column prop="date" label="最后回复时间" width="150">
+			<el-table-column prop="replyTime" label="最后回复时间" width="150">
 			</el-table-column>
-			<el-table-column prop="date" label="发布时间" width="150">
+			<el-table-column prop="releaseTime" label="发布时间" width="150">
 			</el-table-column>
 		</el-table>
 
 		<div style="margin-top: 0.625rem;">
-			<Pagination></Pagination>
+			<Pagination :total="total"></Pagination>
 		</div>
 
 		<el-divider></el-divider>
@@ -25,18 +25,18 @@
 			<div>
 				<div class="title_makes_notice"><i class="el-icon-s-promotion"></i>&ensp;发表新帖</div>
 				<div class="tinymce-btn">
-					<button type="primary" @click="tinymceSave">发&emsp;表</button>
+					<button type="primary" @click="releasePost">发&emsp;表</button>
 				</div>
 			</div>
 			<div class="title">
 				<el-select v-model="value" placeholder="请选择">
-					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+					<el-option v-for="(item, index) in options" :key="index" :label="item" :value="item">
 					</el-option>
 				</el-select>
 				<el-input v-model="input" placeholder="请输入内容"></el-input>
 			</div>
 			<div class="tinymce-box">
-				<TEditor ref="tinymceRef"></TEditor>
+				<TEditor ref="tinymceRef" :updateContent.sync = "content"></TEditor>
 			</div>
 			<!-- <div>富文本框内容：{{tinymceObj}}</div> -->
 			<div style="margin-top: 1rem;display: flex;line-height: 2;">
@@ -60,68 +60,32 @@
 <script>
 	import TEditor from '@/components/tinymce'
 	import Pagination from './Pagination.vue'
+	import {
+		mapState
+	} from 'vuex'
 
 	export default {
 		components: {
 			TEditor,
-			Pagination
+			Pagination,
 		},
+		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid'],
 		data() {
 			return {
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄'
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄'
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄'
-				}],
-				pText: null,
-				html: null,
+				message:null,
+				posts:[],
 				options: [],
 				value: '',
 				input: '',
 				// 标签
-				dynamicTags: ['标签一', '标签二', '标签三'],
+				dynamicTags: [],
 				inputVisible: false,
 				inputValue: '',
+				content:'',
 			}
 		},
 		methods: {
-			dutyDetailClick() {
-				this.$nextTick(() => {
-					let html =
-						'<p><span style="color: rgb(224, 62, 45);" data-mce-style="color: #e03e2d;">1、方便；</span></p><p>2、快捷；</p>';
-					if (!html) {
-						html = '';
-					}
-					// 给富文本框赋值
-					this.$refs.tinymceRef.$el.querySelector('iframe').contentDocument.querySelector('body')
-						.innerHTML = html;
-				});
-			},
-
-			tinymceClose() {
-				// 清空富文本框
-				this.$refs.tinymceRef.$el.querySelector('iframe').contentDocument.querySelector('body').innerHTML = '';
-			},
-			tinymceSave() {
-				//富文本框保存获取值
-				this.pText = this.$refs.tinymceRef.$el.querySelector('iframe').contentDocument.querySelectorAll('p');
-				this.html = this.$refs.tinymceRef.$el.querySelector('iframe').contentDocument.querySelector('body')
-					.innerHTML;
-
-			},
-
+			
 			// 标签添加
 			handleClose(tag) {
 				this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
@@ -139,8 +103,76 @@
 				}
 				this.inputVisible = false;
 				this.inputValue = '';
-			}
-
+			},
+			/* 发表新帖 */
+			releasePost() {
+				if (this.message !== null)
+					this.message.close()
+				let mes = {
+					uid: this.uid,
+					releaseArea: this.aid,
+					postType: this.value,
+					postTitle: this.input,
+					content: this.content,
+					tags: this.listUpdteString(this.dynamicTags),
+				}
+				let arr = Object.values(mes).filter(item => {
+					if (item !== '') {
+						return true
+					}
+				})
+				if (arr.length >= 6) {
+					this.$api.releasePost(mes).then(
+						res => {
+							this.$router.go(0)
+						}
+					)
+				} else {
+					this.message = this.$message.error('请完善数据')
+				}
+			},
+			listUpdteString(arr) {
+				let str = ''
+				arr.forEach(item => {
+					str += item + ','
+				})
+				return str
+			},
+			getPostType() {
+				this.$api.getPostType().then(
+					res => {
+						this.options = res.data.data
+					}
+				)
+			},
+			toP(row) {
+				let aid = this.aid
+				this.$router.push({name:'PublicCommunity', params:{aid,'pid':row.pid}})
+			},
+		},
+		computed: {
+			...mapState({
+				uid:state => state.request.uid,
+			}),
+		},
+		watch:{
+			chaildFirstPosts:{
+				deep: true,
+				handler() {
+					if (this.chaildFirstPosts !== null && this.chaildPosts !== null)
+						this.posts = this.chaildFirstPosts.concat(this.chaildPosts)
+				}
+			},
+			chaildPosts:{
+				deep: true,
+				handler() {
+					if (this.chaildFirstPosts !== null && this.chaildPosts !== null)
+						this.posts = this.chaildFirstPosts.concat(this.chaildPosts)
+				}
+			},	
+		},
+		beforeMount() {
+			this.getPostType()
 		}
 	};
 </script>

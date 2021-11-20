@@ -9,48 +9,25 @@
 				<!-- 标题、个人信息、帖子内容 -->
 				<div class="p_title">
 					<div class="time_super">
-						<small>发表时间：2021-11-12</small>
-						<small>归属组织：社团名称</small>
+						<small>发表时间：{{post.releaseDate}}</small>
+						<small>社团名称：{{name}}</small>
 					</div>
 					<div class="title">
-						<strong>帖子标题</strong>
+						<strong>{{post.title}}</strong>
 					</div>
 				</div>
 
 				<div class="p_body">
 					<div class="p_user">
 						<div class="user_photo">
-							<img src="../assets/profile.jpg">
+							<img :src="headImage(master.image)">
 						</div>
-						<p><big><strong>用户名</strong></big></p>
-						<p>UID: 0662</p>
-						<p>院系：信息技术学院</p>
+						<p><big><strong>{{master.username}}</strong></big></p>
+						<p>UID: {{master.muid}}</p>
+						<p>院系：{{master.org}}</p>
 					</div>
 					<div class="p_content">
-						<div class="content">
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-							<p>Post content</p>
-						</div>
+						<div class="content" v-html="post.content"></div>
 						<div class="operation">
 							<div>
 								<el-tag :key="tag" v-for="tag in dynamicTags">
@@ -74,13 +51,13 @@
 				<div class="discuss_all">
 					<div class="discuss" v-for="(item, index) in discuss" :key="index">
 						<div class="left">
-							<img src="../assets/profile.jpg">
+							<img :src="headImage(item.author.userImage)">
 						</div>
 						<div class="right">
-							<div class="name">{{item.name}}</div>
-							<div class="content" v-html="item.content"></div>
+							<div class="name">{{item.author.username}}</div>
+							<div class="content" v-html="Emoji(item.content.text)"></div>
 							<div class="time_other">
-								<div>发表时间：{{item.date}}</div>
+								<div>发表时间：{{item.content.releaseDate}}</div>
 								<i class="el-icon-more"></i>
 							</div>
 						</div>
@@ -93,9 +70,6 @@
 			<!-- 废物div -->
 			<div style="height: 1rem;"></div>
 		</div>
-		<!-- 废物div -->
-		<div style="height: 1rem;"></div>
-	</div>
 	</div>
 </template>
 
@@ -105,6 +79,10 @@
 	import EmojiInput from '../components/EmojiInput.vue'
 	import Pagination from '../components/Pagination.vue'
 	import analysisEmoji from '../utils/analysisEmoji.js'
+	import base from '../api/request/base.js'
+	import {
+		mapState
+	} from 'vuex'
 
 	export default {
 		name: 'CommunityP',
@@ -112,24 +90,12 @@
 			return {
 				user: {},
 				post: {},
-				discuss: [{
-						name: "用户名",
-						content: "评论内容",
-						date: "2021-11-14",
-					},
-					{
-						name: "用户名",
-						content: "评论内容",
-						date: "2021-11-14",
-					},
-					{
-						name: "用户名",
-						content: "评论内容",
-						date: "2021-11-14",
-					}
-				],
+				discuss: [],
 				myDiscuss: "",
-				dynamicTags: ['标签一', '标签二', '标签三'],
+				dynamicTags: [],
+				permissionCode: 3,
+				post: [],
+				master: [],
 			}
 		},
 		components: {
@@ -148,7 +114,58 @@
 					date: "2021-11-14",
 				})
 			},
+			getPostPageInfo() {
+				let uid = this.uid
+				let pid = this.$route.params.pid
+				this.$api.getPostPageInfo({
+					uid,
+					pid
+				}).then(
+					res => {
+						this.permissionCode = res.data.data.permissionCode
+						this.master = res.data.data.master
+						this.dynamicTags = res.data.data.post.tags
+						this.post = res.data.data.post
+						console.log(res.data)
+					}
+				)
+			},
+			getDiscussList() {
+				let page = 1
+				let pid = this.$route.params.pid
+				this.$api.getDiscussList({
+					pid,
+					page
+				}).then(
+					res => {
+						this.discuss = res.data.data.discuss
+						console.log(res.data)
+					}
+				)
+			},
+			headImage(url) {
+				return `${base.sq}${url}`
+			},
+			Emoji(content) {
+				console.log(analysisEmoji(content))
+				return analysisEmoji(content)
+			}
 		},
+		computed: {
+			...mapState({
+				uid: state => state.request.uid,
+			}),
+			name() {
+				if (this.$route.params.aid === "0" || this.$route.params.aid === 0)
+					return '公共论坛'
+				else
+					return '文学社'
+			}
+		},
+		beforeMount() {
+			this.getPostPageInfo()
+			this.getDiscussList()
+		}
 	}
 </script>
 
@@ -244,7 +261,9 @@
 
 			.publish {
 				padding: 2rem 1rem 0;
-				// border-bottom: rgba(0, 0, 0, .3) 0.0625rem solid;
+				position: sticky;
+				top: 0;
+				background-image: linear-gradient(#fafafa 90%, rgba(0, 0, 0, 0));
 			}
 
 			.discuss_all {
