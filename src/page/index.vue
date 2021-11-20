@@ -14,7 +14,7 @@
 					<div class="notice">
 						<div v-for="(notice, index) in notices" :key="index" class="text item">
 							<a class="notice_title"><strong>{{notice.title}}</strong></a>
-							<a><small>{{notice.time}}</small></a>
+							<a><small>{{notice.date}}</small></a>
 						</div>
 					</div>
 
@@ -51,7 +51,43 @@
 		name: 'Index',
 		data() {
 			return {
-				notices: [],
+				notices: [{
+					title: '在放大的同时字体先放大模糊然后又回归正常，这种问题有什么解决方案',
+					date: '2021-11-16'
+				}, {
+					title: 'ssss',
+					date: '2021-11-17'
+				}, {
+					title: 'nnnnn',
+					date: '2021-11-16'
+				}, {
+					title: 'ssss',
+					date: '2021-11-17'
+				}, {
+					title: 'nnnnn',
+					date: '2021-11-16'
+				}, {
+					title: 'ssss',
+					date: '2021-11-17'
+				}, {
+					title: 'nnnnn',
+					date: '2021-11-16'
+				}, {
+					title: 'ssss',
+					date: '2021-11-17'
+				}, {
+					title: 'nnnnn',
+					date: '2021-11-16'
+				}, {
+					title: 'ssss',
+					date: '2021-11-17'
+				}, {
+					title: 'nnnnn',
+					date: '2021-11-16'
+				}, {
+					title: 'ssss',
+					date: '2021-11-17'
+				}],
 			}
 		},
 		components: {
@@ -199,13 +235,15 @@
 
 	.item {
 		width: 98%;
-		height: 1.875rem;
-		margin-bottom: 18px;
+		height: 1.5rem;
+		margin-bottom: 1rem;
+		padding: 0.1875rem;
 		border-bottom: 0.0625rem solid rgba(0, 0, 0, .25);
+		transition: .3s;
 	}
 
 	.notice_title {
-		width: 80%;
+		width: calc(100% - 5rem);
 		max-height: 1.05rem;
 		overflow: hidden;
 		word-wrap: normal;
@@ -239,8 +277,14 @@
 	}
 
 	.el-card__body {
+		width: 100%;
 		height: 20rem;
 		overflow-y: scroll;
+	}
+
+	.el-card__body .notice .item:hover {
+		transform: scale(1.048);
+		transform-origin: 0% 0;
 	}
 
 	/**滚动条的宽度*/

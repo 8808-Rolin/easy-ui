@@ -4,7 +4,7 @@
 
 		<div class="main_box">
 			<Info></Info>
-			
+
 			<div class="mes_box">
 				<div class="left">
 					<router-view></router-view>
@@ -14,7 +14,8 @@
 					<PersonalInfo></PersonalInfo>
 				</div>
 			</div>
-
+			<!-- 废物div -->
+			<div style="height: 1rem;"></div>
 		</div>
 	</div>
 </template>
@@ -46,22 +47,21 @@
 		margin: auto;
 		position: relative;
 		top: 3rem;
-		
+
 		.mes_box {
 			width: 100%;
 			margin-top: 1rem;
 			display: flex;
+
 			.left {
 				flex: 1;
 				margin-right: 1rem;
+				padding: 1rem;
 				box-shadow: var(--box-shadow2);
-				background-color: #0000FF22;
 			}
-			
+
 			.right {
 				width: 18.75rem;
-				box-shadow: var(--box-shadow2);
-				background-color: #00000022;
 			}
 		}
 	}
