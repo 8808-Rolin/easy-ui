@@ -92,14 +92,13 @@
 				this.user.password = md5.digest('hex'); //password 加密完的密码
 				this.$api.login(this.user).then(
 					response => {
-						console.log(response.data.data.token)
+						console.log(response.data.data.uid + "@@@@")
 						if (response.data.data.code === 0) {
-							console.log(response.data.data)
 							LocalStorage.setItem({
 								name: 'token',
 								value: {
 									token: response.data.data.token,
-									uid: response.data.data.token.uid,
+									uid: response.data.data.uid
 								},
 								expires: 60,
 							})

@@ -1,20 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@lpc528150 
-8808-Rolin
-/
-easy-ui
-Public
-1
-20
-Code
-Issues
-Pull requests
 <template>
 	<div>
 		<Header></Header>
@@ -30,8 +13,9 @@ Pull requests
 					</div>
 					<div class="notice">
 						<div v-for="(notice, index) in notices" :key="index" class="text item">
-							<router-link :to="{path:'/'}" class="notice_title"><strong>{{notice.title}}</strong></router-link>
-							<a><small>{{notice.time}}</small></a>
+							<router-link :to="{path:'/publicommunity'}" class="notice_title"><strong>【系统公告】{{notice.title}}</strong>
+							</router-link>
+							<a><small>{{notice.date}}</small></a>
 						</div>
 					</div>
 
@@ -62,7 +46,7 @@ Pull requests
 
 <script>
 	import Header from '../components/Header'
-	import LocalStorage from '../utils/LocalStorage'	
+	import LocalStorage from '../utils/LocalStorage'
 	export default {
 		name: 'Index',
 		data() {
@@ -75,18 +59,18 @@ Pull requests
 		},
 		methods: {
 			toPublic() {
-				this.$router.push({path: '/public'})
+				this.$router.push({
+					path: '/public'
+				})
 			}
 		},
 		beforeMount() {
-			console.log("数据加载处理.....")
-			/* this.$api.getSimpleNotice().then(
+			this.$api.getSimpleNotice().then(
 				res => {
-					console.log(res.data.data.notice)
 					if (res.data.data.code > 0)
 						this.notices = res.data.data.notice
 				}
-			) */
+			)
 		}
 	}
 </script>
@@ -103,20 +87,24 @@ Pull requests
 		flex-direction: row;
 		justify-content: space-around;
 	}
+
 	.index_box>div {
 		height: 100%;
 	}
+
 	.index_left {
 		width: 50%;
 		background: url(../assets/logo-imgalpha-nologo-600px.png) no-repeat;
 		background-size: 100%;
 	}
+
 	.index_right {
 		width: 50%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
+
 	.button_box {
 		width: 50%;
 		height: 6rem;
@@ -129,6 +117,7 @@ Pull requests
 		overflow: hidden;
 		transition: 1.33s;
 	}
+
 	.button_box>div {
 		height: 100%;
 		position: absolute;
@@ -137,12 +126,14 @@ Pull requests
 		font-weight: bold;
 		transition: 1.33s;
 	}
+
 	.button_box>div::before {
 		display: inline-block;
 		content: "";
 		height: 100%;
 		vertical-align: middle;
 	}
+
 	.enter {
 		width: 30%;
 		left: 0;
@@ -150,6 +141,7 @@ Pull requests
 		color: #1DA0FB;
 		z-index: -1;
 	}
+
 	.community {
 		width: 100%;
 		right: -30%;
@@ -158,19 +150,23 @@ Pull requests
 		color: #fff;
 		font-style: italic;
 	}
+
 	.button_box:hover {
 		transform: translateX(-70%);
 		transition: 1.33s;
 	}
+
 	.button_box:hover .enter {
 		left: -30%;
 		transition: 1.33s;
 	}
+
 	.button_box:hover .community {
 		width: 100%;
 		right: 0;
 		transition: 1.33s;
 	}
+
 	.community .point_box {
 		width: 9rem;
 		height: 100%;
@@ -179,6 +175,7 @@ Pull requests
 		right: 1rem;
 		overflow: hidden;
 	}
+
 	.community .point_box .points {
 		width: 100%;
 		height: 100%;
@@ -189,12 +186,14 @@ Pull requests
 		align-items: center;
 		animation: changeColor 3s infinite;
 	}
+
 	.community .point_box .points i {
 		--r: 0.3;
 		--t: calc((var(--r) + var(--i)));
 		color: rgb(255, 255, 255);
 		opacity: var(--t);
 	}
+
 	/* 公告 */
 	.text {
 		font-size: 14px;
@@ -202,32 +201,38 @@ Pull requests
 		flex-direction: row;
 		justify-content: space-between;
 	}
+
 	.item {
 		width: 98%;
 		height: 1.875rem;
 		margin-bottom: 18px;
 		border-bottom: 0.0625rem solid rgba(0, 0, 0, .25);
 	}
+
 	.notice_title {
-		width: 80%;
+		width: calc(100% - 4rem);
 		max-height: 1.05rem;
 		overflow: hidden;
 		word-wrap: normal;
 		text-align: left;
 	}
+
 	.el-card__header {
 		width: 100%;
 		z-index: 100;
 		padding: 0.5rem 1.25rem;
 	}
+
 	.clearfix:before,
 	.clearfix:after {
 		display: table;
 		content: "";
 	}
+
 	.clearfix:after {
 		clear: both
 	}
+
 	.box-card {
 		width: 100%;
 		height: 25rem;
@@ -237,40 +242,51 @@ Pull requests
 		flex-direction: column;
 		align-items: center;
 	}
+
 	.el-card__body {
+		width: 100%;
 		height: 20rem;
 		overflow-y: scroll;
 	}
+
 	/**滚动条的宽度*/
 	.el-card__body::-webkit-scrollbar {
 		width: 0.5rem;
 		height: 100%;
 	}
+
 	/* 滚动条的滑块 */
 	.el-card__body::-webkit-scrollbar-thumb {
 		background: #1DA0FB;
 		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 		border-radius: 0.25rem;
 	}
+
 	@keyframes changeColor {
+
 		0,
 		100% {
 			left: -6.25rem;
 		}
+
 		33.3% {
 			left: -3.125rem;
 		}
+
 		66.6% {
 			left: 0;
 		}
 	}
+
 	@media screen and (max-width: 48rem) {
 		.index_left {
 			width: 0;
 		}
+
 		.index_right {
 			width: 100%;
 		}
+
 		.button_box {
 			width: 80%;
 			height: 6rem;
@@ -279,14 +295,20 @@ Pull requests
 			bottom: 4.5rem;
 			border-radius: 0.375rem;
 		}
+
 		.button_box:hover {
 			transform: translateX(50%);
 		}
+
 		.enter {
 			left: -30%;
 		}
+
 		.community {
 			right: 0;
 		}
+	}
+	a {
+		color: #000000;
 	}
 </style>

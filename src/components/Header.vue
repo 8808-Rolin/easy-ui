@@ -6,16 +6,16 @@
 			</div>
 			<div class="user" v-show="existUser">
 				<div class="profile">
-					<img src="../assets/profile.jpg">
+					<img :src="headImage">
 				</div>
-				<a>用户名</a>
+				<a>{{user.userName}}</a>
 				<el-dropdown>
 					<span class="el-dropdown-link">
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>个人空间</el-dropdown-item>
-						<el-dropdown-item>退出登录</el-dropdown-item>
+						<el-dropdown-item  @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
@@ -23,54 +23,64 @@
 				<router-link :to="{path:'/login'}">登录</router-link>
 				<router-link :to="{path:'/register'}">注册</router-link>
 			</div>
-			
+
 		</div>
 	</header>
 </template>
 
 <script>
 	import LocalStorage from '../utils/LocalStorage'
+	import {
+		mapState
+	} from 'vuex'
+	import base from '../api/request/base.js'; // 导入接口域名列表
 	
+
 	export default {
 		name: 'Header',
 		data() {
 			return {
-				existUser: false
+				existUser: false,
 			}
 		},
-		methods:{
+		methods: {
 			logout() {
 				console.log("退出登录处理.....")
-				/* this.$api.logout().then(
-					res => {
-						this.$store.commit("deletUser", null)
-						console.log(res.data)
+				this.$store.commit("removeUser", null)
+				LocalStorage.removeItem('token')
+			},
+			checkLogin() {
+				const ls = LocalStorage.getItem("token")
+				if (ls !== null) {
+					this.$store.commit('updateToken', ls.token)
+					let user = this.$store.state.message.user
+					if (user === '' || user === undefined || user === null) {
+						this.$api.getCommonPersonInformation({
+							uid: ls.uid
+						}).then(
+							res => {
+								if (!res.data.data.code) {
+									this.$store.commit("addUser", res.data.data.user)
+									this.existUser = true
+								}
+							}
+						)
+					} else {
+						this.existUser = true
 					}
-				) */
+				}
 			}
 		},
-		beforeMount() {
-			console.log("数据加载处理.....")
-			/* const ls = LocalStorage.getItem("token")
-			if (ls !== null) {
-				this.$store.commit.commit('updateToken', ls.token)
-				let user = this.$store.state.message.user
-				if (user === null || user === undefined) {
-					this.$api.getCommonPersonInformation({uid:ls.uid}).then(
-						res => {
-							if (!res.data.data.code) {
-								this.$store.commit("addUser", res.data.data.user)
-								console.log(res)
-								this.existUser = true
-							} else {
-								
-							}
-						}
-					)
-				} else {
-					this.existUser = true
-				}
-			} */
+		computed: {
+			...mapState({
+				user:state => state.message.user
+			}),
+			headImage() {
+				return `${base.sq}${this.user.headImage}`
+			}
+		},
+		created() {
+			this.checkLogin()
 		}
 	}
 </script>
@@ -137,7 +147,7 @@
 	.el-icon-arrow-down {
 		font-size: 12px;
 	}
-	
+
 	.login_and_register {
 		width: 6.25rem;
 		display: flex;
@@ -145,12 +155,12 @@
 		justify-content: space-around;
 		align-items: center;
 	}
-	
+
 	.login_and_register a {
 		color: inherit;
 		font-size: 14px;
 	}
-	
+
 	.login_and_register a:hover {
 		color: #1DA0FB;
 		font-size: 14px;

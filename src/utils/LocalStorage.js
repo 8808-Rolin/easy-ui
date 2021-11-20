@@ -23,7 +23,7 @@ export default {
 			if (Object.prototype.toString.call(options.value) == '[object Array]') {
 				options.value = JSON.stringify(options.value);
 			}
-			localStorage.setItem(options.name, options.value);
+			localStorage.setItem(options.name, JSON.stringify(options.value));
 		}
 	},
 	//拿到缓存

@@ -18,10 +18,12 @@ const analysisEmoji = content => {
 		arr.forEach((item, index) => {
 			if (emojiList.indexOf(item) >= 0) {
 				str = str.replace(pattern2,`<img src='${require('../assets/emoji/'+item+'.png')}'>`)
+			} else {
+				str = str.replace(/\(/, "[").replace(/\)/, "]")
 			}	
 		})
 	}
-	return str.replace(/\n/g, "<br/>")
+	return str.replace(/\n/g, "<br/>").replace(/\(/, "[").replace(/\)/, "]")
 }
 
 export default analysisEmoji

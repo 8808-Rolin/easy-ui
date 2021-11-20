@@ -14,14 +14,15 @@
 
 			<div class="user" v-show="existUser">
 				<div class="profile">
-					<img src="../assets/profile.jpg">
+					<img :src="headImage">
 				</div>
-				<a>用户名</a>
 				<el-dropdown>
 					<span class="el-dropdown-link">
+						<a>{{user.userName}}</a>
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item>个人空间</el-dropdown-item>
 						<el-dropdown-item>退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -37,6 +38,11 @@
 
 <script>
 	import LocalStorage from '../utils/LocalStorage'
+	import {
+		mapState
+	} from 'vuex'
+	import base from '../api/request/base.js'; // 导入接口域名列表
+	
 	export default {
 		name: 'Header',
 		data() {
@@ -48,7 +54,49 @@
 				}
 			}
 		},
-		methods:{},
+		methods: {
+			logout() {
+				console.log("退出登录处理.....")
+				this.$api.logout().then(
+					res => {
+						this.$store.commit("deletUser", null)
+						console.log(res.data)
+					}
+				)
+			},
+			checkLogin() {
+				const ls = LocalStorage.getItem("token")
+				if (ls !== null) {
+					this.$store.commit('updateToken', ls.token)
+					let user = this.$store.state.message.user
+					if (user === '' || user === undefined || user === null) {
+						this.$api.getCommonPersonInformation({
+							uid: ls.uid
+						}).then(
+							res => {
+								if (!res.data.data.code) {
+									this.$store.commit("addUser", res.data.data.user)
+									this.existUser = true
+								}
+							}
+						)
+					} else {
+						this.existUser = true
+					}
+				}
+			}
+		},
+		computed: {
+			...mapState({
+				user:state => state.message.user
+			}),
+			headImage() {
+				return `${base.sq}${this.user.headImage}`
+			}
+		},
+		created() {
+			this.checkLogin()
+		}
 	}
 </script>
 

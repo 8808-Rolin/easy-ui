@@ -10,7 +10,7 @@ const request = {
 		statusMes:null,
 	},
 	mutations: {
-		loginSuccess(state, val) {
+		updateToken(state, val) {
 			state.token = val
 		},
 		changeNetwork(state, val) {
@@ -25,7 +25,7 @@ const request = {
 
 const message = {
 	state:{
-		user:null,
+		user: '',
 	},
 	mutations:{
 		addUser(state, val) {
