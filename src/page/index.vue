@@ -208,7 +208,6 @@
 		margin-bottom: 1rem;
 		padding: 0.1875rem;
 		border-bottom: 0.0625rem solid rgba(0, 0, 0, .25);
-		transition: .3s;
 	}
 
 	.notice_title {
@@ -250,11 +249,6 @@
 		width: 100%;
 		height: 20rem;
 		overflow-y: scroll;
-	}
-
-	.el-card__body .notice .item:hover {
-		transform: scale(1.048);
-		transform-origin: 0% 0;
 	}
 
 	/**滚动条的宽度*/

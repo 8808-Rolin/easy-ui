@@ -5,11 +5,9 @@
 		<div class="main_box">
 			<div class="search_box">
 				<div class="logo"></div>
-
 				<div class="search">
-
 					<el-input placeholder="请输入内容" v-model="input">
-						<el-switch slot="prepend" v-model="value" active-text="用户" inactive-text="帖子"></el-switch>
+						<el-switch slot="prepend" v-model="value" active-text="帖子" inactive-text="用户" @change="updateChild"></el-switch>
 						<el-button slot="append" icon="el-icon-search"></el-button>
 					</el-input>
 				</div>
@@ -31,17 +29,31 @@
 		name: 'Search',
 		data() {
 			return {
-				value: true,
+				value: false,
 				input: '',
 			}
 		},
 		components: {
 			Header
+		},
+		methods:{
+			updateChild(val) {
+				if (val){
+					this.$router.push({name:'Posts'})
+				}
+				else {
+					this.$router.push({name:'User'})
+				}
+			}
+		},
+		beforeMount() {
+			this.value = true
+			this.$router.push({name:'Posts'})
 		}
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped="scoped">
 	.main_box {
 		width: 100%;
 		max-width: 75rem;
@@ -66,7 +78,7 @@
 				display: flex;
 				align-items: center;
 
-				.el-input-group__append {
+				/deep/ .el-input-group__append {
 					background-color: #1DA0FB;
 					border: #1DA0FB solid 0.0625rem;
 					color: #fff;

@@ -66,15 +66,14 @@ const router = new Router({
 		path: '/search',
 		component: () => import('@/page/search/index'),
 		children: [{
-				name: 'user',
-				path: '/search/',
+				name: 'Posts',
+				path: 'posts',
+				component: () => import('@/page/search/components/Posts')
+			},{
+				name: 'User',
+				path: 'user',
 				component: () => import('@/page/search/components/user')
 			},
-			{
-				name: 'Posts',
-				path: '/search/Posts',
-				component: () => import('@/page/search/components/Posts')
-			}
 		]
 	}, {
 		name: 'HomePage',
