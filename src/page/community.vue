@@ -242,6 +242,11 @@
 		border-radius: 50%;
 		overflow: hidden;
 	}
+	
+	.club_mes .club_logo img {
+		width: 100%;
+		height: 100%;
+	}
 
 	.club_mes .mes {
 		width: calc(100% - 10rem);

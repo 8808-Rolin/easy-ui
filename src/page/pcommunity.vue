@@ -277,6 +277,10 @@
 						border-radius: 50%;
 						margin: 1rem auto;
 						overflow: hidden;
+						img {
+							width: 100%;
+							height: 100%;
+						}
 					}
 
 					p {

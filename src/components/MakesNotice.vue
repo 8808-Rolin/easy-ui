@@ -1,17 +1,37 @@
 <template>
 	<div>
-		<el-table :data="posts" stripe style="width: 100%" @row-click="toP">
+		<el-table class="table" :data="posts" stripe style="width: 100%" @row-click="toP" :header-row-style="{height:'4rem'}" :row-style="{height:'4rem'}">
 			<el-table-column prop="postType" label="类型" width="150">
+				<template scope="scope">
+					<span class="blod" :class="{red: scope.row.postType == '系统公告'}">{{ scope.row.postType}}</span>
+				</template>
 			</el-table-column>
 			<el-table-column prop="postTitle" label="标题" width="400">
+				<template scope="scope">
+					<el-tooltip :content="scope.row.postTitle" placement="top" :open-delay="500">
+					<span class="title" :class="{red: scope.row.postType == '系统公告'}">{{ scope.row.postTitle}}</span>
+					</el-tooltip>
+				</template>
 			</el-table-column>
 			<el-table-column prop="postAuthor" label="发帖用户" width="150">
+				<template scope="scope">
+					<span :class="{blod: scope.row.postType == '系统公告'}">{{ scope.row.postAuthor}}</span>
+				</template>
 			</el-table-column>
 			<el-table-column prop="replies" label="回复数" width="120">
+				<template scope="scope">
+					<span :class="{blod: scope.row.postType == '系统公告'}">{{ scope.row.replies}}</span>
+				</template>
 			</el-table-column>
-			<el-table-column prop="replyTime" label="最后回复时间" width="150">
+			<el-table-column prop="replyTime" label="最后回复时间" width="160">
+				<template scope="scope">
+					<span :class="{blod: scope.row.postType == '系统公告'}">{{ scope.row.replyTime}}</span>
+				</template>
 			</el-table-column>
 			<el-table-column prop="releaseTime" label="发布时间" width="150">
+				<template scope="scope">
+					<span :class="{blod: scope.row.postType == '系统公告'}">{{ scope.row.releaseTime}}</span>
+				</template>
 			</el-table-column>
 		</el-table>
 
@@ -36,7 +56,7 @@
 				<el-input v-model="input" placeholder="请输入内容"></el-input>
 			</div>
 			<div class="tinymce-box">
-				<TEditor ref="tinymceRef" :updateContent.sync = "content"></TEditor>
+				<TEditor ref="tinymceRef" :updateContent.sync="content"></TEditor>
 			</div>
 			<!-- <div>富文本框内容：{{tinymceObj}}</div> -->
 			<div style="margin-top: 1rem;display: flex;line-height: 2;">
@@ -69,11 +89,11 @@
 			TEditor,
 			Pagination,
 		},
-		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'PageSize', 'PageSizes'],
+		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'PageSize', 'PageSizes'],
 		data() {
 			return {
-				message:null,
-				posts:[],
+				message: null,
+				posts: [],
 				options: [],
 				value: '',
 				input: '',
@@ -81,11 +101,11 @@
 				dynamicTags: [],
 				inputVisible: false,
 				inputValue: '',
-				content:'',
+				content: '',
 			}
 		},
 		methods: {
-			
+
 			// 标签添加
 			handleClose(tag) {
 				this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
@@ -147,29 +167,35 @@
 			},
 			toP(row) {
 				let aid = this.aid
-				this.$router.push({name:'PublicCommunity', params:{aid,'pid':row.pid}})
+				this.$router.push({
+					name: 'PublicCommunity',
+					params: {
+						aid,
+						'pid': row.pid
+					}
+				})
 			},
 		},
 		computed: {
 			...mapState({
-				uid:state => state.request.uid,
+				uid: state => state.request.uid,
 			}),
 		},
-		watch:{
-			chaildFirstPosts:{
+		watch: {
+			chaildFirstPosts: {
 				deep: true,
 				handler() {
 					if (this.chaildFirstPosts !== null && this.chaildPosts !== null)
 						this.posts = this.chaildFirstPosts.concat(this.chaildPosts)
 				}
 			},
-			chaildPosts:{
+			chaildPosts: {
 				deep: true,
 				handler() {
 					if (this.chaildFirstPosts !== null && this.chaildPosts !== null)
 						this.posts = this.chaildFirstPosts.concat(this.chaildPosts)
 				}
-			},	
+			},
 		},
 		beforeMount() {
 			this.getPostType()
@@ -177,13 +203,34 @@
 	};
 </script>
 
-<style>
+<style scoped="scoped">
 	.meal_wrap>div:first-child {
 		height: 4rem;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
+	}
+
+	>>>.el-table__row td.el-table_1_column_2 {
+		cursor: pointer;
+	}
+	
+	.title {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+
+	>>>.el-table__body-wrapper::-webkit-scrollbar {
+		width: 100%;
+		height: 0.5rem;
+	}
+
+	>>>.el-table__body-wrapper::-webkit-scrollbar-thumb {
+		background: #1DA0FB;
+		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+		border-radius: 0.25rem;
 	}
 
 	.meal_wrap .title {
@@ -244,5 +291,13 @@
 		width: 90px;
 		margin-left: 10px;
 		vertical-align: bottom;
+	}
+
+	.blod {
+		font-weight: bold;
+	}
+	
+	.red {
+		color: red;
 	}
 </style>

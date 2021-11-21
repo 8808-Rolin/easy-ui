@@ -30,7 +30,7 @@
 
 					<div class="club_box">
 						<div v-for="item in schoolMassOrganization" :key="item.aid" @click="toCommunity(item.aid)">
-							<el-tooltip :content="item.assName" placement="top" open-delay="500">
+							<el-tooltip :content="item.assName" placement="top" :open-delay="500">
 								<el-button>{{item.assName}}</el-button>
 							</el-tooltip>
 						</div>
