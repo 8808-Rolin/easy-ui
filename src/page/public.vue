@@ -12,7 +12,8 @@
 					</div>
 					<div class="club_box">
 						<!-- 社团logo和名称 -->
-						<div class="club_img_name" v-for="item in myMassOrganization" :key="item.aid" @click="toCommunity(item.aid)">
+						<div class="club_img_name" v-for="item in myMassOrganization" :key="item.aid"
+							@click="toCommunity(item.aid)">
 							<div class="club_img">
 								<img :src="assImage(item.assImage)">
 							</div>
@@ -26,17 +27,22 @@
 					<div class="club_title">
 						学校社团
 					</div>
-					
+
 					<div class="club_box">
-						<div v-for="item in schoolMassOrganization" :key="item.aid" @click="toCommunity(item.aid)">{{item.assName}}</div>
+						<div v-for="item in schoolMassOrganization" :key="item.aid" @click="toCommunity(item.aid)">
+							<el-tooltip :content="item.assName" placement="top" :open-delay="500">
+								<el-button>{{item.assName}}</el-button>
+							</el-tooltip>
+						</div>
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="notice_box">
 				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="paid" :notisSize="notSize"></MakesNotice>
+				</MakesNotice>
 			</div>
-			
+
 			<!-- 废物div -->
 			<div style="height: 1rem;"></div>
 		</div>
@@ -73,7 +79,9 @@
 		},
 		methods: {
 			getAssociationList() {
-				this.$api.getShowData({uid:2}).then(
+				this.$api.getShowData({
+					uid: 2
+				}).then(
 					res => {
 						if (res.data.data.code > 0) {
 							this.schoolMassOrganization = this.arrayUnique(res.data.data.ass, 0)
@@ -84,13 +92,18 @@
 			},
 			arrayUnique(arr, isJoin) {
 				const ass = arr.filter((item) => {
-					if (item.isJoin === isJoin) 
+					if (item.isJoin === isJoin)
 						return true
 				})
 				return ass
 			},
 			getFistPostList() {
-				this.$api.getPostList({aid:0,type:1,page:null,limit:null}).then(
+				this.$api.getPostList({
+					aid: 0,
+					type: 1,
+					page: null,
+					limit: null
+				}).then(
 					res => {
 						this.firstposts = res.data.data.posts
 						this.notSize = res.data.data.code
@@ -99,7 +112,12 @@
 				)
 			},
 			getPostList(aid, type, page, limit) {
-				this.$api.getPostList({aid,type,page,limit}).then(
+				this.$api.getPostList({
+					aid,
+					type,
+					page,
+					limit
+				}).then(
 					res => {
 						this.posts = res.data.data.posts
 						this.code = res.data.data.code
@@ -114,21 +132,23 @@
 				this.$router.push({name:'Community', params:{'aid':param}})
 			},
 		},
-		mounted(){
-			this.$bus.$on('getPostList',this.getPostList)
+		mounted() {
+			this.$bus.$on('getPostList', this.getPostList)
+			this.$bus.$on('getFistPostList', this.getFistPostList)
 		},
 		beforeMount() {
 			this.getAssociationList()
 			this.getFistPostList()
-			this.getPostList(0,2,this.page,this.limit)
+			this.getPostList(0, 2, this.page, this.limit)
 		},
 		beforeDestroy() {
 			this.$bus.$off('getPostList')
+			this.$bus.$off('getFistPostList')
 		}
 	}
 </script>
 
-<style>
+<style scoped>
 	.main_box {
 		width: 100%;
 		max-width: 75rem;
@@ -149,6 +169,7 @@
 	.main_box .club>div {
 		position: absolute;
 		height: 11rem;
+		margin-top: 0.5rem;
 	}
 
 	.my_club {
@@ -170,6 +191,7 @@
 		height: 90%;
 		margin-top: 1rem;
 		margin-right: 1rem;
+		cursor: pointer;
 	}
 
 	.club_img_name .club_img {
@@ -187,6 +209,7 @@
 	.club_img_name .club_name {
 		margin-top: 0.5rem;
 		font-size: 0.75rem;
+		text-align: center;
 	}
 
 	.school_club {
@@ -194,14 +217,43 @@
 		right: 0;
 		padding: 0.5rem 1rem;
 	}
-	
+
+	.school_club .club_box {
+		display: flex;
+		flex-wrap: wrap;
+		overflow: auto;
+	}
+
+	/**滚动条的宽度*/
+	>>>.club_box::-webkit-scrollbar {
+		width: 0.5rem;
+		height: 100%;
+	}
+
+	/* 滚动条的滑块 */
+	>>>.club_box::-webkit-scrollbar-thumb {
+		background: #1DA0FB;
+		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+		border-radius: 0.25rem;
+	}
+
 	.school_club .club_box div {
+		width: 8rem;
 		margin-top: 0.375rem;
 		margin-right: 0.75rem;
-		padding: 0.5rem 0.5rem;
 		border-radius: 0.375rem;
+		border: none;
+		cursor: pointer;
+	}
+
+	.school_club .club_box div .el-button {
+		width: 100%;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 		border: dashed #1DA0FB 0.125rem;
 	}
+
 
 	.club_title {
 		width: 6rem;
@@ -209,7 +261,7 @@
 		background-color: #1DA0FB;
 		color: #FFFFFF;
 	}
-	
+
 	.main_box .notice_box {
 		padding: 1rem;
 		border-radius: 1rem;

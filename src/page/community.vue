@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<HeaderHasSearch></HeaderHasSearch>
-
 		<div class="main_box">
 			<Info></Info>
 
@@ -44,7 +43,7 @@
 			</div>
 
 			<div class="notice_box">
-				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="$route.params.aid"></MakesNotice>
+				<MakesNotice :permission="permissionCode" :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="$route.params.aid" :notisSize="notSize"></MakesNotice>
 			</div>
 			<!-- 废物div -->
 			<div style="height: 1rem;"></div>
@@ -63,7 +62,7 @@
 	
 	export default {
 		name: 'Community',
-		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid'],
+		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'notisSize', 'permission'],
 		data() {
 			return {
 				user:{}, 
@@ -79,8 +78,8 @@
 				user:{},
 				code:0,
 				page:1,
-				limit:8,
-				notisSize:0,
+				limit:10,
+				notSize:0,
 			}
 		},
 		components: {
@@ -114,7 +113,6 @@
 					res => {
 						this.posts = res.data.data.posts
 						this.code = res.data.data.code
-						this.code = this.code + this.notisSize
 					}
 				)
 			},
@@ -123,14 +121,22 @@
 				this.$api.getPostList({aid,type,page,limit}).then(
 					res => {
 						this.firstposts = res.data.data.posts
-						this.notisSize = res.data.data.code
-						this.code = this.code + this.notisSize
+						this.notSize = res.data.data.code
 					}
 				)
 			},
 			assImage(assImage) {
 				return `${base.sq}${assImage}`
 			},
+			joinAssociation() {
+				this.$api.joinAssociation().then(
+					res => {
+						this.firstposts = res.data.data.posts
+						this.notisSize = res.data.data.code
+						this.code = this.code + this.notisSize
+					}
+				)
+			}
 		},
 		computed: {
 			...mapState({
@@ -144,10 +150,12 @@
 			this.getPostList(1, this.page, this.limit)
 		},
 		mounted(){
-			this.$bus.$on('getPostList',this.getPostList)
+			this.$bus.$on('cgetPostList',this.getPostList)
+			this.$bus.$on('getFistPostList', this.getFistPostList)
 		},
 		beforeDestroy() {
-			this.$bus.$off('getPostList')
+			this.$bus.$off('cgetPostList')
+			this.$bus.$off('getFistPostList')
 		},
 	}
 </script>

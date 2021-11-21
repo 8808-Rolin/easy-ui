@@ -47,6 +47,9 @@
 				this.$store.commit("removeUser", '')
 				LocalStorage.removeItem('token')
 				this.$store.commit('updateExistUser', false)
+				this.$router.push({
+					path: '/login'
+				})
 			},
 			checkLogin() {
 				const ls = LocalStorage.getItem("token")
@@ -88,7 +91,12 @@
 	}
 </script>
 
-<style>
+<style scoped="scoped">
+	img {
+		width: 100%;
+		height: 100%;
+	}
+	
 	header {
 		width: 100%;
 		height: 4rem;

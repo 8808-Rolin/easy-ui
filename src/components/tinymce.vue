@@ -117,8 +117,8 @@
 					placeholder: '在这里输入文字',
 					menubar: true, // 最上方menu菜单的显示隐藏
 					toolbar_drawer: true,
-					statusbar: false, // 隐藏编辑器底部的状态栏
-					elementpath: false, //禁用下角的当前标签路径
+					statusbar: true, // 隐藏编辑器底部的状态栏
+					elementpath: true, //禁用下角的当前标签路径
 
 					branding: false, //隐藏右下角技术支持
 					/* 图片上传 */

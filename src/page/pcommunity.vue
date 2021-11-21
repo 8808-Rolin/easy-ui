@@ -36,7 +36,7 @@
 							</div>
 							<div>
 								<i class="el-icon-star-off" @click="favoriteProcess" v-show="post.isFavorite === 0"></i>
-								<i class="el-icon-star-on" v-show="post.isFavorite === 1"></i>
+								<i class="el-icon-star-on" @click="favoriteProcess" v-show="post.isFavorite === 1"></i>
 							</div>
 						</div>
 					</div>
@@ -161,7 +161,6 @@
 			},
 			/* 解析表情 **/
 			Emoji(content) {
-				console.log(analysisEmoji(content))
 				return analysisEmoji(content)
 			},
 			/* 插入我的评论 **/
@@ -193,13 +192,16 @@
 			favoriteProcess() {
 				let pid = this.$route.params.pid
 				let uid = this.uid
-				/* this.$api.favoriteProcess({pid,uid}).then(
+				this.$api.favoriteProcess({pid,uid}).then(
 					res => {
 						console.log(res.data)
+						let code = res.data.data.code
+						if (code === 0)
+							this.post.isFavorite = 1
+						else if (code === 1)
+							this.post.isFavorite = 0
 					}
-				) */
-				this.post.isFavorite = 1
-				//this.$set(this.post, 'isFavorite', 1)
+				)
 			},
 		},
 		computed: {

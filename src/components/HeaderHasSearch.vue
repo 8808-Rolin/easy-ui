@@ -23,7 +23,7 @@
 					</span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>个人空间</el-dropdown-item>
-						<el-dropdown-item  @click.native="logout">退出登录</el-dropdown-item>
+						<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
@@ -42,7 +42,7 @@
 		mapState
 	} from 'vuex'
 	import base from '../api/request/base.js'; // 导入接口域名列表
-	
+
 	export default {
 		name: 'Header',
 		data() {
@@ -94,8 +94,8 @@
 		},
 		computed: {
 			...mapState({
-				user:state => state.message.user,
-				existUser:state => state.message.existUser,
+				user: state => state.message.user,
+				existUser: state => state.message.existUser,
 			}),
 			headImage() {
 				return `${base.sq}${this.user.headImage}`
@@ -107,7 +107,11 @@
 	}
 </script>
 
-<style scoped>
+<style scoped="scoped">
+	img {
+		width: 100%;
+		height: 100%;
+	}
 	header {
 		width: 100%;
 		height: 4rem;
@@ -192,7 +196,7 @@
 		transition: width .5s;
 	}
 
-	.seach_box>>> .el-input__inner:hover {
+	.seach_box>>>.el-input__inner:hover {
 		width: 20rem;
 		transition: width .5s;
 	}

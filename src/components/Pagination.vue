@@ -4,7 +4,7 @@
 			<el-pagination background hide-on-single-page @size-change="handleSizeChange"
 				@current-change="handleCurrentChange" :current-page="currentPage"
 				:page-size="PageSize" layout="total, prev, pager, next, jumper"
-				:total="notisSize > 0 ? total + notisSize : total">
+				:total="total">
 			</el-pagination>
 		</div>
 	</div>
@@ -22,11 +22,12 @@
 			},
 			handleCurrentChange(val) {
 				this.$bus.$emit('getPostList', 0, 2, val, this.PageSize)
+				this.$bus.$emit('getFistPostList', 2, val, this.PageSize)
 				this.$bus.$emit('getDiscussList', val)
-				console.log(`当前页: ${val}`);
+				document.documentElement.scrollTop = 10
 			}
 		},
-		props: ['total', 'PageSize', 'PageSizes', 'notisSize'],
+		props: ['total', 'PageSize', 'notisSize'],
 		data() {
 			return {
 				//PageSizes: [10],
