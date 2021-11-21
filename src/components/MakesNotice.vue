@@ -230,7 +230,7 @@
 		align-items: center;
 	}
 
-	>>>.el-table__row td.el-table_1_column_2 {
+	>>>.el-table__row td {
 		cursor: pointer;
 	}
 	
