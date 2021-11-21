@@ -4,9 +4,7 @@
 			<el-input :rows="5" type="textarea" placeholder="请输入内容" v-model="content">
 			</el-input>
 			<el-tooltip class="submit-btn" content="请先加入该社团" :disabled="disabled" placement="top">
-				<el-button type="primary" @click="submitMessage" :disabled="content == ''">
-					发&emsp;送评&emsp;论
-				</el-button>
+				<el-button type="primary" @click="submitMessage" :disabled="content == ''">发&emsp;送评&emsp;论</el-button>
 			</el-tooltip>
 		</div>
 
@@ -130,11 +128,8 @@
 		width: 6.25rem;
 		height: 6.25rem;
 		float: right;
-	}
-
-	/deep/.submit-btn span {
 		font-weight: bold;
 		white-space: pre-wrap;
-		line-height: 1;
+		line-height: 2.5;
 	}
 </style>
