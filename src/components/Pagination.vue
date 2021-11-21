@@ -19,17 +19,18 @@
 				console.log(`每页 ${val} 条`);
 			},
 			handleCurrentChange(val) {
-				this.$bus.$emit('getPostList', 0,2,val,this.PageSize-3)
+				this.$bus.$emit('getPostList', 0,2,val,this.PageSize-2)
+				this.$bus.$emit('getDiscussList', val)
 				console.log(`当前页: ${val}`);
 			}
 		},
-		props:['total'],
+		props:['total', 'PageSize', 'PageSizes'],
 		data() {
 			return {
-				PageSizes: [10],
+				//PageSizes: [10],
 				currentPage: 1,
 				//total: 400,
-				PageSize: 10,
+				//PageSize: 10,
 				msg: {
 					name: 1,
 					age: 1

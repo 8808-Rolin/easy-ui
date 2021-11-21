@@ -35,8 +35,8 @@
 								</el-tag>
 							</div>
 							<div>
-								<i class="el-icon-star-off"></i>
-								<i class="el-icon-star-on"></i>
+								<i class="el-icon-star-off" @click="favoriteProcess" v-show="post.isFavorite === 0"></i>
+								<i class="el-icon-star-on" v-show="post.isFavorite === 1"></i>
 							</div>
 						</div>
 					</div>
@@ -46,7 +46,7 @@
 			<div class="p_discuss">
 				<!-- 评论发表、他人评论 -->
 				<div class="publish">
-					<EmojiInput @analysisEmoji="analyEmoji"></EmojiInput>
+					<EmojiInput @analysisEmoji="releaseDiscuss"></EmojiInput>
 				</div>
 				<div class="discuss_all">
 					<div class="discuss" v-for="(item, index) in discuss" :key="index">
@@ -63,7 +63,7 @@
 						</div>
 					</div>
 					<div style="padding: 0.5rem 0;">
-						<Pagination></Pagination>
+						<Pagination :total="code" :PageSize="12" :PageSizes="[12]"></Pagination>
 					</div>
 				</div>
 			</div>
@@ -86,16 +86,18 @@
 
 	export default {
 		name: 'CommunityP',
+		props:['total', 'PageSize', 'PageSizes'],
 		data() {
 			return {
 				user: {},
 				post: {},
 				discuss: [],
-				myDiscuss: "",
+				//myDiscuss: "",
 				dynamicTags: [],
 				permissionCode: 3,
 				post: [],
 				master: [],
+				code:0,
 			}
 		},
 		components: {
@@ -105,15 +107,6 @@
 			Pagination
 		},
 		methods: {
-			/* 解析表情 **/
-			analyEmoji(content) {
-				let str = analysisEmoji(content)
-				this.discuss.push({
-					name: "用户名",
-					content: str,
-					date: "2021-11-14",
-				})
-			},
 			getPostPageInfo() {
 				let uid = this.uid
 				let pid = this.$route.params.pid
@@ -130,30 +123,89 @@
 					}
 				)
 			},
-			getDiscussList() {
-				let page = 1
+			getDiscussList(page) {
 				let pid = this.$route.params.pid
 				this.$api.getDiscussList({
 					pid,
 					page
 				}).then(
 					res => {
-						this.discuss = res.data.data.discuss
-						console.log(res.data)
+						if (res.data.data.discuss !== undefined) {
+							this.discuss = res.data.data.discuss
+							if (res.data.data.code > 2)
+								this.code = 12 * (res.data.data.code - 1)
+							else 
+								this.code = 12 * res.data.data.code
+						}
+						document.documentElement.scrollTop = 10
 					}
 				)
 			},
 			headImage(url) {
 				return `${base.sq}${url}`
 			},
+			formatDate() {
+				let date = new Date();
+				let year = date.getFullYear(); // 年
+				let month = date.getMonth() + 1; // 月
+				let day = date.getDate(); // 日
+				let week = date.getDay(); // 星期
+				let weekArr = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+				let hour = date.getHours(); // 时
+				hour = hour < 10 ? "0" + hour : hour; // 如果只有一位，则前面补零
+				let minute = date.getMinutes(); // 分
+				minute = minute < 10 ? "0" + minute : minute; // 如果只有一位，则前面补零
+				let second = date.getSeconds(); // 秒
+				second = second < 10 ? "0" + second : second; // 如果只有一位，则前面补零
+				return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
+			},
+			/* 解析表情 **/
 			Emoji(content) {
 				console.log(analysisEmoji(content))
 				return analysisEmoji(content)
-			}
+			},
+			/* 插入我的评论 **/
+			addMyDiscuss(content) {
+				this.discuss.unshift({
+					author: {
+						userImage: this.me.headImage,
+						username: this.me.userName,
+					},
+					content: {
+						text: content,
+						releaseDate: this.formatDate()
+					},
+				})
+			},
+			/* 提交回复 **/
+			releaseDiscuss(content) {
+				let pid = this.$route.params.pid
+				let uid = this.uid
+				this.$api.releaseDiscuss({pid,uid,content}).then(
+					res => {
+						this.addMyDiscuss(content)
+						this.$message.success(res.data.data.msg)
+					}
+				)
+			},
+			
+			/* 收藏贴子 **/
+			favoriteProcess() {
+				let pid = this.$route.params.pid
+				let uid = this.uid
+				/* this.$api.favoriteProcess({pid,uid}).then(
+					res => {
+						console.log(res.data)
+					}
+				) */
+				this.post.isFavorite = 1
+				//this.$set(this.post, 'isFavorite', 1)
+			},
 		},
 		computed: {
 			...mapState({
 				uid: state => state.request.uid,
+				me: state => state.message.user,
 			}),
 			name() {
 				if (this.$route.params.aid === "0" || this.$route.params.aid === 0)
@@ -164,7 +216,13 @@
 		},
 		beforeMount() {
 			this.getPostPageInfo()
-			this.getDiscussList()
+			this.getDiscussList(1)
+		},
+		mounted(){
+			this.$bus.$on('getDiscussList',this.getDiscussList)
+		},
+		beforeDestroy() {
+			this.$bus.$off('getDiscussList')
 		}
 	}
 </script>
