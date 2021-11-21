@@ -23,7 +23,7 @@
 					</span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>个人空间</el-dropdown-item>
-						<el-dropdown-item  @click.native="logout">退出登录</el-dropdown-item>
+						<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
@@ -42,7 +42,7 @@
 		mapState
 	} from 'vuex'
 	import base from '../api/request/base.js'; // 导入接口域名列表
-	
+
 	export default {
 		name: 'Header',
 		data() {
@@ -90,8 +90,8 @@
 		},
 		computed: {
 			...mapState({
-				user:state => state.message.user,
-				existUser:state => state.message.existUser,
+				user: state => state.message.user,
+				existUser: state => state.message.existUser,
 			}),
 			headImage() {
 				return `${base.sq}${this.user.headImage}`
@@ -103,7 +103,11 @@
 	}
 </script>
 
-<style>
+<style scoped="scoped">
+	img {
+		width: 100%;
+		height: 100%;
+	}
 	header {
 		width: 100%;
 		height: 4rem;
@@ -183,18 +187,17 @@
 	}
 
 	/* 搜索框 */
-	.seach_box .el-input__inner {
+	.seach_box>>>.el-input__inner {
 		width: 12.5rem;
 		transition: width .5s;
 	}
 
-	.seach_box .el-input__inner:focus {
+	.seach_box>>>.el-input__inner:hover {
 		width: 20rem;
 		transition: width .5s;
 	}
 
-	.el-input-group__append,
-	.el-input-group__prepend {
+	.seach_box>>>.el-input-group__append {
 		background-color: #1DA0FB;
 		color: #fff;
 		border-color: #1DA0FB;

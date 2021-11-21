@@ -13,9 +13,11 @@
 					</div>
 					<div class="mes">
 						<div class="name">
-							<div class="club_name">
-								<strong>{{ass.assName}}</strong>
-							</div>
+							<el-tooltip :content="ass.assName" placement="top">
+								<div class="club_name">
+									<strong>{{ass.assName}}</strong>
+								</div>
+							</el-tooltip>
 							<div class="join_club" v-show="permissionCode === 0">
 								<el-button>加入社团</el-button>
 							</div>
@@ -35,16 +37,27 @@
 						<div slot="header" class="clearfix">
 							<span>社团活动</span>
 						</div>
-						<div v-for="item in actionOverview" :key="item.actid" class="text item">
+						<div v-for="item in actionOverview" :key="item.actid" class="text item"
+							@click="centerDialogVisible = true;dialogDataChange(item.title)">
 							<a class="notice_title"><strong>{{item.title}}</strong></a>
 							<a><small>{{item.date}}</small></a>
 						</div>
+
+						<el-dialog :title="dialogData.title" :visible.sync="centerDialogVisible" width="61.8%" center>
+							<span>{{dialogData.content}}</span>
+							<span slot="footer" class="dialog-footer">
+								<el-button @click="centerDialogVisible = false">取 消</el-button>
+								<el-button v-show="dialogData.isJoin == 0" type="primary">报名活动</el-button>
+								<el-button v-show="dialogData.isJoin != 0" type="primary" disabled>已报名</el-button>
+							</span>
+						</el-dialog>
 					</el-card>
 				</div>
 			</div>
 
 			<div class="notice_box">
-				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="$route.params.aid"></MakesNotice>
+				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="$route.params.aid">
+				</MakesNotice>
 			</div>
 			<!-- 废物div -->
 			<div style="height: 1rem;"></div>
@@ -60,27 +73,34 @@
 	import {
 		mapState
 	} from 'vuex'
-	
+
 	export default {
 		name: 'Community',
-		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid'],
+		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid'],
 		data() {
 			return {
-				user:{}, 
-				permissionCode:3,
-				ass:[],
+				user: {},
+				permissionCode: 3,
+				ass: [],
 				options: [{
-					label:'社团公告',
-					value:1,
+					label: '社团公告',
+					value: 1,
 				}],
-				actionOverview:[],
-				posts:[],
-				firstposts:[],
-				user:{},
-				code:0,
-				page:1,
-				limit:8,
-				notisSize:0,
+				actionOverview: [],
+				posts: [],
+				firstposts: [],
+				user: {},
+				code: 0,
+				page: 1,
+				limit: 8,
+				notisSize: 0,
+				// 弹出框
+				centerDialogVisible: false,
+				dialogData: {
+					title: '',
+					content: '',
+					isJoin: 0
+				}
 			}
 		},
 		components: {
@@ -92,7 +112,10 @@
 			getMassOrganization() {
 				let uid = this.uid
 				let aid = this.$route.params.aid
-				this.$api.getAssInformation({uid,aid}).then(
+				this.$api.getAssInformation({
+					uid,
+					aid
+				}).then(
 					res => {
 						this.permissionCode = res.data.data.permissionCode
 						this.ass = res.data.data.ass
@@ -102,7 +125,10 @@
 			getActionOverview() {
 				let uid = this.uid
 				let aid = this.$route.params.aid
-				this.$api.getActionOverview({uid,aid}).then(
+				this.$api.getActionOverview({
+					uid,
+					aid
+				}).then(
 					res => {
 						this.actionOverview = res.data.data.action
 					}
@@ -110,7 +136,12 @@
 			},
 			getFistPostList(type, page, limit) {
 				let aid = this.$route.params.aid
-				this.$api.getPostList({aid,type,page,limit}).then(
+				this.$api.getPostList({
+					aid,
+					type,
+					page,
+					limit
+				}).then(
 					res => {
 						this.posts = res.data.data.posts
 						this.code = res.data.data.code
@@ -120,7 +151,12 @@
 			},
 			getPostList(type, page, limit) {
 				let aid = this.$route.params.aid
-				this.$api.getPostList({aid,type,page,limit}).then(
+				this.$api.getPostList({
+					aid,
+					type,
+					page,
+					limit
+				}).then(
 					res => {
 						this.firstposts = res.data.data.posts
 						this.notisSize = res.data.data.code
@@ -131,10 +167,14 @@
 			assImage(assImage) {
 				return `${base.sq}${assImage}`
 			},
+			// 弹出框
+			dialogDataChange(title) {
+				this.dialogData.title = title
+			}
 		},
 		computed: {
 			...mapState({
-				uid:state => state.request.uid,
+				uid: state => state.request.uid,
 			}),
 		},
 		created() {
@@ -143,8 +183,8 @@
 			this.getFistPostList(2, this.page, this.limit)
 			this.getPostList(1, this.page, this.limit)
 		},
-		mounted(){
-			this.$bus.$on('getPostList',this.getPostList)
+		mounted() {
+			this.$bus.$on('getPostList', this.getPostList)
 		},
 		beforeDestroy() {
 			this.$bus.$off('getPostList')
@@ -152,7 +192,12 @@
 	}
 </script>
 
-<style>
+<style scoped="scoped">
+	img {
+		width: 100%;
+		height: 100%;
+	}
+
 	.main_box {
 		width: 100%;
 		max-width: 75rem;
@@ -211,7 +256,13 @@
 		display: flex;
 		justify-content: space-between;
 	}
-	
+
+	.club_mes .mes .name .club_name {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+
 	.club_mes .mes .name .join_club .el-button {
 		background-color: #1DA0FB;
 		color: #FFFFFF;
@@ -237,34 +288,37 @@
 	}
 
 	/* 活动卡片 */
-	.text {
+	>>>.text {
 		font-size: 14px;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 	}
 
-	.item {
+	>>>.item {
 		width: 100%;
 		padding: 0.5rem 0.25rem;
 		margin-bottom: 0.1875rem;
 		border-radius: 0.375rem;
 		box-shadow: var(--box-shadow1);
+		cursor: pointer;
 	}
 
-	.notice_title {
+	>>>.notice_title {
 		width: 80%;
 		max-height: 1.05rem;
 		overflow: hidden;
 		word-wrap: normal;
 		text-align: left;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
-	.el-card__header {
+	>>>.el-card__header {
 		width: 100%;
 		background-color: #1DA0FB;
 		color: #fff;
-		z-index: 100;
 		padding: 0.5rem 1.25rem;
 	}
 
@@ -287,7 +341,7 @@
 		align-items: center;
 	}
 
-	.el-card__body {
+	.club_action>>>.el-card__body {
 		width: 100%;
 		height: 100%;
 		padding: 0.625rem;
@@ -296,13 +350,13 @@
 	}
 
 	/**滚动条的宽度*/
-	.el-card__body::-webkit-scrollbar {
+	>>>.el-card__body::-webkit-scrollbar {
 		width: 0.5rem;
 		height: 100%;
 	}
 
 	/* 滚动条的滑块 */
-	.el-card__body::-webkit-scrollbar-thumb {
+	>>>.el-card__body::-webkit-scrollbar-thumb {
 		background: #1DA0FB;
 		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 		border-radius: 0.25rem;

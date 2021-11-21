@@ -13,7 +13,8 @@
 					</div>
 					<div class="notice">
 						<div v-for="(notice, index) in notices" :key="index" class="text item">
-							<router-link :to="{name:'PublicCommunity', params:{aid:0, pid:notice.pid}}" class="notice_title"><strong>【系统公告】{{notice.title}}</strong>
+							<router-link :to="{name:'PublicCommunity', params:{aid:0, pid:notice.pid}}"
+								class="notice_title"><strong>【系统公告】{{notice.title}}</strong>
 							</router-link>
 							<a><small>{{notice.date}}</small></a>
 						</div>
@@ -51,7 +52,7 @@
 		name: 'Index',
 		data() {
 			return {
-				notices:[],
+				notices: [],
 			}
 		},
 		components: {
@@ -75,7 +76,7 @@
 	}
 </script>
 
-<style>
+<style scoped="scoped">
 	.index_box {
 		width: 80%;
 		height: 37.5rem;
@@ -125,6 +126,7 @@
 		font-size: 2.5rem;
 		font-weight: bold;
 		transition: 1.33s;
+		cursor: pointer;
 	}
 
 	.button_box>div::before {
@@ -139,6 +141,7 @@
 		left: 0;
 		background-color: #fff;
 		color: #1DA0FB;
+		text-align: center;
 		z-index: -1;
 	}
 
@@ -149,6 +152,7 @@
 		border: #1DA0FB 0.0625rem solid;
 		color: #fff;
 		font-style: italic;
+		text-align: center;
 	}
 
 	.button_box:hover {
@@ -208,21 +212,27 @@
 		margin-bottom: 1rem;
 		padding: 0.1875rem;
 		border-bottom: 0.0625rem solid rgba(0, 0, 0, .25);
-		transition: .3s;
+		z-index: 999;
+		transition: all .5s;
+	}
+	
+	.item:hover {
+		transform: scale(1.048);
 	}
 
 	.notice_title {
-		width: calc(100% - 4rem);
-		width: calc(100% - 5rem);
+		max-width: calc(100% - 5rem);
 		max-height: 1.05rem;
 		overflow: hidden;
 		word-wrap: normal;
 		text-align: left;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
-	.el-card__header {
+	.index_right>>>.el-card__header {
 		width: 100%;
-		z-index: 100;
 		padding: 0.5rem 1.25rem;
 	}
 
@@ -236,7 +246,7 @@
 		clear: both
 	}
 
-	.box-card {
+	>>>.box-card {
 		width: 100%;
 		height: 25rem;
 		border-top: #1DA0FB solid 0.75rem;
@@ -246,25 +256,20 @@
 		align-items: center;
 	}
 
-	.el-card__body {
+	>>>.el-card__body {
 		width: 100%;
 		height: 20rem;
 		overflow-y: scroll;
 	}
 
-	.el-card__body .notice .item:hover {
-		transform: scale(1.048);
-		transform-origin: 0% 0;
-	}
-
 	/**滚动条的宽度*/
-	.el-card__body::-webkit-scrollbar {
+	.index_right>>>.el-card__body::-webkit-scrollbar {
 		width: 0.5rem;
 		height: 100%;
 	}
 
 	/* 滚动条的滑块 */
-	.el-card__body::-webkit-scrollbar-thumb {
+	.index_right>>>.el-card__body::-webkit-scrollbar-thumb {
 		background: #1DA0FB;
 		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 		border-radius: 0.25rem;
@@ -316,6 +321,7 @@
 			right: 0;
 		}
 	}
+
 	a {
 		color: #000000;
 	}

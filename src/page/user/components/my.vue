@@ -132,10 +132,6 @@
 		margin-top: 1rem;
 	}
 
-	.email_table {
-		/* border: #999 0.0625rem solid; */
-	}
-
 	.el-table__body-wrapper::-webkit-scrollbar {
 		width: 0.5rem;
 		height: 100%;

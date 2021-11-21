@@ -9,7 +9,7 @@
 				<div class="search">
 
 					<el-input placeholder="请输入内容" v-model="input">
-						<el-switch slot="prepend" v-model="value" active-text="用户" inactive-text="帖子"></el-switch>
+						<el-switch slot="prepend" v-model="value" :active-value="1" :inactive-value="0" active-text="用户" inactive-text="帖子"  @change="change($event,value)"></el-switch>
 						<el-button slot="append" icon="el-icon-search"></el-button>
 					</el-input>
 				</div>
@@ -31,17 +31,23 @@
 		name: 'Search',
 		data() {
 			return {
-				value: true,
+				value: 1,
 				input: '',
 			}
 		},
 		components: {
 			Header
+		},
+		methods: {
+			change(event, value) {
+				console.log(value + "###" + this.value);
+				event= this.value
+			}
 		}
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped="scoped">
 	.main_box {
 		width: 100%;
 		max-width: 75rem;
@@ -66,7 +72,7 @@
 				display: flex;
 				align-items: center;
 
-				.el-input-group__append {
+				/deep/.el-input-group__append {
 					background-color: #1DA0FB;
 					border: #1DA0FB solid 0.0625rem;
 					color: #fff;
