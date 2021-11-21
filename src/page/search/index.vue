@@ -5,10 +5,9 @@
 		<div class="main_box">
 			<div class="search_box">
 				<div class="logo"></div>
-
 				<div class="search">
-
 					<el-input placeholder="请输入内容" v-model="input">
+						<el-switch slot="prepend" v-model="value" active-text="帖子" inactive-text="用户" @change="updateChild"></el-switch>
 						<el-switch slot="prepend" v-model="value" :active-value="1" :inactive-value="0" active-text="用户" inactive-text="帖子"  @change="change($event,value)"></el-switch>
 						<el-button slot="append" icon="el-icon-search"></el-button>
 					</el-input>
@@ -31,18 +30,26 @@
 		name: 'Search',
 		data() {
 			return {
-				value: 1,
+				value: false,
 				input: '',
 			}
 		},
 		components: {
 			Header
 		},
-		methods: {
-			change(event, value) {
-				console.log(value + "###" + this.value);
-				event= this.value
+		methods:{
+			updateChild(val) {
+				if (val){
+					this.$router.push({name:'Posts'})
+				}
+				else {
+					this.$router.push({name:'User'})
+				}
 			}
+		},
+		beforeMount() {
+			this.value = true
+			this.$router.push({name:'Posts'})
 		}
 	}
 </script>

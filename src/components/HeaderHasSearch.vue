@@ -5,9 +5,9 @@
 				<router-link :to="{path:'/'}" title="Easy社团">Easy社团</router-link>
 			</div>
 
-			<div class="seach_box">
-				<el-input placeholder="请输入内容" v-model="search.keyword" class="input-with-select">
-					<el-button slot="append" icon="el-icon-search"></el-button>
+			<div class="seach_box" :class="{'topSeach_box':topSeach_box}">
+				<el-input placeholder="请输入内容" @focus="topSeach_box = true" @blur="topSeach_box = false" v-model="search.keyword" class="input-with-select">
+					<el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
 				</el-input>
 
 			</div>
@@ -50,7 +50,8 @@
 				search: {
 					type: 0,
 					keyword: ''
-				}
+				},
+				topSeach_box:false,
 			}
 		},
 		methods: {
@@ -86,6 +87,9 @@
 				} else {
 					this.$store.commit('updateExistUser', false)
 				}
+			},
+			toSearch() {
+				this.$router.push({name:'Posts'})
 			}
 		},
 		computed: {
@@ -187,7 +191,7 @@
 	}
 
 	/* 搜索框 */
-	.seach_box>>>.el-input__inner {
+	.seach_box>>> .el-input__inner {
 		width: 12.5rem;
 		transition: width .5s;
 	}
@@ -201,5 +205,10 @@
 		background-color: #1DA0FB;
 		color: #fff;
 		border-color: #1DA0FB;
+	}
+	
+	.topSeach_box>>> .el-input__inner {
+		width: 20rem;
+		transition: width .5s;
 	}
 </style>

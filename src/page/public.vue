@@ -39,7 +39,7 @@
 			</div>
 
 			<div class="notice_box">
-				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="paid">
+				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="paid" :notisSize="notSize"></MakesNotice>
 				</MakesNotice>
 			</div>
 
@@ -59,19 +59,19 @@
 		name: 'Public',
 		data() {
 			return {
-				myMassOrganization: [],
-				schoolMassOrganization: [],
-				posts: [],
-				firstposts: [],
-				user: {},
-				code: 0,
-				page: 1,
-				limit: 8,
-				notisSize: 0,
-				paid: 0,
+				myMassOrganization:[],
+				schoolMassOrganization:[],
+				posts:[],
+				firstposts:[],
+				user:{},
+				code:0,
+				page:1,
+				limit:10,
+				notSize:0,
+				paid:0,
 			}
 		},
-		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid'],
+		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'notisSize'],
 		components: {
 			HeaderHasSearch,
 			Info,
@@ -106,8 +106,8 @@
 				}).then(
 					res => {
 						this.firstposts = res.data.data.posts
-						this.notisSize = res.data.data.code
-						this.code = this.code + this.notisSize
+						this.notSize = res.data.data.code
+						this.code = this.code
 					}
 				)
 			},
@@ -119,10 +119,9 @@
 					limit
 				}).then(
 					res => {
-						console.log(res.data.data.posts)
 						this.posts = res.data.data.posts
 						this.code = res.data.data.code
-						this.code = this.code + this.notisSize
+						this.code = this.code
 					}
 				)
 			},
@@ -130,17 +129,12 @@
 				return `${base.sq}${assImage}`
 			},
 			toCommunity(param) {
-				console.log(param)
-				this.$router.push({
-					name: 'Community',
-					params: {
-						'aid': param
-					}
-				})
+				this.$router.push({name:'Community', params:{'aid':param}})
 			},
 		},
 		mounted() {
 			this.$bus.$on('getPostList', this.getPostList)
+			this.$bus.$on('getFistPostList', this.getFistPostList)
 		},
 		beforeMount() {
 			this.getAssociationList()
@@ -149,6 +143,7 @@
 		},
 		beforeDestroy() {
 			this.$bus.$off('getPostList')
+			this.$bus.$off('getFistPostList')
 		}
 	}
 </script>

@@ -36,12 +36,12 @@
 		</el-table>
 
 		<div style="margin-top: 0.625rem;">
-			<Pagination :total="total" :PageSize="10" :PageSizes="[10]"></Pagination>
+			<Pagination :total="total" :PageSize="10" :notisSize="notisSize"></Pagination>
 		</div>
 
 		<el-divider></el-divider>
 
-		<div class="meal_wrap">
+		<div class="meal_wrap" v-show="aid !== 0 && permission !== 0 ? true : false">
 			<div>
 				<div class="title_makes_notice"><i class="el-icon-s-promotion"></i>&ensp;发表新帖</div>
 				<div class="tinymce-btn">
@@ -89,7 +89,7 @@
 			TEditor,
 			Pagination,
 		},
-		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'PageSize', 'PageSizes'],
+		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'PageSize', 'notisSize', 'permission'],
 		data() {
 			return {
 				message: null,
@@ -144,7 +144,17 @@
 				if (arr.length >= 6) {
 					this.$api.releasePost(mes).then(
 						res => {
-							this.$router.go(0)
+							this.$bus.$emit('getFistPostList',2,1,10)
+							this.$bus.$emit('getPostList', 0, 2, 1, 10)
+							this.$bus.$emit('cgetPostList', 1, 1, 10)
+							this.content = ''
+							this.dynamicTags = []
+							this.input = ''
+							this.value = ''
+							// 清空富文本框
+							this.$refs.tinymceRef.$el.querySelector('iframe').contentDocument.querySelector('body').innerHTML = '';
+							this.$message.success("发表成功！")
+							document.documentElement.scrollTop = 10
 						}
 					)
 				} else {
@@ -187,6 +197,10 @@
 				handler() {
 					if (this.chaildFirstPosts !== null && this.chaildPosts !== null)
 						this.posts = this.chaildFirstPosts.concat(this.chaildPosts)
+					else if (this.chaildFirstPosts !== null)
+						this.posts = this.chaildFirstPosts
+					else if (this.chaildPosts !== null)
+						this.posts = this.chaildPosts
 				}
 			},
 			chaildPosts: {
@@ -194,6 +208,10 @@
 				handler() {
 					if (this.chaildFirstPosts !== null && this.chaildPosts !== null)
 						this.posts = this.chaildFirstPosts.concat(this.chaildPosts)
+					else if (this.chaildFirstPosts !== null)
+						this.posts = this.chaildFirstPosts
+					else if (this.chaildPosts !== null)
+						this.posts = this.chaildPosts
 				}
 			},
 		},
