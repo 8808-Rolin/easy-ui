@@ -63,7 +63,7 @@
 						</div>
 					</div>
 					<div style="padding: 0.5rem 0;">
-						<Pagination :total="code" :PageSize="12" :PageSizes="[12]"></Pagination>
+						<Pagination :total="code" :PageSize="12"></Pagination>
 					</div>
 				</div>
 			</div>

@@ -34,7 +34,7 @@
 			</div>
 			
 			<div class="notice_box">
-				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="paid"></MakesNotice>
+				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="paid" :notisSize="notSize"></MakesNotice>
 			</div>
 			
 			<!-- 废物div -->
@@ -60,12 +60,12 @@
 				user:{},
 				code:0,
 				page:1,
-				limit:8,
-				notisSize:0,
+				limit:10,
+				notSize:0,
 				paid:0,
 			}
 		},
-		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid'],
+		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'notisSize'],
 		components: {
 			HeaderHasSearch,
 			Info,
@@ -93,18 +93,17 @@
 				this.$api.getPostList({aid:0,type:1,page:null,limit:null}).then(
 					res => {
 						this.firstposts = res.data.data.posts
-						this.notisSize = res.data.data.code
-						this.code = this.code + this.notisSize
+						this.notSize = res.data.data.code
+						this.code = this.code
 					}
 				)
 			},
 			getPostList(aid, type, page, limit) {
 				this.$api.getPostList({aid,type,page,limit}).then(
 					res => {
-						console.log(res.data.data.posts)
 						this.posts = res.data.data.posts
 						this.code = res.data.data.code
-						this.code = this.code + this.notisSize
+						this.code = this.code
 					}
 				)
 			},
@@ -112,7 +111,6 @@
 				return `${base.sq}${assImage}`
 			},
 			toCommunity(param) {
-				console.log(param)
 				this.$router.push({name:'Community', params:{'aid':param}})
 			},
 		},

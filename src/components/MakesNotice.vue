@@ -16,7 +16,7 @@
 		</el-table>
 
 		<div style="margin-top: 0.625rem;">
-			<Pagination :total="total" :PageSize="10" :PageSizes="[10]"></Pagination>
+			<Pagination :total="total" :PageSize="10" :notisSize="notisSize"></Pagination>
 		</div>
 
 		<el-divider></el-divider>
@@ -69,7 +69,7 @@
 			TEditor,
 			Pagination,
 		},
-		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'PageSize', 'PageSizes'],
+		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'PageSize', 'notisSize'],
 		data() {
 			return {
 				message:null,
@@ -161,6 +161,10 @@
 				handler() {
 					if (this.chaildFirstPosts !== null && this.chaildPosts !== null)
 						this.posts = this.chaildFirstPosts.concat(this.chaildPosts)
+					else if (this.chaildFirstPosts !== null)
+						this.posts = this.chaildFirstPosts
+					else if (this.chaildPosts !== null)
+						this.posts = this.chaildPosts
 				}
 			},
 			chaildPosts:{
@@ -168,6 +172,10 @@
 				handler() {
 					if (this.chaildFirstPosts !== null && this.chaildPosts !== null)
 						this.posts = this.chaildFirstPosts.concat(this.chaildPosts)
+					else if (this.chaildFirstPosts !== null)
+						this.posts = this.chaildFirstPosts
+					else if (this.chaildPosts !== null)
+						this.posts = this.chaildPosts
 				}
 			},	
 		},
