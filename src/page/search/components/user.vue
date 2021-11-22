@@ -1,14 +1,11 @@
 <template>
 	<div class="result">
 		<div class="user_box">
-			<div class="user">
+			<transition name="el-zoom-in-top" mode="out-in">
+				<div class="user">
 				<div class="left">
 					<div class="user_photo">
 						<img src="../../../assets/profile.jpg">
-					</div>
-					<div class="college">
-						<p><small>二级学院</small></p>
-						<p><strong>信息技术学院</strong></p>
 					</div>
 				</div>
 				<div class="right">
@@ -21,6 +18,8 @@
 					</div>
 				</div>
 			</div>
+			</transition>
+			
 			<i style="width: 31.25rem;"></i>
 		</div>
 
@@ -38,7 +37,7 @@
 		name: 'user',
 		data() {
 			return {
-
+				transitionName: 'slide-right'
 			}
 		},
 		components: {
@@ -47,10 +46,11 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped="scoped">
 	.result {
 		width: 100%;
-		padding: 0 1.25rem;
+		padding: 1rem 2.25rem;
+		box-shadow: var(--box-shadow2);
 
 		.user_box {
 			width: 100%;
@@ -65,10 +65,10 @@
 				border-radius: 1rem;
 				display: flex;
 				box-shadow: var(--box-shadow2);
+				cursor: pointer;
 
 				.left {
 					width: 7.5rem;
-					text-align: center;
 
 					.user_photo {
 						width: 6rem;
@@ -76,6 +76,11 @@
 						border-radius: 50%;
 						overflow: hidden;
 						margin: 0 auto 0.5rem;
+						
+						img {
+							width: 100%;
+							height: 100%;
+						}
 					}
 				}
 
@@ -94,7 +99,6 @@
 					.intro {
 						padding: 0.25rem;
 						flex: 1;
-
 					}
 				}
 			}

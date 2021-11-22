@@ -117,7 +117,7 @@
 	}
 </script>
 
-<style>
+<style scoped="scoped">
 	.top_box {
 		padding-bottom: 1rem;
 		border-bottom: #999 0.0625rem solid;

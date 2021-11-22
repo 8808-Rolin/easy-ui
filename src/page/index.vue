@@ -125,7 +125,8 @@
 		float: left;
 		font-size: 2.5rem;
 		font-weight: bold;
-		transition: 1.33s;
+		transition: all 300ms linear;
+		will-change: all;
 		cursor: pointer;
 	}
 
@@ -157,18 +158,21 @@
 
 	.button_box:hover {
 		transform: translateX(-70%);
-		transition: 1.33s;
+		transition: all 300ms linear;
+		will-change: all;
 	}
 
 	.button_box:hover .enter {
 		left: -30%;
-		transition: 1.33s;
+		transition: all 300ms linear;
+		will-change: all;
 	}
 
 	.button_box:hover .community {
 		width: 100%;
 		right: 0;
-		transition: 1.33s;
+		transition: all 300ms linear;
+		will-change: all;
 	}
 
 	.community .point_box {

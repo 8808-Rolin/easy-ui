@@ -13,7 +13,9 @@
 						<small>社团名称：{{name}}</small>
 					</div>
 					<div class="title">
-						<strong>{{post.title}}</strong>
+						<el-tooltip :content="post.title" placement="top" :open-delay="500">
+						<strong>&emsp;&emsp;{{post.title}}</strong>
+						</el-tooltip>
 					</div>
 				</div>
 
@@ -258,7 +260,11 @@
 				}
 
 				.title {
-					font-size: 1.5rem;
+					width: 75%;
+					font-size: 2rem;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
 				}
 			}
 
@@ -294,6 +300,9 @@
 
 				.p_content {
 					flex: 1;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
 
 					.content {
 						min-height: calc(100% - 5rem);
