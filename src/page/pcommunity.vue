@@ -46,7 +46,7 @@
 			<div class="p_discuss">
 				<!-- 评论发表、他人评论 -->
 				<div class="publish">
-					<EmojiInput @analysisEmoji="releaseDiscuss"></EmojiInput>
+					<EmojiInput @analysisEmoji="releaseDiscuss" :permission="permissionCode"></EmojiInput>
 				</div>
 				<div class="discuss_all">
 					<div class="discuss" v-for="(item, index) in discuss" :key="index">
@@ -86,7 +86,7 @@
 
 	export default {
 		name: 'CommunityP',
-		props:['total', 'PageSize', 'PageSizes'],
+		props:['total', 'PageSize', 'PageSizes', 'permission'],
 		data() {
 			return {
 				user: {},
@@ -94,7 +94,7 @@
 				discuss: [],
 				//myDiscuss: "",
 				dynamicTags: [],
-				permissionCode: 3,
+				permissionCode: 0,
 				post: [],
 				master: [],
 				code:0,
@@ -115,11 +115,20 @@
 					pid
 				}).then(
 					res => {
-						this.permissionCode = res.data.data.permissionCode
 						this.master = res.data.data.master
 						this.dynamicTags = res.data.data.post.tags
 						this.post = res.data.data.post
 						console.log(res.data)
+					}
+				)
+			},
+			getMassOrganization() {
+				let uid = this.uid
+				let aid = this.$route.params.aid
+				this.$api.getAssInformation({uid,aid}).then(
+					res => {
+						console.log(res.data.data, "@@@@")
+						this.permissionCode = res.data.data.permissionCode
 					}
 				)
 			},
@@ -180,12 +189,17 @@
 			releaseDiscuss(content) {
 				let pid = this.$route.params.pid
 				let uid = this.uid
-				this.$api.releaseDiscuss({pid,uid,content}).then(
-					res => {
-						this.addMyDiscuss(content)
-						this.$message.success(res.data.data.msg)
-					}
-				)
+				if (this.permissionCode !== 0) {
+					this.$api.releaseDiscuss({pid,uid,content}).then(
+						res => {
+							this.addMyDiscuss(content)
+							this.$message.success(res.data.data.msg)
+						}
+					)
+				} else {
+					this.$message.info('请先加入社团')
+				}
+				
 			},
 			
 			/* 收藏贴子 **/
@@ -219,6 +233,8 @@
 		beforeMount() {
 			this.getPostPageInfo()
 			this.getDiscussList(1)
+			this.getMassOrganization()
+			document.documentElement.scrollTop = 10
 		},
 		mounted(){
 			this.$bus.$on('getDiscussList',this.getDiscussList)

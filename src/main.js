@@ -14,6 +14,8 @@ Vue.withCredentials = true
 
 Vue.use(ElementUI)
 Vue.use(less)
+let homeScrollTop = 0;
+Vue.prototype.$homeScroll = homeScrollTop;
 
 new Vue({
 	router,

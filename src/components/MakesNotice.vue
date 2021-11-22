@@ -41,7 +41,7 @@
 
 		<el-divider></el-divider>
 
-		<div class="meal_wrap" v-show="aid !== 0 && permission !== 0 ? true : false">
+		<div class="meal_wrap" v-show="aid !== 0 && permission !== 0 || aid === 0? true : false">
 			<div>
 				<div class="title_makes_notice"><i class="el-icon-s-promotion"></i>&ensp;发表新帖</div>
 				<div class="tinymce-btn">
