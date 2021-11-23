@@ -1,21 +1,25 @@
 <template>
-	<div>
+	<div id="seach">
 		<Header></Header>
 
 		<div class="main_box">
 			<div class="search_box">
 				<div class="logo"></div>
 				<div class="search">
-					<el-input placeholder="请输入内容" v-model="input" @keyup.enter.native="toChild()">
-						<el-switch slot="prepend" v-model="value" active-text="用户" :active-value="1" :inactive-value="0" inactive-text="帖子"></el-switch>
-						<el-button slot="append" icon="el-icon-search" @click="toChild"></el-button>
-					</el-input>
+						<el-input placeholder="请输入内容" v-model="input" @keyup.enter.native="toChild()">
+							<el-switch slot="prepend" v-model="value" active-text="用户" :active-value="1"
+								:inactive-value="0" inactive-text="帖子"></el-switch>
+							<el-button slot="append" icon="el-icon-search" @click="toChild"></el-button>
+						</el-input>
 				</div>
 			</div>
 
 			<div class="result_box">
-				<router-view :type="value"></router-view>
+				<transition class="result_box" name="transitionName" mode="out-in">
+					<router-view class="router" :type="value"></router-view>
+					</transition>
 			</div>
+
 			<!-- 废物div -->
 			<div style="height: 1rem;"></div>
 		</div>
@@ -27,24 +31,46 @@
 
 	export default {
 		name: 'Search',
-		props:['type'],
+		props: ['type'],
 		data() {
 			return {
 				value: 0,
 				input: '',
+				transitionName: 'slide-right',
 			}
 		},
 		components: {
 			Header
 		},
-		methods:{
+		watch: {
+			$route(to, from) {
+				let isBack = this.$router.isBack;
+				if (isBack) {
+					this.transitionName = "slide-right"
+				} else {
+					this.transitionName = "slide-left"
+				}
+				this.$router.isBack = false
+			}
+		},
+		methods: {
 			toChild(val) {
 				console.log(this.value, this.input)
-				if(this.value === 0 && this.input !== '') {
-					this.$router.push({name:'Posts',params:{content:this.input}})
+				if (this.value === 0 && this.input !== '') {
+					this.$router.push({
+						name: 'Posts',
+						params: {
+							content: this.input
+						}
+					})
 					this.$bus.$emit('search')
-				} else if(this.value === 1){
-					this.$router.push({name:'User',params:{content:this.input}})
+				} else if (this.value === 1) {
+					this.$router.push({
+						name: 'User',
+						params: {
+							content: this.input
+						}
+					})
 					this.$bus.$emit('search')
 				}
 			},
@@ -52,50 +78,53 @@
 		beforeMount() {
 			if (this.$route.name === 'User')
 				this.value = 1
-			else 
+			else
 				this.value = 0
 		}
 	}
 </script>
 
 <style lang="less" scoped="scoped">
-	.main_box {
-		width: 100%;
-		max-width: 75rem;
-		margin: auto;
+	#seach {
+		height: 100vh;
 
-		.search_box {
-			padding: 1rem;
-			box-shadow: var(--box-shadow2);
+		.main_box {
+			width: 100%;
+			height: 100%;
+			max-width: 75rem;
+			margin: auto;
 
-			.logo {
-				width: 15rem;
-				height: 6rem;
-				margin: auto;
-				background: url(../../assets/logo-slogen-225x90px.png) no-repeat;
-				background-size: cover;
-			}
+			.search_box {
+				padding: 1rem;
+				box-shadow: var(--box-shadow2);
 
-			.search {
-				width: 100%;
-				max-width: 40rem;
-				margin: 0.5rem auto;
-				display: flex;
-				align-items: center;
-
-				/deep/.el-input-group__append {
-					background-color: #1DA0FB;
-					border: #1DA0FB solid 0.0625rem;
-					color: #fff;
+				.logo {
+					width: 15rem;
+					height: 6rem;
+					margin: auto;
+					background: url(../../assets/logo-slogen-225x90px.png) no-repeat;
+					background-size: cover;
 				}
 
-			}
-		}
+				.search {
+					width: 100%;
+					max-width: 40rem;
+					margin: 0.5rem auto;
+					display: flex;
+					align-items: center;
 
-		.result_box {
-			margin-top: 2rem;
-			padding: 1rem;
-			box-shadow: var(--box-shadow2);
+					/deep/.el-input-group__append {
+						background-color: #1DA0FB;
+						border: #1DA0FB solid 0.0625rem;
+						color: #fff;
+					}
+
+				}
+			}
+
+			.result_box {
+				margin-top: 2rem;
+			}
 		}
 	}
 </style>

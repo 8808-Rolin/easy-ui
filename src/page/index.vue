@@ -125,7 +125,8 @@
 		float: left;
 		font-size: 2.5rem;
 		font-weight: bold;
-		transition: 1.33s;
+		transition: all 300ms linear;
+		will-change: all;
 		cursor: pointer;
 	}
 
@@ -157,18 +158,21 @@
 
 	.button_box:hover {
 		transform: translateX(-70%);
-		transition: 1.33s;
+		transition: all 300ms linear;
+		will-change: all;
 	}
 
 	.button_box:hover .enter {
 		left: -30%;
-		transition: 1.33s;
+		transition: all 300ms linear;
+		will-change: all;
 	}
 
 	.button_box:hover .community {
 		width: 100%;
 		right: 0;
-		transition: 1.33s;
+		transition: all 300ms linear;
+		will-change: all;
 	}
 
 	.community .point_box {
@@ -211,7 +215,6 @@
 		height: 1.5rem;
 		margin-bottom: 1rem;
 		padding: 0.1875rem;
-		border-bottom: 0.0625rem solid rgba(0, 0, 0, .25);
 		z-index: 999;
 		transition: all .5s;
 	}

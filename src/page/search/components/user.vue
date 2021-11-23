@@ -1,28 +1,29 @@
-<template>
+<template v-if="show">
 	<div class="result">
-		<div v-show="users.length <= 0" style="text-align: center;"><h3>暂无数据</h3></div>
+		<div v-show="users.length <= 0" style="text-align: center;">
+			<h3>暂无数据</h3>
+		</div>
 		<div class="user_box">
-			<div class="user" v-for="(item, index) in users" :key="item.uid">
-				<div class="left">
-					<div class="user_photo">
-						<img :src="headImage(item.image)">
+			<transition-group appear name="more" v-bind:css="false" v-on:before-enter="beforeEnter" v-on:enter="enter">
+				<div class="user" v-for="(item, index) in users" :key="item.uid" :data-index="item">
+					<div class="left">
+						<div class="user_photo">
+							<img :src="headImage(item.image)">
+						</div>
 					</div>
-					<!-- <div class="college">
-						<p><small>{{二级学院}}</small></p>
-						<p><strong>信息技术学院</strong></p>
-					</div> -->
-				</div>
-				<div class="right">
-					<div class="name">
-						<div><big><strong>{{item.username}}</strong></big></div>
-						<div><small>发帖数量：{{item.numberOfPost}}</small></div>
-					</div>
-					<div class="intro">
-						<small>{{item.intro}}</small>
+					<div class="right">
+						<div class="name">
+							<div><big><strong>{{item.username}}</strong></big></div>
+							<div><small>发帖数量：{{item.numberOfPost}}</small></div>
+						</div>
+						<div class="intro">
+							<small>{{item.intro}}</small>
+						</div>
 					</div>
 				</div>
-			</div>
-			<i style="width: 31.25rem;"></i>
+			</transition-group>
+
+
 		</div>
 
 		<div class="">
@@ -38,19 +39,23 @@
 
 	export default {
 		name: 'user',
-		props:['type'],
+		props: ['type'],
 		data() {
 			return {
-				users:[]
+				show: false,
+				users: []
 			}
 		},
-		methods:{
+		methods: {
 			/* 获取搜索数据 **/
 			search() {
 				let type = this.type
 				let keyword = this.$route.params.content
 				if (keyword !== 'null') {
-					this.$api.search({type,keyword}).then(
+					this.$api.search({
+						type,
+						keyword
+					}).then(
 						res => {
 							this.users = res.data.data.users
 							//console.log(res.data.data.users)
@@ -61,13 +66,38 @@
 			/* 重写头像路径 **/
 			headImage(image) {
 				return `${base.sq}${image}`
+			},
+			// 动画
+			beforeEnter(el) {
+				el.style.opacity = 0
+			},
+			enter(el, done) {
+				// console.log(el.dataset.index)
+				let delay = el.dataset.index * 1000
+				setTimeout(() => {
+					el.style.transition = 'opacity 1s '
+					el.style.opacity = 1
+					el.style.animation = 'one-in 1s infinite'
+					el.style['animation-iteration-count'] = 1
+					done()
+				}, delay)
 			}
 		},
 		components: {
 			Pagination
 		},
+		watch: {
+			users() {
+				setTimeout(() => {
+					this.show = !this.show
+				})
+			}
+		},
 		mounted() {
 			this.$bus.$on('search', this.search)
+			setTimeout(() => {
+				this.show = !this.show
+			})
 		},
 		beforeDestroy() {
 			this.$bus.$off('search')
@@ -78,16 +108,27 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped="scoped">
 	.result {
 		width: 100%;
-		padding: 0 1.25rem;
+		padding: 1rem 2.25rem;
+		box-shadow: var(--box-shadow2);
 
 		.user_box {
 			width: 100%;
-			display: flex;
-			justify-content: space-around;
-			flex-wrap: wrap;
+
+			span {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: space-around;
+				flex-wrap: wrap;
+				
+				&::after {
+					width: 31.25rem;
+				    content: '';
+				}
+			}
 
 			.user {
 				width: 31.25rem;
@@ -96,10 +137,10 @@
 				border-radius: 1rem;
 				display: flex;
 				box-shadow: var(--box-shadow2);
+				cursor: pointer;
 
 				.left {
 					width: 7.5rem;
-					text-align: center;
 
 					.user_photo {
 						width: 6rem;
@@ -107,6 +148,11 @@
 						border-radius: 50%;
 						overflow: hidden;
 						margin: 0 auto 0.5rem;
+
+						img {
+							width: 100%;
+							height: 100%;
+						}
 					}
 				}
 
@@ -117,18 +163,33 @@
 					flex-direction: column;
 
 					.name {
+						max-height: 2rem;
+						overflow: hidden;
 						padding: 0.25rem;
 						display: flex;
 						justify-content: space-between;
 					}
 
 					.intro {
+						max-height: 4.5rem;
+						overflow: hidden;
 						padding: 0.25rem;
 						flex: 1;
-
 					}
 				}
 			}
+		}
+	}
+</style>
+
+<style type="text/css">
+	@keyframes one-in {
+		from {
+			padding-left: 100%;
+		}
+
+		to {
+			padding-left: 0%;
 		}
 	}
 </style>
