@@ -67,12 +67,18 @@ const router = new Router({
 		component: () => import('@/page/search/index'),
 		children: [{
 				name: 'Posts',
-				path: 'posts',
-				component: () => import('@/page/search/components/Posts')
+				path: 'posts/:content',
+				component: () => import('@/page/search/components/Posts'),
+				props($route){
+					return {content:$route.params.content}
+				}
 			},{
 				name: 'User',
-				path: 'user',
-				component: () => import('@/page/search/components/user')
+				path: 'user/:content',
+				component: () => import('@/page/search/components/user'),
+				props($route){
+					return {content:$route.params.content}
+				}
 			},
 		]
 	}, {

@@ -215,7 +215,6 @@
 		height: 1.5rem;
 		margin-bottom: 1rem;
 		padding: 0.1875rem;
-		border-bottom: 0.0625rem solid rgba(0, 0, 0, .25);
 		z-index: 999;
 		transition: all .5s;
 	}

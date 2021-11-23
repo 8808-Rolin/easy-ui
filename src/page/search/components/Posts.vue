@@ -1,39 +1,25 @@
 <template>
 	<div class="result">
-		<div class="Posts_box">
-			<div class="Posts">
-				<div class="title"><strong>帖子标题</strong></div>
-				<p class="content">
-					<small>个人空间是用来展示用户的一些信息以及收藏的，用户可以选择空间是否对外开放，以及用户本人和其他用户访问同一个空间时个人空间会展示不同的内容，因此个人空间应有三种不同的布局，既：用户本人访问的页面用户设置了不对外开放时其他用户访问的页面用户设置了对外开放时其他用户访问的页面作为空间主人，用户还可以在这里修改对应的用户信息，包括昵称、邮箱、联系方式、简介等；点击头像即可修改头像，点击对应项即可修改对应信息个人空间是用来展示用户的一些信息以及收藏的，用户可以选择空间是否对外开放，以及用户本人和其他用户访问同一个空间时个人空间会展示不同的内容，因此个人空间应有三种不同的布局，既：用户本人访问的页面用户设置了不对外开放时其他用户访问的页面用户设置了对外开放时其他用户访问的页面作为空间主人，用户还可以在这里修改对应的用户信息，包括昵称、邮箱、联系方式、简介等；点击头像即可修改头像，点击对应项即可修改对应信息</small>
-				</p>
-				<div class="other">
-					<div><small>动漫社</small></div>
-					<div>
-						<div><small>作者</small></div>
-						&emsp;
-						<div><small>2021-11-15</small></div>
-					</div>
-				</div>
-			</div>
-
-
-			<div class="Posts">
-				<div class="title"><strong>帖子标题</strong></div>
-				<div class="content">
-					<small>帖子内容</small>
-				</div>
-				<div class="other">
-					<div><small>动漫社</small></div>
-					<div>
-						<div><small>作者</small></div>
-						&emsp;
-						<div><small>2021-11-15</small></div>
-					</div>
-				</div>
-			</div>
+		<div v-show="posts.length <= 0" style="text-align: center;">
+			<h3>暂无数据</h3>
 		</div>
-		<div>
-			<Pagination></Pagination>
+		<div class="Posts_box">
+			<transition-group name="more" v-bind:css="false" v-on:before-enter="beforeEnter" v-on:enter="enter">
+				<div class="Posts" v-for="(item, index) in posts" :key="item.pid" v-if="show" :data-index="item">
+					<div class="title" @click="toPost(item.aid, item.pid)"><strong>{{item.title}}</strong></div>
+					<div class="content" @click="toPost(item.aid, item.pid)">
+						<small v-html="item.content"></small>
+					</div>
+					<div class="other">
+						<div @click="toCommunityAndPublic(item.aid)"><small>{{item.aname}}</small></div>
+						<div>
+							<div><small>{{item.authorName}}</small></div>
+							&emsp;
+							<div><small>{{item.releaseDate}}</small></div>
+						</div>
+					</div>
+				</div>
+			</transition-group>
 		</div>
 	</div>
 </template>
@@ -43,14 +29,91 @@
 
 	export default {
 		name: 'Posts',
+		props: ['type'],
 		data() {
 			return {
-
+				posts: [],
+				show: false
 			}
 		},
 		components: {
 			Pagination
-		}
+		},
+		methods: {
+			/* 获取搜索数据 **/
+			search() {
+				let type = this.type
+				let keyword = this.$route.params.content
+				if (keyword !== 'null') {
+					this.$api.search({
+						type,
+						keyword
+					}).then(
+						res => {
+							this.posts = res.data.data.posts
+							console.log(res.data.data)
+						}
+					)
+				} else {
+
+				}
+			},
+			// 前往帖子页面
+			toPost(aid, pid) {
+				console.log(this.$homeScroll)
+				setTimeout(() => {
+					this.$router.push({
+						name: 'PublicCommunity',
+						params: {
+							aid,
+							'pid': pid
+						}
+					})
+				}, 500)
+			},
+			// 前往公共论坛和社团
+			toCommunityAndPublic(aid) {
+				if (aid === 0)
+					this.$router.push({
+						name: 'Public'
+					})
+				else
+					this.$router.push({
+						name: 'Community',
+						params: {
+							aid
+						}
+					})
+			},
+			// 动画
+			beforeEnter(el) {
+				el.style.opacity = 0
+			},
+			enter(el, done) {
+				// console.log(el.dataset.index)
+				let delay = el.dataset.index * 1000
+				setTimeout(() => {
+					el.style.transition = 'opacity 1s '
+					el.style.opacity = 1
+					el.style.animation = 'one-in 1s infinite'
+					el.style['animation-iteration-count'] = 1
+					done()
+				}, delay)
+			}
+		},
+		beforeMount() {
+			this.search()
+		},
+		mounted() {
+			this.$bus.$on('search', this.search)
+			setTimeout(() => {
+				this.show = !this.show
+			})
+		},
+		beforeDestroy() {
+			this.$bus.$off('search')
+			//sessionStorage.setItem('scrollTop', scrollTop)
+		},
 	}
 </script>
 
@@ -98,6 +161,20 @@
 					border: none;
 				}
 			}
+		}
+	}
+</style>
+
+<style type="text/css">
+	@keyframes one-in {
+		from {
+			padding-top: 100px;
+			height: 0%;
+		}
+
+		to {
+			padding-top: 0px;
+			height: 100%;
 		}
 	}
 </style>

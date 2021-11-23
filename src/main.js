@@ -14,6 +14,16 @@ Vue.withCredentials = true
 
 Vue.use(ElementUI)
 Vue.use(less)
+let homeScrollTop = 0;
+Vue.prototype.$homeScroll = homeScrollTop;
+
+
+// fade/zoom 等
+import 'element-ui/lib/theme-chalk/base.css';
+// collapse 展开折叠
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+
+Vue.component(CollapseTransition.name, CollapseTransition)
 
 new Vue({
 	router,

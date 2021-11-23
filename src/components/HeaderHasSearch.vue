@@ -6,7 +6,7 @@
 			</div>
 
 			<div class="seach_box" :class="{'topSeach_box':topSeach_box}">
-				<el-input placeholder="请输入内容" @focus="topSeach_box = true" @blur="topSeach_box = false" v-model="search.keyword" class="input-with-select">
+				<el-input placeholder="请输入内容" @focus="topSeach_box = true" v-model="search.keyword" class="input-with-select">
 					<el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
 				</el-input>
 
@@ -89,7 +89,8 @@
 				}
 			},
 			toSearch() {
-				this.$router.push({name:'Posts'})
+				if (this.search.keyword !== '') 
+					this.$router.push({name:'Posts',params:{content:this.search.keyword}})
 			}
 		},
 		computed: {

@@ -34,18 +34,20 @@
 						<div slot="header" class="clearfix">
 							<span>社团活动</span>
 						</div>
-						<div v-for="item in actionOverview" :key="item.actid" class="text item" @click="centerDialogVisible = true;showDialog(item.title)">
+						<div v-for="item in actionOverview" :key="item.actid" class="text item"
+							@click="centerDialogVisible = true;getActionInfo(item.actid)">
 							<a class="notice_title"><strong>{{item.title}}</strong></a>
 							<a><small>{{item.date}}</small></a>
 						</div>
 					</el-card>
 
 					<el-dialog :title="dialogData.title" :visible.sync="centerDialogVisible" width="30%" center>
-						<span>{{dialogData.content}}</span>
+						<span v-html="dialogData.content"></span>
 						<span slot="footer" class="dialog-footer">
 							<el-button @click="centerDialogVisible = false">取&emsp;消</el-button>
-							<el-button v-show="dialogData.isJoin == 0" type="primary" @click="centerDialogVisible = false">报&emsp;名</el-button>
-							<el-button v-show="dialogData.isJoin != 0" type="primary" disabled>已报名</el-button>
+							<el-button v-show="dialogData.status !== 2" type="primary"
+								@click="joinAction(centerDialogVisible)">报&emsp;名</el-button>
+							<el-button v-show="dialogData.status === 2" type="primary" disabled>已报名</el-button>
 						</span>
 					</el-dialog>
 				</div>
@@ -76,7 +78,7 @@
 		data() {
 			return {
 				user: {},
-				permissionCode: 3,
+				permissionCode: 0,
 				ass: [],
 				options: [{
 					label: '社团公告',
@@ -91,11 +93,7 @@
 				limit: 10,
 				notSize: 0,
 				// 对话框
-				dialogData: {
-					title: '',
-					content: '',
-					isJoin: 0
-				},
+				dialogData: {},
 				centerDialogVisible: false
 			}
 		},
@@ -170,10 +168,42 @@
 					}
 				)
 			},
-			// 对话框
+			/* // 对话框
 			showDialog(title) {
 				this.dialogData.title = title
-				
+			} */
+			/* get-action-info 获取活动详细内容**/
+			getActionInfo(actid) {
+				let uid = this.uid
+				this.$api.getActionInfo({
+					actid,
+					uid
+				}).then(
+					res => {
+						this.dialogData = res.data.data
+						this.dialogData.actid = actid
+						console.log(res.data.data)
+					}
+				)
+			},
+			joinAction(centerDialogVisible) {
+				let status = this.dialogData.status
+				if (status === 0) {
+					this.participate()
+				} else if(status === 1){
+					this.$message.error("你没有权限参加活动")
+					this.centerDialogVisible = false
+				}
+			},
+			participate() {
+				let uid = this.uid
+				let actid = this.dialogData.actid
+				this.$api.participate({uid,actid}).then(
+					res => {
+						this.$message.success(res.data.data.msg)
+						this.centerDialogVisible = false
+					}
+				)
 			}
 		},
 		computed: {

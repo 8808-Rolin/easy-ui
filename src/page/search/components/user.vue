@@ -1,26 +1,29 @@
-<template>
+<template v-if="show">
 	<div class="result">
+		<div v-show="users.length <= 0" style="text-align: center;">
+			<h3>暂无数据</h3>
+		</div>
 		<div class="user_box">
-			<transition name="el-zoom-in-top" mode="out-in">
-				<div class="user">
-				<div class="left">
-					<div class="user_photo">
-						<img src="../../../assets/profile.jpg">
+			<transition-group appear name="more" v-bind:css="false" v-on:before-enter="beforeEnter" v-on:enter="enter">
+				<div class="user" v-for="(item, index) in users" :key="item.uid" :data-index="item">
+					<div class="left">
+						<div class="user_photo">
+							<img :src="headImage(item.image)">
+						</div>
+					</div>
+					<div class="right">
+						<div class="name">
+							<div><big><strong>{{item.username}}</strong></big></div>
+							<div><small>发帖数量：{{item.numberOfPost}}</small></div>
+						</div>
+						<div class="intro">
+							<small>{{item.intro}}</small>
+						</div>
 					</div>
 				</div>
-				<div class="right">
-					<div class="name">
-						<div><big><strong>用户名</strong></big></div>
-						<div><small>发帖数量：0</small></div>
-					</div>
-					<div class="intro">
-						<small>个人介绍nnnnnnnn</small>
-					</div>
-				</div>
-			</div>
-			</transition>
-			
-			<i style="width: 31.25rem;"></i>
+			</transition-group>
+
+
 		</div>
 
 		<div class="">
@@ -32,17 +35,76 @@
 
 <script>
 	import Pagination from '../../../components/Pagination.vue'
+	import base from '../../../api/request/base.js'
 
 	export default {
 		name: 'user',
+		props: ['type'],
 		data() {
 			return {
-				transitionName: 'slide-right'
+				show: false,
+				users: []
+			}
+		},
+		methods: {
+			/* 获取搜索数据 **/
+			search() {
+				let type = this.type
+				let keyword = this.$route.params.content
+				if (keyword !== 'null') {
+					this.$api.search({
+						type,
+						keyword
+					}).then(
+						res => {
+							this.users = res.data.data.users
+							//console.log(res.data.data.users)
+						}
+					)
+				}
+			},
+			/* 重写头像路径 **/
+			headImage(image) {
+				return `${base.sq}${image}`
+			},
+			// 动画
+			beforeEnter(el) {
+				el.style.opacity = 0
+			},
+			enter(el, done) {
+				// console.log(el.dataset.index)
+				let delay = el.dataset.index * 1000
+				setTimeout(() => {
+					el.style.transition = 'opacity 1s '
+					el.style.opacity = 1
+					el.style.animation = 'one-in 1s infinite'
+					el.style['animation-iteration-count'] = 1
+					done()
+				}, delay)
 			}
 		},
 		components: {
 			Pagination
-		}
+		},
+		watch: {
+			users() {
+				setTimeout(() => {
+					this.show = !this.show
+				})
+			}
+		},
+		mounted() {
+			this.$bus.$on('search', this.search)
+			setTimeout(() => {
+				this.show = !this.show
+			})
+		},
+		beforeDestroy() {
+			this.$bus.$off('search')
+		},
+		beforeMount() {
+			this.search()
+		},
 	}
 </script>
 
@@ -54,9 +116,19 @@
 
 		.user_box {
 			width: 100%;
-			display: flex;
-			justify-content: space-around;
-			flex-wrap: wrap;
+
+			span {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: space-around;
+				flex-wrap: wrap;
+				
+				&::after {
+					width: 31.25rem;
+				    content: '';
+				}
+			}
 
 			.user {
 				width: 31.25rem;
@@ -76,7 +148,7 @@
 						border-radius: 50%;
 						overflow: hidden;
 						margin: 0 auto 0.5rem;
-						
+
 						img {
 							width: 100%;
 							height: 100%;
@@ -91,17 +163,33 @@
 					flex-direction: column;
 
 					.name {
+						max-height: 2rem;
+						overflow: hidden;
 						padding: 0.25rem;
 						display: flex;
 						justify-content: space-between;
 					}
 
 					.intro {
+						max-height: 4.5rem;
+						overflow: hidden;
 						padding: 0.25rem;
 						flex: 1;
 					}
 				}
 			}
+		}
+	}
+</style>
+
+<style type="text/css">
+	@keyframes one-in {
+		from {
+			padding-left: 100%;
+		}
+
+		to {
+			padding-left: 0%;
 		}
 	}
 </style>

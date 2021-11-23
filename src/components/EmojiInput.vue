@@ -3,12 +3,12 @@
 		<div>
 			<el-input :rows="5" type="textarea" placeholder="请输入内容" v-model="content">
 			</el-input>
-			<el-tooltip class="submit-btn" content="请先加入该社团" :disabled="disabled" placement="top">
+			<el-tooltip class="submit-btn" content="请先加入该社团" :disabled="permission !== 0" placement="top">
 				<el-button type="primary" @click="submitMessage" :disabled="content == ''">发&emsp;送评&emsp;论</el-button>
 			</el-tooltip>
 		</div>
 
-		<el-popover placement="bottom" width="500" trigger="click" v-model="emojiShow">
+		<el-popover placement="bottom" v-show="permission !== 0" width="500" trigger="click" v-model="emojiShow">
 			<el-button slot="reference" @click="loadEmojis">表&emsp;情</el-button>
 			<div class="browBox">
 				<EmojiBox ref="emojibox" @addEmoji="addEmoji"></EmojiBox>
@@ -22,6 +22,7 @@
 
 	export default {
 		name: 'Emoji',
+		props:['permission'],
 		data() {
 			return {
 				//聊天输入内容
@@ -31,7 +32,6 @@
 				//表情列表
 				faceList: [],
 				visible: false,
-				disabled: false
 			}
 		},
 		methods: {

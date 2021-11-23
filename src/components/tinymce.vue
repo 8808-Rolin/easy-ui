@@ -33,7 +33,6 @@
 	import "tinymce/plugins/autosave";
 	import "tinymce/plugins/autoresize";
 
-
 	const fonts = [
 		"宋体=宋体",
 		"微软雅黑=微软雅黑",

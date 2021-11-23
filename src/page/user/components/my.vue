@@ -122,7 +122,7 @@
 		padding-bottom: 1rem;
 		border-bottom: #999 0.0625rem solid;
 	}
-	
+
 	.btn_box {
 		padding: 0.25rem 0;
 		text-align: right;
@@ -132,14 +132,28 @@
 		margin-top: 1rem;
 	}
 
-	.el-table__body-wrapper::-webkit-scrollbar {
+	>>>.el-table__body-wrapper::-webkit-scrollbar {
 		width: 0.5rem;
 		height: 100%;
 	}
 
-	.el-table__body-wrapper::-webkit-scrollbar-thumb {
+	>>>.el-table__body-wrapper::-webkit-scrollbar-thumb {
 		background: #1DA0FB;
 		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 		border-radius: 0.25rem;
+	}
+
+	>>>.el-table,
+	.el-table__expanded-cell {
+		background-color: transparent;
+	}
+
+	>>>.el-table tr {
+		background-color: transparent !important;
+	}
+
+	>>>.el-table--enable-row-transition .el-table__body td,
+	.el-table .cell {
+		background-color: transparent;
 	}
 </style>

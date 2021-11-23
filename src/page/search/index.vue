@@ -6,18 +6,18 @@
 			<div class="search_box">
 				<div class="logo"></div>
 				<div class="search">
-					<el-input placeholder="请输入内容" v-model="input">
-						<el-switch slot="prepend" v-model="value" active-text="帖子" inactive-text="用户"
-							@change="updateChild"></el-switch>
-						<el-button slot="append" icon="el-icon-search"></el-button>
-					</el-input>
+						<el-input placeholder="请输入内容" v-model="input" @keyup.enter.native="toChild()">
+							<el-switch slot="prepend" v-model="value" active-text="用户" :active-value="1"
+								:inactive-value="0" inactive-text="帖子"></el-switch>
+							<el-button slot="append" icon="el-icon-search" @click="toChild"></el-button>
+						</el-input>
 				</div>
 			</div>
 
 			<div class="result_box">
-				<transition class="result_box" :name="transitionName" mode="out-in">
-					<router-view class="router"></router-view>
-				</transition>
+				<transition class="result_box" name="transitionName" mode="out-in">
+					<router-view class="router" :type="value"></router-view>
+					</transition>
 			</div>
 
 			<!-- 废物div -->
@@ -31,34 +31,16 @@
 
 	export default {
 		name: 'Search',
+		props: ['type'],
 		data() {
 			return {
-				value: false,
+				value: 0,
 				input: '',
-				transitionName: 'slide-right'
+				transitionName: 'slide-right',
 			}
 		},
 		components: {
 			Header
-		},
-		methods: {
-			updateChild(val) {
-				if (val) {
-					this.$router.push({
-						name: 'Posts'
-					})
-				} else {
-					this.$router.push({
-						name: 'User'
-					})
-				}
-			}
-		},
-		beforeMount() {
-			this.value = true
-			this.$router.push({
-				name: 'Posts'
-			})
 		},
 		watch: {
 			$route(to, from) {
@@ -70,6 +52,34 @@
 				}
 				this.$router.isBack = false
 			}
+		},
+		methods: {
+			toChild(val) {
+				console.log(this.value, this.input)
+				if (this.value === 0 && this.input !== '') {
+					this.$router.push({
+						name: 'Posts',
+						params: {
+							content: this.input
+						}
+					})
+					this.$bus.$emit('search')
+				} else if (this.value === 1) {
+					this.$router.push({
+						name: 'User',
+						params: {
+							content: this.input
+						}
+					})
+					this.$bus.$emit('search')
+				}
+			},
+		},
+		beforeMount() {
+			if (this.$route.name === 'User')
+				this.value = 1
+			else
+				this.value = 0
 		}
 	}
 </script>
@@ -77,7 +87,7 @@
 <style lang="less" scoped="scoped">
 	#seach {
 		height: 100vh;
-		
+
 		.main_box {
 			width: 100%;
 			height: 100%;

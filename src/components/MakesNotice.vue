@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<el-table class="table" :data="posts" stripe style="width: 100%" @row-click="toP" :header-row-style="{height:'4rem'}" :row-style="{height:'4rem'}">
+		<el-table class="table" :data="posts" stripe style="width: 100%" @row-click="toP"
+			:header-row-style="{height:'4rem'}" :row-style="{height:'4rem'}">
 			<el-table-column prop="postType" label="类型" width="150">
 				<template scope="scope">
 					<span class="blod" :class="{red: scope.row.postType == '系统公告'}">{{ scope.row.postType}}</span>
@@ -9,7 +10,7 @@
 			<el-table-column prop="postTitle" label="标题" width="400">
 				<template scope="scope">
 					<el-tooltip :content="scope.row.postTitle" placement="top" :open-delay="500">
-					<span class="title" :class="{red: scope.row.postType == '系统公告'}">{{ scope.row.postTitle}}</span>
+						<span class="title" :class="{red: scope.row.postType == '系统公告'}">{{ scope.row.postTitle}}</span>
 					</el-tooltip>
 				</template>
 			</el-table-column>
@@ -41,7 +42,7 @@
 
 		<el-divider></el-divider>
 
-		<div class="meal_wrap" v-show="aid !== 0 && permission !== 0 ? true : false">
+		<div class="meal_wrap" v-show="aid !== 0 && permission !== 0 || aid === 0? true : false">
 			<div>
 				<div class="title_makes_notice"><i class="el-icon-s-promotion"></i>&ensp;发表新帖</div>
 				<div class="tinymce-btn">
@@ -89,7 +90,7 @@
 			TEditor,
 			Pagination,
 		},
-		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'PageSize', 'notisSize', 'permission'],
+		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'PageSize', 'notisSize', 'permission'],
 		data() {
 			return {
 				message: null,
@@ -144,7 +145,7 @@
 				if (arr.length >= 6) {
 					this.$api.releasePost(mes).then(
 						res => {
-							this.$bus.$emit('getFistPostList',2,1,10)
+							this.$bus.$emit('getFistPostList', 2, 1, 10)
 							this.$bus.$emit('getPostList', 0, 2, 1, 10)
 							this.$bus.$emit('cgetPostList', 1, 1, 10)
 							this.content = ''
@@ -152,7 +153,8 @@
 							this.input = ''
 							this.value = ''
 							// 清空富文本框
-							this.$refs.tinymceRef.$el.querySelector('iframe').contentDocument.querySelector('body').innerHTML = '';
+							this.$refs.tinymceRef.$el.querySelector('iframe').contentDocument.querySelector('body')
+								.innerHTML = '';
 							this.$message.success("发表成功！")
 							document.documentElement.scrollTop = 10
 						}
@@ -233,7 +235,7 @@
 	>>>.el-table__row td {
 		cursor: pointer;
 	}
-	
+
 	.title {
 		overflow: hidden;
 		white-space: nowrap;
@@ -314,8 +316,22 @@
 	.blod {
 		font-weight: bold;
 	}
-	
+
 	.red {
 		color: red;
+	}
+
+	>>>.el-table,
+	.el-table__expanded-cell {
+		background-color: transparent;
+	}
+
+	>>>.el-table tr {
+		background-color: transparent !important;
+	}
+
+	>>>.el-table--enable-row-transition .el-table__body td,
+	.el-table .cell {
+		background-color: transparent;
 	}
 </style>

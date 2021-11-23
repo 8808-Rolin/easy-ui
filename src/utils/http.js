@@ -50,9 +50,9 @@ const errorHandle = (status, other) => {
         case 401:
             toLogin();
             break;
-        // 403 token过期
+        // 809 token过期
         // 清除token并跳转登录页
-        case 403:
+        case 809:
             localStorage.removeItem('token');
             store.commit('loginSuccess', null);
             setTimeout(() => {
