@@ -54,6 +54,9 @@
 	import Info from '../components/info.vue'
 	import MakesNotice from '../components/MakesNotice.vue'
 	import base from '../api/request/base.js'
+	import {
+		mapState
+	} from 'vuex'
 
 	export default {
 		name: 'Public',
@@ -80,9 +83,10 @@
 		methods: {
 			getAssociationList() {
 				this.$api.getShowData({
-					uid: 2
+					uid: this.uid
 				}).then(
 					res => {
+						
 						if (res.data.data.code > 0) {
 							this.schoolMassOrganization = this.arrayUnique(res.data.data.ass, 0)
 							this.myMassOrganization = this.arrayUnique(res.data.data.ass, 1)
@@ -91,6 +95,7 @@
 				)
 			},
 			arrayUnique(arr, isJoin) {
+				console.log(arr)
 				const ass = arr.filter((item) => {
 					if (item.isJoin === isJoin)
 						return true
@@ -131,6 +136,11 @@
 			toCommunity(param) {
 				this.$router.push({name:'Community', params:{'aid':param}})
 			},
+		},
+		computed: {
+			...mapState({
+				uid: state => state.request.uid,
+			}),
 		},
 		mounted() {
 			this.$bus.$on('getPostList', this.getPostList)
