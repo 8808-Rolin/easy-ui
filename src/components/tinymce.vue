@@ -38,10 +38,16 @@
 	import "tinymce/plugins/nonbreaking";
 	import "tinymce/plugins/toc";
 	import "tinymce/plugins/help";
+	import "tinymce/plugins/save";
+	import "tinymce/plugins/pagebreak";
+	import "tinymce/plugins/tabfocus";
 	import "tinymce/plugins/autosave";
 	import "tinymce/plugins/bdmap";
 	import "tinymce/plugins/code";
 	import "tinymce/plugins/attachment";
+	import '@npkg/tinymce-plugins/importword';
+	import '@npkg/tinymce-plugins/upfile';
+
 
 	const fonts = [
 		"宋体=宋体",
@@ -92,7 +98,7 @@
 			//插件
 			plugins: {
 				type: [String, Array],
-				default: "attachment code help toc link bdmap paste preview searchreplace directionality fullscreen image table charmap insertdatetime advlist lists wordcount imagetools textpattern autosave autoresize"
+				default: "tabfocus importword upfile attachment pagebreak code help toc link bdmap paste preview searchreplace directionality fullscreen image table charmap insertdatetime advlist lists wordcount imagetools textpattern autosave autoresize"
 			},
 			//工具栏
 			toolbar: {
@@ -102,9 +108,9 @@
 						blockquote subscript superscript removeformat |\
 						alignleft aligncenter alignright alignjustify outdent indent lineheight formatpainter |\
 						bullist numlist|\
-						table image charmap hr pagebreak insertdatetime |\
-						bdmap fullscreen preview searchreplace|\
-						attachment link pastetext|\
+						table image charmap insertdatetime|\
+						bdmap preview searchreplace fullscreen|\
+						attachment link pastetext restoredraft importword upfile|\
 						formatselect fontselect fontsizeselect"
 			}
 		},
@@ -156,6 +162,7 @@
 							}
 						}
 					},
+					pagebreak_split_block: true,
 					/* 百度地图 */
 					bdmap_options: {
 						width: 560,
@@ -172,8 +179,12 @@
 						console.log(file, successCallback, failureCallback, progressCallback)
 						let data = new FormData(); //重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
 						data.append("file", file)
-						
-						let headers = {headers: {"Content-Type": "multipart/form-data"}}
+
+						let headers = {
+							headers: {
+								"Content-Type": "multipart/form-data"
+							}
+						}
 						axios.post(`${base.sq}/api/tool/upload-file`, data, headers, {
 								onUploadProgress: function(e) {
 									const progress = (e.loaded / e.total * 100 | 0) + '%';
@@ -186,6 +197,13 @@
 								failureCallback(`上传失败:${error.message}`)
 							});
 					},
+					 /* 文件上传 */
+					file_callback: function(file, succFun) {
+						// 自定义处理文件操作部分
+						succFun(`${base.sq}/api/tool/upload-file`, {
+							text: 'xx.pdf'
+						}) //成功回调函数 text 显示的文本
+					}
 					/* /* 文件上传 */
 					// file_picker_types: 'file image media', // 指定允许上传的类型
 					/* file_picker_types: 'file', // 指定允许上传的类型
@@ -214,7 +232,7 @@
 										consl
 									}
 								) */
-							/* 	// call the callback and populate the Title field with the file name
+					/* 	// call the callback and populate the Title field with the file name
 								callback(blobInfo.blobUri(), {
 									text: file.name,
 									title: file.name
@@ -222,7 +240,7 @@
 							}
 							reader.readAsDataURL(file)
 						} 
-					} */ 
+					} */
 				}
 			}
 		},

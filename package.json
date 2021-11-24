@@ -7,6 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@npkg/tinymce-plugins": "0.0.7",
     "@tinymce/tinymce-vue": "^3.2.8",
     "axios": "^0.24.0",
     "core-js": "^2.6.5",

@@ -1,21 +1,45 @@
+
+ /**
+ * bdmap (Enhancement 1.1v)
+ * The tinymce-plugins is used to import baidu map (Enhancement)
+ * 
+ * https://github.com/Five-great/tinymce-plugins
+ * 
+ * Copyright 2020, Five(Li Hailong) The Chengdu, China https://www.fivecc.cn/
+ *
+ * Licensed under MIT
+ */
 tinymce.PluginManager.add('bdmap', function(editor, url) {
 	var pluginName='插入百度地图';
-	var baseURL=tinymce.baseURL;
-	var iframe1 = 'tinymce/plugins/bdmap/map.html';
-	var bdmap_width = function (editor) {
-		return editor.getParam('bdmap_width', 560);
-    };
-    var bdmap_height = function (editor) {
-		return editor.getParam('bdmap_height', 362);
-    };
+	var bdmap_opt = editor.getParam('bdmap_options', {width: 560,height: 360,outputIframe: './plugins/bdmap/bd.html'});
+	var baseURL= tinymce.baseURL || '.';
+	var iframe1 = baseURL+'/plugins/bdmap/map.html';
 	window.tinymceLng='';
 	window.tinymceLat='';
+	window.tinymceBDZoom='';
+	window.tinymceBDW='';
+	window.tinymceBDH='';
+	window.tinymceBDBoxW='';
+	window.tinymceBDBoxH='';
+	window.tinymceBDBoxHtml='';
+	window.tinymceBDDH='';
+	window.tinymceBDSF = '';
+	window.tinymceBDBgColor = '';
+	window.tinymceBDDName = '';
+	var setContent = function (editor, html) {
+		editor.focus();
+		editor.undoManager.transact(function () {
+		  editor.setContent(html);
+		});
+		editor.nodeChanged();
+	  };
+	  var getContent = function (editor) {
+		return editor.getContent({ source_view: true });
+	  };
 	var openDialog = function() {
 		return editor.windowManager.openUrl({
 			title: pluginName,
 			size: 'large',
-			//width: 800,
-			//height: 500,
 			url:iframe1,
 			buttons: [
 				{
@@ -32,8 +56,24 @@ tinymce.PluginManager.add('bdmap', function(editor, url) {
 			onAction: function (api, details) {
 				switch (details.name) {
 					case 'save':
-						html='<iframe src="tinymce/plugins/bdmap/bd.html?center='+tinymceLng+'%2C'+tinymceLat+'&zoom=14&width='+(bdmap_width(editor)-2)+'&height='+(bdmap_height(editor)-2)+'" frameborder="0" style="width:'+bdmap_width(editor)+'px;height:'+bdmap_height(editor)+'px;">';
-						editor.insertContent(html);
+						tinymceBDBoxHtml = tinymceBDBoxHtml.replace(/\'/g,'￥').replace(/\"/g,'^').replace(/\>/g,'】').replace(/\</g,'【');
+						tinymceBDBgColor = 	tinymceBDBgColor.replace(/\#/g,'@').replace(/\(/g,'+').replace(/\)/g,'-');
+						html='<iframe data-tag="bdMap" src="'+bdmap_opt.outputIframe+'?center='+tinymceLng+'%2C'+tinymceLat+'&zoom='+(tinymceBDZoom?tinymceBDZoom:'14')+'&bwidth='+tinymceBDBoxW+'&bheight='+tinymceBDBoxH+'&boxhtml='+tinymceBDBoxHtml+'&DH='+tinymceBDDH+'&bgColor='+tinymceBDBgColor+'&SF='+tinymceBDSF+'&dName='+tinymceBDDName+'" frameborder="0" style=" min-height: 100px;border:#ccc solid 1px;" height="'+bdmap_opt.height+'" width="'+bdmap_opt.width+'">';
+					 editor.insertContent(html)
+					//  var editorContent = getContent(editor);
+					//  setContent(editor,  editorContent);
+							tinymceLng='';
+							tinymceLat='';
+							tinymceBDZoom='';
+							tinymceBDW='';
+							tinymceBDH='';
+							tinymceBDBoxW='';
+							tinymceBDBoxH='';
+							tinymceBDBoxHtml='';
+							tinymceBDDH='';
+							tinymceBDSF = '';
+							tinymceBDBgColor = '';
+							tinymceBDDName = '';
 						api.close();
 						break;
 					default:
@@ -48,7 +88,7 @@ tinymce.PluginManager.add('bdmap', function(editor, url) {
 	
 	editor.ui.registry.addButton('bdmap', {
 		icon: 'bdmap',
-        tooltip: pluginName,
+    tooltip: pluginName,
 		onAction: function() {
 			openDialog();
 		}
@@ -63,7 +103,7 @@ tinymce.PluginManager.add('bdmap', function(editor, url) {
 		getMetadata: function() {
 			return  {
 				name: pluginName,
-				url: "http://tinymce.ax-z.cn/more-plugins/bdmap.php",
+				url: "https://github.com/Five-great/tinymce-plugins",
 			};
 		}
 	};
