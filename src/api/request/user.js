@@ -67,11 +67,11 @@ const user = {
 	     return axios.get(`${base.sq}/api/tool/get-college-list`);    
 	},
 	
-	// 下载文件接口
+	/* // 下载文件接口
 	downloadFile(params) {
 		return axios.post(`${base.sq}/api/tool/download-file`, qs.stringify(params));
 	},
-	
+	 */
 	// 获取总的帖子类型
 	getPostType() {
 	     return axios.get(`${base.sq}/api/tool/get-post-type`);    

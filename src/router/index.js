@@ -83,15 +83,15 @@ const router = new Router({
 		]
 	}, {
 		name: 'HomePage',
-		path: '/home-page',
+		path: '/homepage',
 		component: () => import('@/page/user/index'),
 		children: [{
-			name: 'MyHome',
-			path: '/home-page/',
+			name: 'Me',
+			path: 'me',
 			component: () => import('@/page/user/components/my')
 		}, {
-			name: 'HisHome',
-			path: '/home-page/his-page',
+			name: 'His',
+			path: 'his',
 			component: () => import('@/page/user/components/his')
 		}]
 	}]

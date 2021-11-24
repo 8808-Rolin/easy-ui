@@ -55,7 +55,7 @@
 
 			<div class="notice_box">
 				<MakesNotice :permission="permissionCode" :chaildPosts="posts" :chaildFirstPosts="firstposts"
-					:total="code" :aid="$route.params.aid" :notisSize="notSize"></MakesNotice>
+					:total="code" :aid="$route.params.aid" :notisSize="notSize" :tinymceId="'ctinymceId'"></MakesNotice>
 			</div>
 			<!-- 废物div -->
 			<div style="height: 1rem;"></div>
@@ -74,7 +74,7 @@
 
 	export default {
 		name: 'Community',
-		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'notisSize', 'permission'],
+		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'notisSize', 'permission','tinymceId'],
 		data() {
 			return {
 				user: {},
@@ -111,7 +111,6 @@
 					aid
 				}).then(
 					res => {
-						console.log(res.data.data)
 						this.permissionCode = res.data.data.permissionCode
 						this.ass = res.data.data.ass
 					}
@@ -169,11 +168,7 @@
 					}
 				)
 			},
-			/* // 对话框
-			showDialog(title) {
-				this.dialogData.title = title
-			} */
-			/* get-action-info 获取活动详细内容**/
+			/* 获取活动详细内容**/
 			getActionInfo(actid) {
 				let uid = this.uid
 				this.$api.getActionInfo({
@@ -183,7 +178,6 @@
 					res => {
 						this.dialogData = res.data.data
 						this.dialogData.actid = actid
-						console.log(res.data.data)
 					}
 				)
 			},

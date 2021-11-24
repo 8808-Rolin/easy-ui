@@ -6,7 +6,7 @@
 			</div>
 
 			<div class="seach_box" :class="{'topSeach_box':topSeach_box}">
-				<el-input placeholder="请输入内容" @focus="topSeach_box = true" v-model="search.keyword" class="input-with-select">
+				<el-input placeholder="请输入内容" @keyup.enter.native="toSearch" @focus="topSeach_box = true" v-model="search.keyword" class="input-with-select">
 					<el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
 				</el-input>
 
@@ -56,7 +56,6 @@
 		},
 		methods: {
 			logout() {
-				console.log("退出登录处理.....")
 				this.$store.commit("removeUser", '')
 				LocalStorage.removeItem('token')
 				this.$store.commit('updateExistUser', false)

@@ -5,8 +5,9 @@
 </template>
 
 <script>
-	import base from '../api/request/base.js'; 
-	import axios from "axios";
+	import base from '../api/request/base.js';
+	import axios from 'axios';
+	import qs from 'qs'; // 根据需求是否导入qs模块
 	import tinymce from 'tinymce/tinymce' //tinymce默认hidden，不引入不显示
 	import Editor from '@tinymce/tinymce-vue' //编辑器引入
 	import "tinymce/icons/default/icons";
@@ -19,12 +20,12 @@
 	import "tinymce/plugins/colorpicker";
 	import "tinymce/plugins/textcolor";
 	import "tinymce/plugins/preview";
-	import "tinymce/plugins/link";
+	//import "tinymce/plugins/link";
 	import "tinymce/plugins/advlist";
 	import "tinymce/plugins/fullscreen";
 	import "tinymce/plugins/textpattern";
 	import "tinymce/plugins/searchreplace";
-	import "tinymce/plugins/autolink";
+	//import "tinymce/plugins/autolink";
 	import "tinymce/plugins/directionality";
 	import "tinymce/plugins/charmap";
 	import "tinymce/plugins/nonbreaking";
@@ -32,6 +33,15 @@
 	import "tinymce/plugins/imagetools";
 	import "tinymce/plugins/autosave";
 	import "tinymce/plugins/autoresize";
+	import "tinymce/plugins/paste";
+	import "tinymce/plugins/link";
+	import "tinymce/plugins/nonbreaking";
+	import "tinymce/plugins/toc";
+	import "tinymce/plugins/help";
+	import "tinymce/plugins/autosave";
+	import "tinymce/plugins/bdmap";
+	import "tinymce/plugins/code";
+	import "tinymce/plugins/attachment";
 
 	const fonts = [
 		"宋体=宋体",
@@ -65,6 +75,10 @@
 			Editor
 		},
 		props: {
+			tinymceId: {
+				type: String,
+				default: ''
+			},
 			//内容
 			value: {
 				type: String,
@@ -78,28 +92,30 @@
 			//插件
 			plugins: {
 				type: [String, Array],
-				default: "preview searchreplace directionality link fullscreen image autolink table charmap insertdatetime advlist lists wordcount imagetools textpattern autosave autoresize"
+				default: "attachment code help toc link bdmap paste preview searchreplace directionality fullscreen image table charmap insertdatetime advlist lists wordcount imagetools textpattern autosave autoresize"
 			},
 			//工具栏
 			toolbar: {
 				type: [String, Array],
-				default:"undo redo|\
+				default: "undo redo|\
 						forecolor backcolor bold italic underline strikethrough|\
 						blockquote subscript superscript removeformat |\
 						alignleft aligncenter alignright alignjustify outdent indent lineheight formatpainter |\
-						bullist numlist |\
+						bullist numlist|\
 						table image charmap hr pagebreak insertdatetime |\
-						bdmap fullscreen preview searchreplace |\
+						bdmap fullscreen preview searchreplace|\
+						attachment link pastetext|\
 						formatselect fontselect fontsizeselect"
 			}
 		},
 		data(vm) {
 			return {
 				//初始化配置
-				tinymceId: 'tinymce',
+				//tinymceId: 'tinymceId',
 				myValue: this.value,
+				test: '',
 				init: {
-					selector: '#tinymce',
+					selector: `#${this.tinymceId}`,
 					language_url: '/tinymce/langs/zh_CN.js', //汉化路径是自定义的，一般放在public或static里面
 					language: 'zh_CN',
 					skin_url: '/tinymce/skins/ui/oxide', //皮肤
@@ -128,8 +144,10 @@
 							failure('请选择1M以内的图片！')
 						} else {
 							reader.readAsDataURL(blobInfo.blob())
-							reader.onload = function(a,b) {
-								vm.$api.uploadImage({imageBASE64: this.result}).then(
+							reader.onload = function(a, b) {
+								vm.$api.uploadImage({
+									imageBASE64: this.result
+								}).then(
 									res => {
 										console.log(res)
 										success(`${base.sq}${res.data.data.msg}`)
@@ -138,9 +156,39 @@
 							}
 						}
 					},
-					/* 文件上传 */
+					/* 百度地图 */
+					bdmap_options: {
+						width: 560,
+						height: 360,
+						outputIframe: 'tinymce/plugins/bdmap/bd.html',
+						apiKey: 'Xypt7HR5ElzeCZQYWVWBqNbk20jze55M'
+					},
+
+					/* 上传附件  **/
+					attachment_assets_path: '/tinymce/skins/ui/icons/',
+					attachment_max_size: 10 * 1024 * 1024,
+					content_css: 'tinymce/skins/content/snow/content.css',
+					attachment_upload_handler: function(file, successCallback, failureCallback, progressCallback) {
+						console.log(file, successCallback, failureCallback, progressCallback)
+						let data = new FormData(); //重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
+						data.append("file", file)
+						
+						let headers = {headers: {"Content-Type": "multipart/form-data"}}
+						axios.post(`${base.sq}/api/tool/upload-file`, data, headers, {
+								onUploadProgress: function(e) {
+									const progress = (e.loaded / e.total * 100 | 0) + '%';
+									progressCallback(progress);
+								}
+							})
+							.then((response) => {
+								successCallback(`${base.sq}/files/${response.data.data.msg}`);
+							}).catch((error) => {
+								failureCallback(`上传失败:${error.message}`)
+							});
+					},
+					/* /* 文件上传 */
 					// file_picker_types: 'file image media', // 指定允许上传的类型
-					file_picker_types: 'file', // 指定允许上传的类型
+					/* file_picker_types: 'file', // 指定允许上传的类型
 					file_picker_callback: function(callback, value, meta) {
 						console.log(meta.filetype)
 						console.log(343434)
@@ -153,42 +201,28 @@
 						input.click()
 						input.onchange = function() {
 							let file = this.files[0]
-							/* console.log(this.files)
-							console.log(file)
-							console.log(file.name)
-							// 下方被注释掉的是官方的一个例子
-							// 放到下面给大家参考 */
 							let reader = new FileReader()
 							reader.onload = function() {
 								console.log(window.tinymce)
-								// Note: Now we need to register the blob in TinyMCEs image blob
-								// registry. In the next release this part hopefully won't be
-								// necessary, as we are looking to handle it internally.
 								let id = 'blobid' + (new Date()).getTime()
 								let blobCache = window.tinymce.activeEditor.editorUpload.blobCache
 								let base64 = reader.result.split(',')[1]
 								let blobInfo = blobCache.create(id, file, base64)
-								console.log(id)
-								console.log(file)
-								console.log(base64)
-								console.log(file.name)
-								console.log(blobInfo)
-								console.log(blobInfo.blobUri())
 								blobCache.add(blobInfo)
 								/* vm.$api.uploadFile({file}).then(
 									res => {
 										consl
 									}
 								) */
-								// call the callback and populate the Title field with the file name
+							/* 	// call the callback and populate the Title field with the file name
 								callback(blobInfo.blobUri(), {
 									text: file.name,
 									title: file.name
 								})
 							}
 							reader.readAsDataURL(file)
-						}
-					}
+						} 
+					} */ 
 				}
 			}
 		},
@@ -209,7 +243,19 @@
 		},
 		mounted() {
 			tinymce.init({})
-			// console.log(this.toolbar,'======')
+		},
+		activated() {
+			if (window.tinymce) {
+				window.tinymce.init({
+					...this.init
+				})
+			}
+		},
+		deactivated() {
+			const tinymce = window.tinymce.get(this.tinymceId)
+			if (tinymce) {
+				tinymce.destroy()
+			}
 		},
 		methods: {
 			onClick(e) {

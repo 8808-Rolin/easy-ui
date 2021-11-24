@@ -48,7 +48,7 @@
 			<div class="p_discuss">
 				<!-- 评论发表、他人评论 -->
 				<div class="publish">
-					<EmojiInput @analysisEmoji="releaseDiscuss" :permission="permissionCode"></EmojiInput>
+					<EmojiInput @analysisEmoji="releaseDiscuss" :aid="$route.params.aid" :permission="permissionCode"></EmojiInput>
 				</div>
 				<div class="discuss_all">
 					<div class="discuss" v-for="(item, index) in discuss" :key="index">
@@ -88,7 +88,7 @@
 
 	export default {
 		name: 'CommunityP',
-		props:['total', 'PageSize', 'PageSizes', 'permission'],
+		props:['total', 'PageSize', 'PageSizes', 'permission', 'aid'],
 		data() {
 			return {
 				user: {},
@@ -120,7 +120,6 @@
 						this.master = res.data.data.master
 						this.dynamicTags = res.data.data.post.tags
 						this.post = res.data.data.post
-						console.log(res.data)
 					}
 				)
 			},
@@ -129,7 +128,6 @@
 				let aid = this.$route.params.aid
 				this.$api.getAssInformation({uid,aid}).then(
 					res => {
-						console.log(res.data.data, "@@@@")
 						this.permissionCode = res.data.data.permissionCode
 					}
 				)
@@ -407,5 +405,26 @@
 				}
 			}
 		}
+	}
+	.attachment {
+	    cursor: pointer !important;
+	}
+	.upload_error {
+	    background: #FFE5E0;
+	    border: 1px solid #EA644A;
+	}
+	.attachment > img {
+	    width: 16px;
+	    vertical-align: middle;
+	    padding-right:4px;
+	}
+	.attachment > a {
+	    text-decoration: none;
+	    vertical-align: middle;
+	}
+	
+	.attachment > span {
+	    vertical-align: middle;
+	    padding-right:4px;
 	}
 </style>
