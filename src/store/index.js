@@ -7,7 +7,7 @@ Vue.use(Vuex)
 const request = {
 	state:{
 		token:'',
-		network:false,
+		network:true,
 		statusMes:'',
 		uid:'',
 	},

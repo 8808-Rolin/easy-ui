@@ -176,8 +176,8 @@ const user = {
 	},
 	
 	// 获取我的（他的）帖子和收藏
-	getZoneStatus(params) {
-		return axios.get(`${base.sq}/api/zone/get-zone-status`, {params});
+	getPosts(params) {
+		return axios.get(`${base.sq}/api/zone/get-post`, {params});
 	},
 	
 	/*  获取我的邮件 */

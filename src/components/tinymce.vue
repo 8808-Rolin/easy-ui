@@ -20,12 +20,11 @@
 	import "tinymce/plugins/colorpicker";
 	import "tinymce/plugins/textcolor";
 	import "tinymce/plugins/preview";
-	//import "tinymce/plugins/link";
 	import "tinymce/plugins/advlist";
 	import "tinymce/plugins/fullscreen";
 	import "tinymce/plugins/textpattern";
 	import "tinymce/plugins/searchreplace";
-	//import "tinymce/plugins/autolink";
+	import "tinymce/plugins/autolink";
 	import "tinymce/plugins/directionality";
 	import "tinymce/plugins/charmap";
 	import "tinymce/plugins/nonbreaking";
@@ -44,9 +43,13 @@
 	import "tinymce/plugins/autosave";
 	import "tinymce/plugins/bdmap";
 	import "tinymce/plugins/code";
+	import "tinymce/plugins/formatpainter"
 	import "tinymce/plugins/attachment";
 	import '@npkg/tinymce-plugins/importword';
 	import '@npkg/tinymce-plugins/upfile';
+	import '@npkg/tinymce-plugins/layout'
+
+
 
 
 	const fonts = [
@@ -98,7 +101,7 @@
 			//插件
 			plugins: {
 				type: [String, Array],
-				default: "tabfocus importword upfile attachment pagebreak code help toc link bdmap paste preview searchreplace directionality fullscreen image table charmap insertdatetime advlist lists wordcount imagetools textpattern autosave autoresize"
+				default: "formatpainter autolink layout tabfocus importword attachment pagebreak code help toc link bdmap paste preview searchreplace directionality fullscreen image table charmap insertdatetime advlist lists wordcount imagetools textpattern autosave autoresize"
 			},
 			//工具栏
 			toolbar: {
@@ -106,11 +109,11 @@
 				default: "undo redo|\
 						forecolor backcolor bold italic underline strikethrough|\
 						blockquote subscript superscript removeformat |\
-						alignleft aligncenter alignright alignjustify outdent indent lineheight formatpainter |\
+						alignleft aligncenter alignright alignjustify outdent indent lineheight|\
 						bullist numlist|\
 						table image charmap insertdatetime|\
 						bdmap preview searchreplace fullscreen|\
-						attachment link pastetext restoredraft importword upfile|\
+						attachment link pastetext restoredraft importword formatpainter|\
 						formatselect fontselect fontsizeselect"
 			}
 		},
@@ -172,38 +175,87 @@
 					},
 
 					/* 上传附件  **/
-					attachment_assets_path: '/tinymce/skins/ui/icons/',
+					attachment_assets_path: 'tinymce/plugins/attachment/icons',
 					attachment_max_size: 10 * 1024 * 1024,
 					content_css: 'tinymce/skins/content/snow/content.css',
+					attachment_type: ".doc|.docx|.pptx|.ppt|.pdf|.xlsx|.xls|",
 					attachment_upload_handler: function(file, successCallback, failureCallback, progressCallback) {
-						console.log(file, successCallback, failureCallback, progressCallback)
 						let data = new FormData(); //重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
 						data.append("file", file)
-
 						let headers = {
 							headers: {
 								"Content-Type": "multipart/form-data"
 							}
 						}
 						axios.post(`${base.sq}/api/tool/upload-file`, data, headers, {
-								onUploadProgress: function(e) {
-									const progress = (e.loaded / e.total * 100 | 0) + '%';
-									progressCallback(progress);
-								}
-							})
-							.then((response) => {
-								successCallback(`${base.sq}/files/${response.data.data.msg}`);
-							}).catch((error) => {
-								failureCallback(`上传失败:${error.message}`)
-							});
+							onUploadProgress: function(e) {
+								const progress = (e.loaded / e.total * 100 | 0) + '%';
+								progressCallback(progress);
+							}
+						}, ).then((response) => {
+							successCallback(`${base.sq}/files/${response.data.data.msg}`);
+						}).catch((error) => {
+							failureCallback(`上传失败:${error.message}`)
+						});
+						// }
 					},
-					 /* 文件上传 */
-					file_callback: function(file, succFun) {
+					/* 文件上传 */
+					/* file_callback: function(file, succFun) {
 						// 自定义处理文件操作部分
+						console
 						succFun(`${base.sq}/api/tool/upload-file`, {
 							text: 'xx.pdf'
 						}) //成功回调函数 text 显示的文本
-					}
+					}, */
+
+					/* 一键布局 **/
+					layout_options: {
+						style: {
+							'text-align': 'justify',
+							'text-indent': '2em',
+							'line-height': 1.5
+						},
+						filterTags: ['table>*', 'tbody'], //'table，'tbody','td','tr' 将会忽略掉 同时 table>*，忽略table 标签 以及所有子标签
+						clearStyle: ['text-indent'], //text-indent 将会被清除掉
+						tagsStyle: {
+							'table': {
+								'line-height': 3,
+								'text-align': 'center'
+							},
+							'table,tbody,tr,td': { //支持并集选择
+								'line-height': 2
+							},
+							'tr>td,table>tbody': { //支持, 精准定位 通过 ' > '
+								'line-height': 3,
+								'text-align': 'center'
+							}
+						}
+					},
+
+					/* word导入 **/
+					importword_handler: function(editor, files, next) {
+						let file_name = null
+						if (files[0] !== undefined)
+							file_name = files[0].name
+						if (file_name.substr(file_name.lastIndexOf(".") + 1) == 'docx') {
+							editor.notificationManager.open({
+								text: '正在转换中...',
+								type: 'info',
+								closeButton: false,
+							});
+							next(files);
+						} else {
+							editor.notificationManager.open({
+								text: '目前仅支持docx文件格式，若为doc111，请将扩展名改为docx',
+								type: 'warning',
+							});
+						}
+						// next(files);
+					},
+					importword_filter: function(result, insert, message) {
+						// 自定义操作部分
+						insert(result) //回插函数
+					},
 					/* /* 文件上传 */
 					// file_picker_types: 'file image media', // 指定允许上传的类型
 					/* file_picker_types: 'file', // 指定允许上传的类型

@@ -17,9 +17,9 @@
 	.btnList >span>i{ display: block; position: relative; text-align: center;color: #333;font-size:12px; margin-top:-5px; letter-spacing: 2px;}
 	.gotoDH{display: block; position: absolute;background-color: rgba(255,255,255,0.9); padding-top:5px; box-shadow: 0 4px 8px 2px rgba(67, 108, 221, 0.3); width: 40px;height: 35px; border-radius: 20px; text-align:center ; bottom: 8%;right: 1%;}
 </style>
-<script src="https://api.map.baidu.com/api?v=3.0&ak=ONwdanPtvCDLHBSm184T2ynP"></script>
-<script src="https://api.map.baidu.com/library/InfoBox/1.2/src/InfoBox_min.js"></script>
-<script src="https://webapi.amap.com/maps?v=1.4.15&key=Xypt7HR5ElzeCZQYWVWBqNbk20jze55M"></script>
+<script src="//api.map.baidu.com/api?v=3.0&ak=Xypt7HR5ElzeCZQYWVWBqNbk20jze55M"></script>
+<script src="//api.map.baidu.com/library/InfoBox/1.2/src/InfoBox_min.js"></script>
+<script src="//webapi.amap.com/maps?v=1.4.15&key=608d75903d29ad471362f8c58c550daf"></script>
 </head>
 
 <body onload="initMap();">
@@ -192,7 +192,7 @@ var geolocation2='';
     }
 
     function  onError(obj){
-    //   console.log(obj.message);
+      console.log(obj.message);
 	  var geolocationBD = new BMap.Geolocation();
 	   geolocationBD.enableSDKLocation();
 		geolocationBD.getCurrentPosition(function(r){

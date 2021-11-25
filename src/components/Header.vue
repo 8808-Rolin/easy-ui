@@ -14,8 +14,8 @@
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>个人空间</el-dropdown-item>
-						<el-dropdown-item  @click.native="logout">退出登录</el-dropdown-item>
+						<el-dropdown-item @click.native="toMyHomePage">个人空间</el-dropdown-item>
+						<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
@@ -74,12 +74,16 @@
 				} else {
 					this.$store.commit('updateExistUser', false)
 				}
+			},
+			toMyHomePage() {
+				this.$router.push({name:'Me',params:{uid:this.uid}})
 			}
 		},
 		computed: {
 			...mapState({
 				user:state => state.message.user,
 				existUser:state => state.message.existUser,
+				uid: state => state.request.uid,
 			}),
 			headImage() {
 				return `${base.sq}${this.user.headImage}`

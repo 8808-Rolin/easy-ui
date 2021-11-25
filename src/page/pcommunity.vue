@@ -21,10 +21,10 @@
 
 				<div class="p_body">
 					<div class="p_user">
-						<div class="user_photo">
+						<div class="user_photo" @click="toHisHomePage(master.muid)">
 							<img :src="headImage(master.image)">
 						</div>
-						<p><big><strong>{{master.username}}</strong></big></p>
+						<p @click="toHisHomePage(master.muid)"><big><strong>{{master.username}}</strong></big></p>
 						<p>UID: {{master.muid}}</p>
 						<p>院系：{{master.org}}</p>
 					</div>
@@ -52,11 +52,11 @@
 				</div>
 				<div class="discuss_all">
 					<div class="discuss" v-for="(item, index) in discuss" :key="index">
-						<div class="left">
+						<div class="left" @click="toHisHomePage(item.author.cuid)">
 							<img :src="headImage(item.author.userImage)">
 						</div>
 						<div class="right">
-							<div class="name">{{item.author.username}}</div>
+							<div class="name" @click="toHisHomePage(item.author.cuid)">{{item.author.username}}</div>
 							<div class="content" v-html="Emoji(item.content.text)"></div>
 							<div class="time_other">
 								<div>发表时间：{{item.content.releaseDate}}</div>
@@ -217,6 +217,14 @@
 					}
 				)
 			},
+			
+			/* 前往他的空间 */
+			toHisHomePage(uid) {
+				if (uid !== this.uid)
+					this.$router.push({name:'His',params:{uid}})
+				else
+					this.$router.push({name:'Me',params:{uid}})
+			}
 		},
 		computed: {
 			...mapState({

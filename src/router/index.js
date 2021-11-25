@@ -87,12 +87,18 @@ const router = new Router({
 		component: () => import('@/page/user/index'),
 		children: [{
 			name: 'Me',
-			path: 'me',
-			component: () => import('@/page/user/components/my')
+			path: 'me/:uid',
+			component: () => import('@/page/user/components/my'),
+			props($route){
+				return {content:$route.params.uid}
+			}
 		}, {
 			name: 'His',
-			path: 'his',
-			component: () => import('@/page/user/components/his')
+			path: 'his/:uid',
+			component: () => import('@/page/user/components/his'),
+			props($route){
+				return {content:$route.params.uid}
+			}
 		}]
 	}]
 })

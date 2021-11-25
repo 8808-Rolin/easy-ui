@@ -6,7 +6,7 @@
 			</div>
 
 			<div class="seach_box" :class="{'topSeach_box':topSeach_box}">
-				<el-input placeholder="请输入内容" @keyup.enter.native="toSearch" @focus="topSeach_box = true" v-model="search.keyword" class="input-with-select">
+				<el-input placeholder="请输入内容" @keyup.enter.native="toSearch" @focus="topSeach_box = true" @blur="topSeach_box = false" v-model="search.keyword" class="input-with-select">
 					<el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
 				</el-input>
 
@@ -22,7 +22,7 @@
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>个人空间</el-dropdown-item>
+						<el-dropdown-item @click.native="toMyHomePage">个人空间</el-dropdown-item>
 						<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -90,12 +90,16 @@
 			toSearch() {
 				if (this.search.keyword !== '') 
 					this.$router.push({name:'Posts',params:{content:this.search.keyword}})
+			},
+			toMyHomePage() {
+				this.$router.push({name:'Me',params:{uid:this.uid}})
 			}
 		},
 		computed: {
 			...mapState({
 				user: state => state.message.user,
 				existUser: state => state.message.existUser,
+				uid: state => state.request.uid,
 			}),
 			headImage() {
 				return `${base.sq}${this.user.headImage}`
