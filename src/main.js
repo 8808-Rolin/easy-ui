@@ -3,6 +3,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import less from 'less'
 import tinymce from 'tinymce'
+import time from "./utils/time.js"
 
 import App from './App.vue'
 import router from './router'

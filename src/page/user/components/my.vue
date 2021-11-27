@@ -1,75 +1,106 @@
 <template>
-	<div class="homepage">
-		<div class="left">
-			<el-tabs class="top_box" v-model="activeName2" @tab-click="handleClick">
-				<el-tab-pane label="我的社团" name="first">
-					<MyClub :ass="joinass"></MyClub>
-				</el-tab-pane>
-				<el-tab-pane label="我的私信" name="second">
-					<div class="btn_box">
-						<!-- <el-button type="primary" icon="el-icon-edit" @click="centerDialogVisible2 = true">发送邮件
+	<div>
+		<Info></Info>
+
+		<div class="homepage">
+			<div class="left">
+				<el-tabs class="top_box" v-model="activeName2" @tab-click="handleClick2">
+					<el-tab-pane label="我的社团" name="0">
+						<MyClub :ass="joinass"></MyClub>
+					</el-tab-pane>
+					<el-tab-pane label="我的私信" name="1">
+						<div class="btn_box">
+							<!-- <el-button type="primary" icon="el-icon-edit" @click="centerDialogVisible2 = true">发送邮件
 						</el-button> -->
-						<el-button type="danger" @click.native="deleteMail" icon="el-icon-delete" size="medium">清空所有
-						</el-button>
+							<el-button type="danger" @click.native="deleteMail" icon="el-icon-delete" size="medium">清空所有
+							</el-button>
+						</div>
+
+						<el-table class="email_table" :data="mail" style="width: 100%" fit height="313">
+							<el-table-column label="状态" width="100">
+								<template slot-scope="scope">
+									<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
+									<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读</el-tag>
+								</template>
+							</el-table-column>
+							<el-table-column class="title_2" label="标题" width="280">
+								<template slot-scope="scope">
+									<el-tooltip :content="updateTitle(scope.row.title)" placement="top"
+										@click.native="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid)">
+										<div>{{updateTitle(scope.row.title)}}</div>
+									</el-tooltip>
+								</template>
+							</el-table-column>
+							<el-table-column label="发送人" prop="from"></el-table-column>
+							<el-table-column label="发送时间" width="180">
+								<template slot-scope="scope">
+									<i class="el-icon-time"></i>
+									<span style="margin-left: 10px">{{ scope.row.date }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="操作" width="200">
+								<template slot-scope="scope">
+									<el-badge :is-dot="scope.row.isRead === 0" class="item">
+										<el-button size="mini" type="primary"
+											@click="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid);getHisId(scope.row.title)">
+											查看
+										</el-button>
+									</el-badge>
+								</template>
+							</el-table-column>
+						</el-table>
+					</el-tab-pane>
+				</el-tabs>
+
+				<el-tabs class="bottom_box" v-model="activeName" @tab-click="handleClick">
+					<el-tab-pane label="我的帖子" name="0">
+						<Posts :posts="post"></Posts>
+					</el-tab-pane>
+					<el-tab-pane label="我的收藏" name="1">
+						<Collection :myColl="post"></Collection>
+					</el-tab-pane>
+				</el-tabs>
+			</div>
+
+			<div class="right">
+				<PersonalInfo :user="userdata" :status="code"></PersonalInfo>
+			</div>
+
+			<!-- 对话框，邮件内容 -->
+			<transition name="el-zoom-in-center" :duration="5000">
+				<el-dialog title="私信内容" v-show="centerDialogVisible" :visible.sync="centerDialogVisible" width="30%"
+					center>
+					<el-input type="textarea" maxlength="255" :rows="10" :readonly="true" :value="mailContent"
+						placeholder="请输入私信内容" show-word-limit></el-input>
+					<span slot="footer" class="dialog-footer">
+						<el-button type="infor" @click="centerDialogVisible = false">关闭</el-button>
+						<el-button type="primary" @click="centerDialogVisible2 = true; close()">回复</el-button>
+					</span>
+				</el-dialog>
+			</transition>
+
+			<!-- 对话框，发送邮件 -->
+			<transition name="el-zoom-in-center" :duration="5000">
+				<el-dialog title="发送私信" v-show="centerDialogVisible2" :visible.sync="centerDialogVisible2" width="30%"
+					center>
+					<div class="form">
+						<div>
+							<label>私信标题：</label>
+							<el-input v-model="title" maxlength="120" show-word-limit placeholder="请输入内容"></el-input>
+						</div>
+						<div>
+							<el-input type="textarea" maxlength="255" :rows="10" v-model="input" placeholder="请输入私信内容"
+								show-word-limit></el-input>
+						</div>
 					</div>
-
-					<el-table class="email_table" :data="mail" style="width: 100%" fit height="313">
-						<el-table-column label="状态" width="100">
-							<template slot-scope="scope">
-								<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
-								<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读</el-tag>
-							</template>
-						</el-table-column>
-						<el-table-column class="title_2" label="标题" width="280">
-							<template slot-scope="scope">
-								<el-tooltip :content="scope.row.title" placement="top"
-									@click.native="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid)">
-									<div>{{ scope.row.title }}</div>
-								</el-tooltip>
-							</template>
-						</el-table-column>
-						<el-table-column label="发送人" prop="from"></el-table-column>
-						<el-table-column label="发送时间" width="180">
-							<template slot-scope="scope">
-								<i class="el-icon-time"></i>
-								<span style="margin-left: 10px">{{ scope.row.date }}</span>
-							</template>
-						</el-table-column>
-						<el-table-column label="操作" width="200">
-							<template slot-scope="scope">
-								<el-badge :is-dot="scope.row.isRead === 0" class="item">
-									<el-button size="mini" type="primary"
-										@click="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid)">
-										查看
-									</el-button>
-								</el-badge>
-							</template>
-						</el-table-column>
-					</el-table>
-				</el-tab-pane>
-			</el-tabs>
-
-			<el-tabs class="bottom_box" v-model="activeName" @tab-click="handleClick">
-				<el-tab-pane label="我的帖子" name="0">
-					<Posts :posts="post"></Posts>
-				</el-tab-pane>
-				<el-tab-pane label="我的收藏" name="1">
-					<Collection :myColl="post"></Collection>
-				</el-tab-pane>
-			</el-tabs>
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="centerDialogVisible = true;centerDialogVisible2 = false">返回</el-button>
+						<el-button type="primary" @click="sendEmail">发送</el-button>
+					</span>
+				</el-dialog>
+			</transition>
 		</div>
 
-		<div class="right">
-			<PersonalInfo :user="userdata" :status="code"></PersonalInfo>
-		</div>
-
-		<!-- 对话框，邮件内容 -->
-		<el-dialog title="私信内容" :visible.sync="centerDialogVisible" width="30%" center>
-			<span v-html="mailContent"></span>
-			<span slot="footer" class="dialog-footer">
-				<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
-			</span>
-		</el-dialog>
 	</div>
 
 </template>
@@ -79,6 +110,11 @@
 	import Posts from '@/components/homePage/posts.vue'
 	import Collection from '@/components/homePage/collection.vue'
 	import PersonalInfo from '@/components/homePage/personalInfo.vue'
+	import Info from '@/components/info.vue'
+	import time from '@/utils/time.js'
+	import {
+		mapState
+	} from 'vuex'
 
 	export default {
 		name: 'MyHome',
@@ -86,7 +122,7 @@
 		data() {
 			return {
 				activeName: 0,
-				activeName2: 'first',
+				activeName2: 0,
 				userdata: {},
 				joinass: [],
 				post: [],
@@ -99,12 +135,27 @@
 				selectValue: '',
 				input: '',
 				message: null,
+				title: '',
+				hisId: -1,
+				dateList: [],
 			}
 		},
 		methods: {
+			close() {
+				setTimeout(() => {
+					this.centerDialogVisible = false
+				}, 500)
+			},
 			handleClick(tab, event) {
 				//console.log(tab, event, "@@@@@@@@");
 				this.getPosts()
+			},
+			handleClick2(tab, event) {
+				//console.log(tab, event, "@@@@@@@@");
+				if (tab.name === "1") {
+					this.$store.commit("addOlineTime", time.formatDate)
+					this.getMails()
+				}
 			},
 			handleEdit(index, row) {
 				console.log(index, row);
@@ -157,12 +208,17 @@
 				}).then(
 					res => {
 						this.mail = res.data.data.mail
-						console.log(res.data)
+						this.dateList = res.data.data.mail.reduce((item, next) => {
+							item.push(next.date);
+							return item;
+						}, []);
 					}
 				)
 			},
 			/* 查看邮箱 */
 			getMailContent(mid) {
+				if (this.message !== null)
+					this.message.close()
 				this.$api.getMailContent({
 					mid
 				}).then(
@@ -171,7 +227,7 @@
 							this.mailContent = res.data.data.msg
 							this.getMails()
 						} else
-							this.$message.error(res.data.data.msg)
+							this.message = this.$message.error(res.data.data.msg)
 					}
 				)
 			},
@@ -191,12 +247,12 @@
 							uid
 						}).then(
 							res => {
-								this.$message.success(res.data.data.msg)
+								this.message = this.$message.success(res.data.data.msg)
 								this.getMails()
 							}
 						)
 					}).catch(() => {
-						this.$message({
+						this.message = this.$message({
 							type: 'info',
 							message: '已取消删除'
 						});
@@ -204,19 +260,84 @@
 				} else {
 					this.message = this.$message.info("你未收到任何私信")
 				}
+			},
+			/* 替换换行符 **/
+			updateNext(content) {
+				return content.replace(/\n/g, "<br/>").replace(/ /g, '&nbsp')
+			},
+			updateTitle(title) {
+				let arr = title.split('|=|')
+				return arr[0]
+			},
+			getHisId(mailTitle) {
+				if (this.message !== null)
+					this.message.close()
+				console.log(mailTitle.split('|=|')[1])
+				this.hisId = mailTitle.split('|=|')[1]
+			},
+			sendEmail() {
+				let isSystem = 0
+				let mailType = 0
+				let fromuid = this.userdata.uid
+				let touid = this.hisId
+				let title = this.title + '|=|' + this.userdata.uid
+				let content = this.input
+				this.$api.sendEmail({
+					isSystem,
+					mailType,
+					fromuid,
+					touid,
+					title,
+					content
+				}).then(
+					res => {
+						if (res.data.data.code > -1) {
+							this.message = this.$message.success(res.data.data.msg)
+							this.centerDialogVisible2 = false
+							this.title = ''
+							this.input = ''
+						} else {
+							this.message = this.$message.error(res.data.data.msg)
+						}
+					}
+				)
+			},
+			/* 定时任务方法 */
+			checkNewMail() {
+				let count = 0
+				this.dateList.forEach((item, index) => {
+					if (item > this.olineTime) {
+						count++
+					} else {
+						console.log(item,this.olineTime)
+						console.log(item > this.olineTime)
+					}
+				})
+				if (count > 0) {
+					console.log(count)
+				}
 			}
+		},
+		computed: {
+			...mapState({
+				olineTime: state => state.message.olineTime,
+			}),
 		},
 		components: {
 			MyClub,
 			Posts,
 			PersonalInfo,
 			Collection,
+			Info
 		},
 		beforeMount() {
 			this.getInformation()
 			this.getPosts()
 			this.getZoneStatus()
-			this.getMails()
+		},
+		created() {
+			clearInterval()
+			//setInterval(this.checkNewMail, 3000)
 		}
 	}
 </script>
@@ -273,10 +394,10 @@
 		text-align: center;
 	}
 
-	>>>.el-table td.el-table__cell .el-tooltip,
+	/* >>>.el-table td.el-table__cell .el-tooltip,
 	>>>.el-table_1_column_2 .cell {
 		text-align: left;
-	}
+	} */
 
 	>>>.el-table td.el-table__cell .el-tooltip {
 		cursor: pointer;
@@ -300,5 +421,36 @@
 
 	.right {
 		width: 18.75rem;
+	}
+
+	>>>textarea {
+		resize: none;
+		cursor: default;
+	}
+
+	/* /deep/.el-dialog {
+		height: 30rem;
+	} */
+
+	.form {
+		height: 18.75rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+
+	.form>div {
+		display: flex;
+		align-items: center;
+	}
+
+	.form>div label {
+		width: 6rem;
+		line-height: 2;
+	}
+
+	/deep/.form textarea {
+		resize: none;
+		border: 0.0625rem solid #dcdfe6;
 	}
 </style>

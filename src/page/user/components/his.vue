@@ -1,5 +1,8 @@
 <template>
-	<div class="homepage">
+	<div>
+		<Info :user="userdata"></Info>
+		
+		<div class="homepage">
 		<div v-show="code === 2" style="line-height: 100px;">
 			<h1>当前空间用户未开放，无法访问！！</h1>
 		</div>
@@ -24,6 +27,8 @@
 			<PersonalInfo :user="userdata" :status="code"></PersonalInfo>
 		</div>
 	</div>
+	</div>
+	
 
 </template>
 
@@ -32,10 +37,11 @@
 	import Posts from '@/components/homePage/posts.vue'
 	import Collection from '@/components/homePage/collection.vue'
 	import PersonalInfo from '@/components/homePage/personalInfo.vue'
+	import Info from '@/components/hisInfo.vue'
 
 	export default {
 		name: 'MyHome',
-		props: ['user', 'ass', 'posts', 'myColl', 'status'],
+		props: ['user', 'ass', 'posts', 'myColl', 'status', 'user'],
 		data() {
 			return {
 				activeName: 0,
@@ -104,6 +110,7 @@
 			Posts,
 			PersonalInfo,
 			Collection,
+			Info
 		},
 		beforeMount() {
 			this.getInformation()

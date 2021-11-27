@@ -13,7 +13,7 @@
 					<div class="other">
 						<div @click="toCommunityAndPublic(item.aid)"><small>{{item.aname}}</small></div>
 						<div>
-							<div><small>{{item.authorName}}</small></div>
+							<div @click="toHisHomePage(item.authorUID)"><small>{{item.authorName}}</small></div>
 							&emsp;
 							<div><small>{{item.releaseDate}}</small></div>
 						</div>
@@ -26,6 +26,10 @@
 
 <script>
 	import Pagination from '../../../components/Pagination.vue'
+	import {
+		mapState
+	} from 'vuex'
+	
 
 	export default {
 		name: 'Posts',
@@ -58,6 +62,15 @@
 
 				}
 			},
+			
+			/* 前往他的空间 */
+			toHisHomePage(uid) {
+				if (uid !== this.uid)
+					this.$router.push({name:'His',params:{uid}})
+				else
+					this.$router.push({name:'Me',params:{uid}})
+			},
+			
 			// 前往帖子页面
 			toPost(aid, pid) {
 				console.log(this.$homeScroll)
@@ -100,6 +113,11 @@
 					done()
 				}, delay)
 			}
+		},
+		computed: {
+			...mapState({
+				uid: state => state.request.uid,
+			}),
 		},
 		beforeMount() {
 			this.search()

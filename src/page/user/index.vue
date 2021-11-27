@@ -1,10 +1,7 @@
 <template>
 	<div>
 		<Header></Header>
-
 		<div class="main_box">
-			<Info></Info>
-
 			<div class="mes_box">
 				<router-view></router-view>
 			</div>
@@ -16,7 +13,6 @@
 
 <script>
 	import Header from '../../components/Header.vue'
-	import Info from '../../components/info.vue'
 
 	export default {
 		name: 'HomePage',
@@ -27,7 +23,6 @@
 		},
 		components: {
 			Header,
-			Info,
 		},
 	}
 </script>

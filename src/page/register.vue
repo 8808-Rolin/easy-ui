@@ -292,7 +292,7 @@
 			},
 			// 邮箱正则校验 
 			checkMail() {
-				const regEemail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
+				const regEemail = /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/
 				if (this.loginMessage.email != "" && !regEemail.test(this.loginMessage.email)) {
 					this.isTrueMail = false
 				} else {

@@ -82,6 +82,7 @@
 	import Pagination from '../components/Pagination.vue'
 	import analysisEmoji from '../utils/analysisEmoji.js'
 	import base from '../api/request/base.js'
+	import time from '../utils/time.js'
 	import {
 		mapState
 	} from 'vuex'
@@ -100,6 +101,7 @@
 				post: [],
 				master: [],
 				code:0,
+				aname:'',
 			}
 		},
 		components: {
@@ -153,27 +155,13 @@
 			headImage(url) {
 				return `${base.sq}${url}`
 			},
-			formatDate() {
-				let date = new Date();
-				let year = date.getFullYear(); // 年
-				let month = date.getMonth() + 1; // 月
-				let day = date.getDate(); // 日
-				let week = date.getDay(); // 星期
-				let weekArr = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-				let hour = date.getHours(); // 时
-				hour = hour < 10 ? "0" + hour : hour; // 如果只有一位，则前面补零
-				let minute = date.getMinutes(); // 分
-				minute = minute < 10 ? "0" + minute : minute; // 如果只有一位，则前面补零
-				let second = date.getSeconds(); // 秒
-				second = second < 10 ? "0" + second : second; // 如果只有一位，则前面补零
-				return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
-			},
 			/* 解析表情 **/
 			Emoji(content) {
 				return analysisEmoji(content)
 			},
 			/* 插入我的评论 **/
 			addMyDiscuss(content) {
+				console.log(time)
 				this.discuss.unshift({
 					author: {
 						userImage: this.me.headImage,
@@ -181,7 +169,7 @@
 					},
 					content: {
 						text: content,
-						releaseDate: this.formatDate()
+						releaseDate: time.formatDate
 					},
 				})
 			},
@@ -224,7 +212,19 @@
 					this.$router.push({name:'His',params:{uid}})
 				else
 					this.$router.push({name:'Me',params:{uid}})
-			}
+			},
+			/* 获取社团名称 */
+			getAssociationInfo() {
+				let aid = this.$route.params.aid
+				this.$api.getAssociationInfo({aid}).then(
+					res => {
+						if (res.data.data.name !== undefined)
+							this.aname = res.data.data.name
+						else 
+							this.aname = '文学社'
+					}
+				)
+			}		
 		},
 		computed: {
 			...mapState({
@@ -234,14 +234,16 @@
 			name() {
 				if (this.$route.params.aid === "0" || this.$route.params.aid === 0)
 					return '公共论坛'
-				else
-					return '文学社'
+				else {
+					return this.aname
+				}
 			}
 		},
 		beforeMount() {
 			this.getPostPageInfo()
 			this.getDiscussList(1)
 			this.getMassOrganization()
+			this.getAssociationInfo()
 			document.documentElement.scrollTop = 10
 		},
 		mounted(){

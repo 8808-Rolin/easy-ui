@@ -30,6 +30,7 @@
 
 <script>
 	import LocalStorage from '../utils/LocalStorage'
+	import time from '../utils/time.js'
 	import {
 		mapState
 	} from 'vuex'
@@ -65,6 +66,7 @@
 								if (!res.data.data.code) {
 									this.$store.commit("addUser", res.data.data.user)
 									this.$store.commit('updateExistUser', true)
+									this.$store.commit("addOlineTime", time.formatDate)
 								}
 							}
 						)

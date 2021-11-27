@@ -5,7 +5,7 @@
 		</div>
 		<div class="user_box">
 			<transition-group appear name="more" v-bind:css="false" v-on:before-enter="beforeEnter" v-on:enter="enter">
-				<div class="user" v-for="(item, index) in users" :key="item.uid" :data-index="item">
+				<div @click="toHisHomePage(item.uid)" class="user" v-for="(item, index) in users" :key="item.uid" :data-index="item">
 					<div class="left">
 						<div class="user_photo">
 							<img :src="headImage(item.image)">
@@ -34,8 +34,11 @@
 </template>
 
 <script>
-	import Pagination from '../../../components/Pagination.vue'
-	import base from '../../../api/request/base.js'
+	import Pagination from '@/components/Pagination.vue'
+	import base from '@/api/request/base.js'
+	import {
+		mapState
+	} from 'vuex'
 
 	export default {
 		name: 'user',
@@ -63,6 +66,13 @@
 					)
 				}
 			},
+			/* 前往他的空间 */
+			toHisHomePage(uid) {
+				if (uid !== this.uid)
+					this.$router.push({name:'His',params:{uid}})
+				else
+					this.$router.push({name:'Me',params:{uid}})
+			},
 			/* 重写头像路径 **/
 			headImage(image) {
 				return `${base.sq}${image}`
@@ -82,6 +92,11 @@
 					done()
 				}, delay)
 			}
+		},
+		computed: {
+			...mapState({
+				uid: state => state.request.uid,
+			}),
 		},
 		components: {
 			Pagination
@@ -172,6 +187,7 @@
 
 					.intro {
 						max-height: 4.5rem;
+						margin-top: 0;
 						overflow: hidden;
 						padding: 0.25rem;
 						flex: 1;

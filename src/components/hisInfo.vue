@@ -5,14 +5,11 @@
 				<img :src="userImage" >
 			</div>
 			<div class="name_and_ID">
-				<strong v-show="$route.name !== 'Me'">{{user.userName}}</strong>
-				<strong v-show="$route.name === 'Me'" @click="update('昵称')" style="cursor: pointer;">{{user.userName}}</strong>
+				<strong>{{user.username}}</strong>
 				&emsp;
-				<small><strong>学号：</strong>{{user.studentID}}</small>
 			</div>
 			<div class="intro">
-				<small v-show="$route.name !== 'Me'">{{user.intro}}</small>
-				<small v-show="$route.name === 'Me'" @click="update('简介')" style="cursor: pointer;">{{user.intro}}</small>
+				<small>{{user.notice}}</small>
 			</div>
 		</div>
 
@@ -23,28 +20,19 @@
 </template>
 
 <script>
-	import {
-		mapState
-	} from 'vuex'
 	import base from '../api/request/base.js'
+	
 	export default {
-		name: 'info',
+		name: 'hisInfo',
+		props:['user'],
 		data() {
 			return {
 				
 			}
 		},
-		methods:{
-			update(mes) {
-				this.$bus.$emit('updateUser', mes)
-			}
-		},
 		computed:{
-			...mapState({
-				user:state => state.message.user,
-			}),
 			userImage() {
-				return `${base.sq}${this.user.headImage}`
+				return `${base.sq}${this.user.profile}`
 			},
 		},
 	}
@@ -91,7 +79,7 @@
 	
 	.name_and_ID {
 		height: 2rem;
-		left: 8.5rem;
+		left: 10rem;
 		margin-top: 0.5rem;
 	}
 	
@@ -100,7 +88,7 @@
 	}
 	
 	.intro {
-		left: 8.5rem;
+		left: 10rem;
 		margin-top: 3.125rem;
 	}
 
