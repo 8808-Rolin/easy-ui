@@ -1,9 +1,26 @@
 <template>
-	<div id="app">
-		<transition :name="transitionName">
-			<router-view></router-view>
-		</transition>
-	</div>
+  <div id="app">
+    <vue-particles
+        color="#f5f8f9"
+        :particleOpacity="0.7"
+        :particlesNumber="120"
+        shapeType="circle"
+        :particleSize="3"
+        linesColor="#8eaed0"
+        :linesWidth="1"
+        :lineLinked="true"
+        :lineOpacity="0.4"
+        :linesDistance="150"
+        :moveSpeed="2"
+        :hoverEffect="true"
+        hoverMode="grab"
+        :clickEffect="true"
+        clickMode="push"
+        class="lizi"
+      >
+      </vue-particles>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
@@ -18,8 +35,6 @@
 		    //使用watch 监听$router的变化
 		    $route(to, from) {
 		      //如果to索引大于from索引,判断为前进状态,反之则为后退状态
-		      console.log(to, "to");
-		      console.log(from, "from");
 		      if (to.meta.index > from.meta.index) {
 		        //设置动画名称
 		        this.transitionName = "slide-right";
@@ -43,7 +58,7 @@
 	.slide-right-enter-active, .slide-right-leave-active, .slide-left-enter-active, .slide-left-leave-active {
 	      will-change: transform;
 	      transition: all 500ms;
-	      position: absolute;
+	      /* position: absolute; */
 	    }
 	
 	    .slide-right-enter {
@@ -65,4 +80,11 @@
 	      opacity: 0;
 	      transform: translate3d(-100%, 0, 0);
 	    }
+		
+		 #particles-js{
+		    width: 100%;
+		    height: 100%;
+		    position: fixed;   /* //设置absolute,其他DIV设置为relative，这样这个例子效果就作为背景 */
+			z-index: 0;
+		}
 </style>

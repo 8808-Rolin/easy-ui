@@ -40,7 +40,7 @@ export default {
 			//如果有startTime的值，说明设置了失效时间
 			if (item.expires) {
 				let date = new Date().getTime();
-				console.log(date - item.startTime)
+				//console.log(date - item.startTime)
 				//何时将值取出减去刚存入的时间，与item.expires比较，如果大于就是过期了，如果小于或等于就还没过期
 				if (((date - item.startTime) % (1000 * 60 * 60)) / (1000 * 60) > item.expires) {
 					//缓存过期，清除缓存，返回false

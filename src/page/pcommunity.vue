@@ -21,10 +21,10 @@
 
 				<div class="p_body">
 					<div class="p_user">
-						<div class="user_photo">
+						<div class="user_photo" @click="toHisHomePage(master.muid)">
 							<img :src="headImage(master.image)">
 						</div>
-						<p><big><strong>{{master.username}}</strong></big></p>
+						<p @click="toHisHomePage(master.muid)"><big><strong>{{master.username}}</strong></big></p>
 						<p>UID: {{master.muid}}</p>
 						<p>院系：{{master.org}}</p>
 					</div>
@@ -48,15 +48,15 @@
 			<div class="p_discuss">
 				<!-- 评论发表、他人评论 -->
 				<div class="publish">
-					<EmojiInput @analysisEmoji="releaseDiscuss" :permission="permissionCode"></EmojiInput>
+					<EmojiInput @analysisEmoji="releaseDiscuss" :aid="$route.params.aid" :permission="permissionCode"></EmojiInput>
 				</div>
 				<div class="discuss_all">
 					<div class="discuss" v-for="(item, index) in discuss" :key="index">
-						<div class="left">
+						<div class="left" @click="toHisHomePage(item.author.cuid)">
 							<img :src="headImage(item.author.userImage)">
 						</div>
 						<div class="right">
-							<div class="name">{{item.author.username}}</div>
+							<div class="name" @click="toHisHomePage(item.author.cuid)">{{item.author.username}}</div>
 							<div class="content" v-html="Emoji(item.content.text)"></div>
 							<div class="time_other">
 								<div>发表时间：{{item.content.releaseDate}}</div>
@@ -82,13 +82,14 @@
 	import Pagination from '../components/Pagination.vue'
 	import analysisEmoji from '../utils/analysisEmoji.js'
 	import base from '../api/request/base.js'
+	import time from '../utils/time.js'
 	import {
 		mapState
 	} from 'vuex'
 
 	export default {
 		name: 'CommunityP',
-		props:['total', 'PageSize', 'PageSizes', 'permission'],
+		props:['total', 'PageSize', 'PageSizes', 'permission', 'aid'],
 		data() {
 			return {
 				user: {},
@@ -100,6 +101,7 @@
 				post: [],
 				master: [],
 				code:0,
+				aname:'',
 			}
 		},
 		components: {
@@ -120,7 +122,6 @@
 						this.master = res.data.data.master
 						this.dynamicTags = res.data.data.post.tags
 						this.post = res.data.data.post
-						console.log(res.data)
 					}
 				)
 			},
@@ -129,7 +130,6 @@
 				let aid = this.$route.params.aid
 				this.$api.getAssInformation({uid,aid}).then(
 					res => {
-						console.log(res.data.data, "@@@@")
 						this.permissionCode = res.data.data.permissionCode
 					}
 				)
@@ -155,27 +155,13 @@
 			headImage(url) {
 				return `${base.sq}${url}`
 			},
-			formatDate() {
-				let date = new Date();
-				let year = date.getFullYear(); // 年
-				let month = date.getMonth() + 1; // 月
-				let day = date.getDate(); // 日
-				let week = date.getDay(); // 星期
-				let weekArr = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-				let hour = date.getHours(); // 时
-				hour = hour < 10 ? "0" + hour : hour; // 如果只有一位，则前面补零
-				let minute = date.getMinutes(); // 分
-				minute = minute < 10 ? "0" + minute : minute; // 如果只有一位，则前面补零
-				let second = date.getSeconds(); // 秒
-				second = second < 10 ? "0" + second : second; // 如果只有一位，则前面补零
-				return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
-			},
 			/* 解析表情 **/
 			Emoji(content) {
 				return analysisEmoji(content)
 			},
 			/* 插入我的评论 **/
 			addMyDiscuss(content) {
+				console.log(time)
 				this.discuss.unshift({
 					author: {
 						userImage: this.me.headImage,
@@ -183,7 +169,7 @@
 					},
 					content: {
 						text: content,
-						releaseDate: this.formatDate()
+						releaseDate: time.formatDate
 					},
 				})
 			},
@@ -191,7 +177,7 @@
 			releaseDiscuss(content) {
 				let pid = this.$route.params.pid
 				let uid = this.uid
-				if (this.permissionCode !== 0) {
+				if (this.permissionCode !== 0 || this.$route.params.aid === 0) {
 					this.$api.releaseDiscuss({pid,uid,content}).then(
 						res => {
 							this.addMyDiscuss(content)
@@ -219,6 +205,26 @@
 					}
 				)
 			},
+			
+			/* 前往他的空间 */
+			toHisHomePage(uid) {
+				if (uid !== this.uid)
+					this.$router.push({name:'His',params:{uid}})
+				else
+					this.$router.push({name:'Me',params:{uid}})
+			},
+			/* 获取社团名称 */
+			getAssociationInfo() {
+				let aid = this.$route.params.aid
+				this.$api.getAssociationInfo({aid}).then(
+					res => {
+						if (res.data.data.name !== undefined)
+							this.aname = res.data.data.name
+						else 
+							this.aname = '文学社'
+					}
+				)
+			}		
 		},
 		computed: {
 			...mapState({
@@ -228,14 +234,16 @@
 			name() {
 				if (this.$route.params.aid === "0" || this.$route.params.aid === 0)
 					return '公共论坛'
-				else
-					return '文学社'
+				else {
+					return this.aname
+				}
 			}
 		},
 		beforeMount() {
 			this.getPostPageInfo()
 			this.getDiscussList(1)
 			this.getMassOrganization()
+			this.getAssociationInfo()
 			document.documentElement.scrollTop = 10
 		},
 		mounted(){
@@ -260,6 +268,7 @@
 			width: 100%;
 			margin-top: 1rem;
 			box-shadow: var(--box-shadow2);
+			background-color: var(--bg);
 
 			.p_title {
 				padding: 0.5rem;
@@ -347,6 +356,7 @@
 			border-bottom-left-radius: 1rem;
 			border-bottom-right-radius: 1rem;
 			box-shadow: var(--box-shadow2);
+			background-color: var(--bg);
 
 			.publish {
 				padding: 2rem 1rem 0;
@@ -369,6 +379,12 @@
 						height: 4rem;
 						border-radius: 50%;
 						overflow: hidden;
+						cursor: pointer;
+						
+						img {
+							width: 100%;
+							height: 100%;
+						}
 					}
 
 					.right {
@@ -381,7 +397,9 @@
 						}
 
 						.name {
+							width: fit-content;
 							font-weight: bold;
+							cursor: pointer;
 						}
 
 						.content {
@@ -407,5 +425,26 @@
 				}
 			}
 		}
+	}
+	.attachment {
+	    cursor: pointer !important;
+	}
+	.upload_error {
+	    background: #FFE5E0;
+	    border: 1px solid #EA644A;
+	}
+	.attachment > img {
+	    width: 16px;
+	    vertical-align: middle;
+	    padding-right:4px;
+	}
+	.attachment > a {
+	    text-decoration: none;
+	    vertical-align: middle;
+	}
+	
+	.attachment > span {
+	    vertical-align: middle;
+	    padding-right:4px;
 	}
 </style>

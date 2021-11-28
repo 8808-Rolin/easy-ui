@@ -7,7 +7,7 @@ Vue.use(Vuex)
 const request = {
 	state:{
 		token:'',
-		network:false,
+		network:true,
 		statusMes:'',
 		uid:'',
 	},
@@ -32,6 +32,7 @@ const message = {
 	state:{
 		user: '',
 		existUser: true,
+		olineTime:'',
 	},
 	mutations:{
 		addUser(state, val) {
@@ -43,6 +44,9 @@ const message = {
 		updateExistUser(state, val){
 			state.existUser = val
 		},
+		addOlineTime(state, val) {
+			state.olineTime = val
+		}
 	}
 }
 const store = new Vuex.Store({

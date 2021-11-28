@@ -1,24 +1,34 @@
 <template>
 	<div>
 		<div class="clubs">
-			<div class="club">
-				<div class="logo">
-					<img src="../../assets/profile.jpg">
+			<div class="club" v-for="(item, index) in ass" :key="item.aid">
+				<div class="logo" @click="toCommunity(item.aid)">
+					<img :src="assImage(item.profile)">
 				</div>
-				<div class="name">
-					社团名称
-				</div>
+				<el-tooltip :content="item.name" placement="bottom" :open-delay="500">
+					<div class="name" @click="toCommunity(item.aid)">{{item.name}}</div>
+				</el-tooltip>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+	import base from '@/api/request/base.js'
 	export default {
 		name: 'MyClub',
+		props:['ass'],
 		data() {
 			return {
 
+			}
+		},
+		methods:{
+			assImage(image) {
+				return `${base.sq}${image}`
+			},
+			toCommunity(aid) {
+				this.$router.push({name:'Community', params:{aid}})
 			}
 		}
 	}
@@ -27,6 +37,8 @@
 <style lang="less" scoped="scoped">
 	.clubs {
 		padding: 1rem 0;
+		display: flex;
+		align-items: center;
 		.club {
 			width: 6.25rem;
 			margin-right: 1rem;
@@ -46,7 +58,13 @@
 			}
 
 			.name {
+				width: 100%;
 				margin-top: 0.5rem;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				cursor: pointer;
+				text-align: center;
 			}
 		}
 

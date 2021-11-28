@@ -67,14 +67,20 @@ const user = {
 	     return axios.get(`${base.sq}/api/tool/get-college-list`);    
 	},
 	
-	// 下载文件接口
+	/* // 下载文件接口
 	downloadFile(params) {
 		return axios.post(`${base.sq}/api/tool/download-file`, qs.stringify(params));
 	},
+	 */
 	
 	// 获取总的帖子类型
 	getPostType() {
-	     return axios.get(`${base.sq}/api/tool/get-post-type`);    
+	    return axios.get(`${base.sq}/api/tool/get-post-type`);    
+	},
+	
+	// 通过社团ID获取社团信息
+	getAssociationInfo(params) {
+		return axios.get(`${base.sq}/api/info/get-association-info`,{params});    
 	},
 	
 	/* 首页相关接口 **/
@@ -176,8 +182,8 @@ const user = {
 	},
 	
 	// 获取我的（他的）帖子和收藏
-	getZoneStatus(params) {
-		return axios.get(`${base.sq}/api/zone/get-zone-status`, {params});
+	getPosts(params) {
+		return axios.get(`${base.sq}/api/zone/get-post`, {params});
 	},
 	
 	/*  获取我的邮件 */
@@ -208,8 +214,8 @@ const user = {
 	},
 	
 	/* 修改个人信息 */
-	
-	// 修改昵称
+
+	/* // 修改昵称
 	updateName(params) {
 		return axios.post(`${base.sq}/api/zone/update-name`, qs.stringify(params));
 	},
@@ -217,22 +223,22 @@ const user = {
 	// 修改简介
 	updateIntro(params) {
 		return axios.post(`${base.sq}/api/zone/update-intro`, qs.stringify(params));
-	},
+	}, */
 	
 	// 修改头像
 	updateProfile(params) {
 		return axios.post(`${base.sq}/api/zone/update-profile`, qs.stringify(params));
 	},
 	
-	// 修改电子邮箱
+	/* // 修改电子邮箱
 	updateEmail(params) {
 		return axios.post(`${base.sq}/api/zone/update-email`, qs.stringify(params));
-	},
+	}, */
 	
 	// 修改生日
 	updateBirth(params) {
 		return axios.post(`${base.sq}/api/zone/update-birth`, qs.stringify(params));
-	},
+	}, 
 }
 
 export default user;

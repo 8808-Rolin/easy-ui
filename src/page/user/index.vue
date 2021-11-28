@@ -1,18 +1,9 @@
 <template>
 	<div>
 		<Header></Header>
-
 		<div class="main_box">
-			<Info></Info>
-
 			<div class="mes_box">
-				<div class="left">
-					<router-view></router-view>
-				</div>
-
-				<div class="right">
-					<PersonalInfo></PersonalInfo>
-				</div>
+				<router-view></router-view>
 			</div>
 			<!-- 废物div -->
 			<div style="height: 1rem;"></div>
@@ -22,8 +13,6 @@
 
 <script>
 	import Header from '../../components/Header.vue'
-	import Info from '../../components/info.vue'
-	import PersonalInfo from '../../components/homePage/personalInfo.vue'
 
 	export default {
 		name: 'HomePage',
@@ -34,9 +23,7 @@
 		},
 		components: {
 			Header,
-			Info,
-			PersonalInfo
-		}
+		},
 	}
 </script>
 
@@ -51,18 +38,6 @@
 		.mes_box {
 			width: 100%;
 			margin-top: 1rem;
-			display: flex;
-
-			.left {
-				flex: 1;
-				margin-right: 1rem;
-				padding: 1rem;
-				box-shadow: var(--box-shadow2);
-			}
-
-			.right {
-				width: 18.75rem;
-			}
 		}
 	}
 </style>

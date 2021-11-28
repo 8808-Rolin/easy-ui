@@ -14,8 +14,8 @@
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>个人空间</el-dropdown-item>
-						<el-dropdown-item  @click.native="logout">退出登录</el-dropdown-item>
+						<el-dropdown-item @click.native="toMyHomePage">个人空间</el-dropdown-item>
+						<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
@@ -30,6 +30,7 @@
 
 <script>
 	import LocalStorage from '../utils/LocalStorage'
+	import time from '../utils/time.js'
 	import {
 		mapState
 	} from 'vuex'
@@ -65,6 +66,7 @@
 								if (!res.data.data.code) {
 									this.$store.commit("addUser", res.data.data.user)
 									this.$store.commit('updateExistUser', true)
+									this.$store.commit("addOlineTime", time.formatDate)
 								}
 							}
 						)
@@ -74,12 +76,16 @@
 				} else {
 					this.$store.commit('updateExistUser', false)
 				}
+			},
+			toMyHomePage() {
+				this.$router.push({name:'Me',params:{uid:this.uid}})
 			}
 		},
 		computed: {
 			...mapState({
 				user:state => state.message.user,
 				existUser:state => state.message.existUser,
+				uid: state => state.request.uid,
 			}),
 			headImage() {
 				return `${base.sq}${this.user.headImage}`
@@ -100,12 +106,13 @@
 	header {
 		width: 100%;
 		height: 4rem;
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		box-shadow: var(--box-shadow2);
-		background-color: #FFFFFF;
+		background-color: var(--bg);
 		z-index: 9999;
 	}
 

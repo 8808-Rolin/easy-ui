@@ -39,7 +39,7 @@
 			</div>
 
 			<div class="notice_box">
-				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="paid" :notisSize="notSize"></MakesNotice>
+				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="paid" :notisSize="notSize" :tinymceId="'ptinymceId'"></MakesNotice>
 			</div>
 
 			<!-- 废物div -->
@@ -73,7 +73,7 @@
 				paid:0,
 			}
 		},
-		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'notisSize'],
+		props:['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'notisSize', 'tinymceId'],
 		components: {
 			HeaderHasSearch,
 			Info,
@@ -94,7 +94,6 @@
 				)
 			},
 			arrayUnique(arr, isJoin) {
-				console.log(arr)
 				const ass = arr.filter((item) => {
 					if (item.isJoin === isJoin)
 						return true
@@ -173,6 +172,7 @@
 		border-bottom-left-radius: 1rem;
 		border-bottom-right-radius: 1rem;
 		box-shadow: var(--box-shadow2);
+		background-color: var(--bg);
 	}
 
 	.main_box .club>div {
@@ -219,6 +219,9 @@
 		margin-top: 0.5rem;
 		font-size: 0.75rem;
 		text-align: center;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	.school_club {
@@ -276,5 +279,6 @@
 		border-radius: 1rem;
 		margin-top: 3rem;
 		box-shadow: var(--box-shadow2);
+		background-color: var(--bg);
 	}
 </style>

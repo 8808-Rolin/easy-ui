@@ -96,7 +96,7 @@
 	.index_left {
 		width: 50%;
 		background: url(../assets/logo-imgalpha-nologo-600px.png) no-repeat;
-		background-size: 100%;
+		background-size: cover cover;
 	}
 
 	.index_right {

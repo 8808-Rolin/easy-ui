@@ -7,7 +7,8 @@
 
 <script>
 	import base from '../api/request/base.js';
-	import axios from "axios";
+	import axios from 'axios';
+	import qs from 'qs'; // 根据需求是否导入qs模块
 	import tinymce from 'tinymce/tinymce' //tinymce默认hidden，不引入不显示
 	import Editor from '@tinymce/tinymce-vue' //编辑器引入
 	import "tinymce/icons/default/icons";
@@ -20,7 +21,6 @@
 	import "tinymce/plugins/colorpicker";
 	import "tinymce/plugins/textcolor";
 	import "tinymce/plugins/preview";
-	import "tinymce/plugins/link";
 	import "tinymce/plugins/advlist";
 	import "tinymce/plugins/fullscreen";
 	import "tinymce/plugins/textpattern";
@@ -33,6 +33,25 @@
 	import "tinymce/plugins/imagetools";
 	import "tinymce/plugins/autosave";
 	import "tinymce/plugins/autoresize";
+	import "tinymce/plugins/paste";
+	import "tinymce/plugins/link";
+	import "tinymce/plugins/nonbreaking";
+	import "tinymce/plugins/toc";
+	import "tinymce/plugins/help";
+	import "tinymce/plugins/save";
+	import "tinymce/plugins/pagebreak";
+	import "tinymce/plugins/tabfocus";
+	import "tinymce/plugins/autosave";
+	import "tinymce/plugins/bdmap";
+	import "tinymce/plugins/code";
+	import "tinymce/plugins/formatpainter"
+	import "tinymce/plugins/attachment";
+	import '@npkg/tinymce-plugins/importword';
+	import '@npkg/tinymce-plugins/upfile';
+	import '@npkg/tinymce-plugins/layout'
+
+
+
 
 	const fonts = [
 		"宋体=宋体",
@@ -66,6 +85,10 @@
 			Editor
 		},
 		props: {
+			tinymceId: {
+				type: String,
+				default: ''
+			},
 			//内容
 			value: {
 				type: String,
@@ -79,7 +102,7 @@
 			//插件
 			plugins: {
 				type: [String, Array],
-				default: "preview searchreplace directionality link fullscreen image autolink table charmap insertdatetime advlist lists wordcount imagetools textpattern autosave autoresize"
+				default: "formatpainter autolink layout tabfocus importword attachment pagebreak code help toc link bdmap paste preview searchreplace directionality fullscreen image table charmap insertdatetime advlist lists wordcount imagetools textpattern autosave autoresize"
 			},
 			//工具栏
 			toolbar: {
@@ -87,10 +110,11 @@
 				default: "undo redo|\
 						forecolor backcolor bold italic underline strikethrough|\
 						blockquote subscript superscript removeformat |\
-						alignleft aligncenter alignright alignjustify outdent indent lineheight formatpainter |\
-						bullist numlist |\
-						table image charmap hr pagebreak insertdatetime |\
-						bdmap fullscreen preview searchreplace |\
+						alignleft aligncenter alignright alignjustify outdent indent lineheight|\
+						bullist numlist|\
+						table image charmap insertdatetime|\
+						bdmap preview searchreplace fullscreen|\
+						attachment link pastetext restoredraft importword formatpainter|\
 						formatselect fontselect fontsizeselect"
 			}
 		},
@@ -98,10 +122,11 @@
 			return {
 				tinymceFlag: 1,
 				//初始化配置
-				tinymceId: 'tinymce',
+				//tinymceId: 'tinymceId',
 				myValue: this.value,
+				test: '',
 				init: {
-					selector: '#tinymce',
+					selector: `#${this.tinymceId}`,
 					language_url: '/tinymce/langs/zh_CN.js', //汉化路径是自定义的，一般放在public或static里面
 					language: 'zh_CN',
 					skin_url: '/tinymce/skins/ui/oxide', //皮肤
@@ -142,9 +167,100 @@
 							}
 						}
 					},
+					pagebreak_split_block: true,
+					/* 百度地图 */
+					bdmap_options: {
+						width: 560,
+						height: 360,
+						outputIframe: 'tinymce/plugins/bdmap/bd.html',
+						apiKey: 'Xypt7HR5ElzeCZQYWVWBqNbk20jze55M'
+					},
+
+					/* 上传附件  **/
+					attachment_assets_path: 'tinymce/plugins/attachment/icons',
+					attachment_max_size: 10 * 1024 * 1024,
+					content_css: 'tinymce/skins/content/snow/content.css',
+					attachment_type: ".doc|.docx|.pptx|.ppt|.pdf|.xlsx|.xls|",
+					attachment_upload_handler: function(file, successCallback, failureCallback, progressCallback) {
+						let data = new FormData(); //重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
+						data.append("file", file)
+						let headers = {
+							headers: {
+								"Content-Type": "multipart/form-data"
+							}
+						}
+						axios.post(`${base.sq}/api/tool/upload-file`, data, headers, {
+							onUploadProgress: function(e) {
+								const progress = (e.loaded / e.total * 100 | 0) + '%';
+								progressCallback(progress);
+							}
+						}, ).then((response) => {
+							successCallback(`${base.sq}/files/${response.data.data.msg}`);
+						}).catch((error) => {
+							failureCallback(`上传失败:${error.message}`)
+						});
+						// }
+					},
 					/* 文件上传 */
+					/* file_callback: function(file, succFun) {
+						// 自定义处理文件操作部分
+						console
+						succFun(`${base.sq}/api/tool/upload-file`, {
+							text: 'xx.pdf'
+						}) //成功回调函数 text 显示的文本
+					}, */
+
+					/* 一键布局 **/
+					layout_options: {
+						style: {
+							'text-align': 'justify',
+							'text-indent': '2em',
+							'line-height': 1.5
+						},
+						filterTags: ['table>*', 'tbody'], //'table，'tbody','td','tr' 将会忽略掉 同时 table>*，忽略table 标签 以及所有子标签
+						clearStyle: ['text-indent'], //text-indent 将会被清除掉
+						tagsStyle: {
+							'table': {
+								'line-height': 3,
+								'text-align': 'center'
+							},
+							'table,tbody,tr,td': { //支持并集选择
+								'line-height': 2
+							},
+							'tr>td,table>tbody': { //支持, 精准定位 通过 ' > '
+								'line-height': 3,
+								'text-align': 'center'
+							}
+						}
+					},
+
+					/* word导入 **/
+					importword_handler: function(editor, files, next) {
+						let file_name = null
+						if (files[0] !== undefined)
+							file_name = files[0].name
+						if (file_name.substr(file_name.lastIndexOf(".") + 1) == 'docx') {
+							editor.notificationManager.open({
+								text: '正在转换中...',
+								type: 'info',
+								closeButton: false,
+							});
+							next(files);
+						} else {
+							editor.notificationManager.open({
+								text: '目前仅支持docx文件格式，若为doc111，请将扩展名改为docx',
+								type: 'warning',
+							});
+						}
+						// next(files);
+					},
+					importword_filter: function(result, insert, message) {
+						// 自定义操作部分
+						insert(result) //回插函数
+					},
+					/* /* 文件上传 */
 					// file_picker_types: 'file image media', // 指定允许上传的类型
-					file_picker_types: 'file', // 指定允许上传的类型
+					/* file_picker_types: 'file', // 指定允许上传的类型
 					file_picker_callback: function(callback, value, meta) {
 						console.log(meta.filetype)
 						console.log(343434)
@@ -157,42 +273,28 @@
 						input.click()
 						input.onchange = function() {
 							let file = this.files[0]
-							/* console.log(this.files)
-							console.log(file)
-							console.log(file.name)
-							// 下方被注释掉的是官方的一个例子
-							// 放到下面给大家参考 */
 							let reader = new FileReader()
 							reader.onload = function() {
 								console.log(window.tinymce)
-								// Note: Now we need to register the blob in TinyMCEs image blob
-								// registry. In the next release this part hopefully won't be
-								// necessary, as we are looking to handle it internally.
 								let id = 'blobid' + (new Date()).getTime()
 								let blobCache = window.tinymce.activeEditor.editorUpload.blobCache
 								let base64 = reader.result.split(',')[1]
 								let blobInfo = blobCache.create(id, file, base64)
-								console.log(id)
-								console.log(file)
-								console.log(base64)
-								console.log(file.name)
-								console.log(blobInfo)
-								console.log(blobInfo.blobUri())
 								blobCache.add(blobInfo)
 								/* vm.$api.uploadFile({file}).then(
 									res => {
 										consl
 									}
 								) */
-								// call the callback and populate the Title field with the file name
+					/* 	// call the callback and populate the Title field with the file name
 								callback(blobInfo.blobUri(), {
 									text: file.name,
 									title: file.name
 								})
 							}
 							reader.readAsDataURL(file)
-						}
-					}
+						} 
+					} */
 				}
 			}
 		},
@@ -213,7 +315,19 @@
 		},
 		mounted() {
 			tinymce.init({})
-			// console.log(this.toolbar,'======')
+		},
+		activated() {
+			if (window.tinymce) {
+				window.tinymce.init({
+					...this.init
+				})
+			}
+		},
+		deactivated() {
+			const tinymce = window.tinymce.get(this.tinymceId)
+			if (tinymce) {
+				tinymce.destroy()
+			}
 		},
 		methods: {
 			onClick(e) {

@@ -57,7 +57,9 @@
 				<el-input v-model="input" placeholder="请输入内容"></el-input>
 			</div>
 			<div class="tinymce-box">
-				<TEditor ref="tinymceRef" :updateContent.sync="content"></TEditor>
+				<keep-alive :max="10">
+					<TEditor :is="view" ref="tinymceRef" :updateContent.sync="content" :tinymceId="tinymceId"></TEditor>
+				</keep-alive>
 			</div>
 			<!-- <div>富文本框内容：{{tinymceObj}}</div> -->
 			<div style="margin-top: 1rem;display: flex;line-height: 2;">
@@ -90,9 +92,10 @@
 			TEditor,
 			Pagination,
 		},
-		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'PageSize', 'notisSize', 'permission'],
+		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'PageSize', 'notisSize', 'permission', 'tinymceId'],
 		data() {
 			return {
+				view:'TEditor',
 				message: null,
 				posts: [],
 				options: [],
