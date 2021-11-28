@@ -8,47 +8,89 @@
 					<el-tab-pane label="我的社团" name="0">
 						<MyClub :ass="joinass"></MyClub>
 					</el-tab-pane>
-					<el-tab-pane label="我的私信" name="1">
-						<div class="btn_box">
-							<!-- <el-button type="primary" icon="el-icon-edit" @click="centerDialogVisible2 = true">发送邮件
-						</el-button> -->
-							<el-button type="danger" @click.native="deleteMail" icon="el-icon-delete" size="medium">清空所有
-							</el-button>
-						</div>
-
-						<el-table class="email_table" :data="mail" style="width: 100%" fit height="313">
-							<el-table-column label="状态" width="100">
-								<template slot-scope="scope">
-									<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
-									<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读</el-tag>
-								</template>
-							</el-table-column>
-							<el-table-column class="title_2" label="标题" width="280">
-								<template slot-scope="scope">
-									<el-tooltip :content="updateTitle(scope.row.title)" placement="top"
-										@click.native="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid)">
-										<div>{{updateTitle(scope.row.title)}}</div>
-									</el-tooltip>
-								</template>
-							</el-table-column>
-							<el-table-column label="发送人" prop="from"></el-table-column>
-							<el-table-column label="发送时间" width="180">
-								<template slot-scope="scope">
-									<i class="el-icon-time"></i>
-									<span style="margin-left: 10px">{{ scope.row.date }}</span>
-								</template>
-							</el-table-column>
-							<el-table-column label="操作" width="200">
-								<template slot-scope="scope">
-									<el-badge :is-dot="scope.row.isRead === 0" class="item">
-										<el-button size="mini" type="primary"
-											@click="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid);getHisId(scope.row.title)">
-											查看
-										</el-button>
-									</el-badge>
-								</template>
-							</el-table-column>
-						</el-table>
+					<el-tab-pane label="我的邮箱" name="1">
+						<el-tabs tab-position="left">
+						    <el-tab-pane label="发件箱">
+								<div class="btn_box">
+									<el-button type="danger" @click.native="deleteMail" icon="el-icon-delete" size="mini">清空
+									</el-button>
+								</div>
+								
+								<el-table class="email_table" :data="mail" style="width: 100%" fit height="313">
+									<el-table-column label="状态" width="50">
+										<template slot-scope="scope">
+											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
+											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读</el-tag>
+										</template>
+									</el-table-column>
+									<el-table-column class="title_2" label="标题" width="280">
+										<template slot-scope="scope">
+											<el-tooltip :content="updateTitle(scope.row.title)" placement="top"
+												@click.native="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid)">
+												<div>{{updateTitle(scope.row.title)}}</div>
+											</el-tooltip>
+										</template>
+									</el-table-column>
+									<el-table-column label="发送人" prop="from"></el-table-column>
+									<el-table-column label="发送时间" width="180">
+										<template slot-scope="scope">
+											<i class="el-icon-time"></i>
+											<span style="margin-left: 10px">{{ scope.row.date }}</span>
+										</template>
+									</el-table-column>
+									<el-table-column label="操作" width="200">
+										<template slot-scope="scope">
+											<el-badge :is-dot="scope.row.isRead === 0" class="item">
+												<el-button size="mini" type="primary"
+													@click="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid);getHisId(scope.row.title)">
+													查看
+												</el-button>
+											</el-badge>
+										</template>
+									</el-table-column>
+								</el-table>
+							</el-tab-pane>
+						    <el-tab-pane label="收件箱">
+								<div class="btn_box">
+									<el-button type="danger" @click.native="deleteMail" icon="el-icon-delete" size="mini">清空
+									</el-button>
+								</div>
+								
+								<el-table class="email_table" :data="mail" style="width: 100%" fit height="313">
+									<el-table-column label="状态" width="50">
+										<template slot-scope="scope">
+											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
+											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读</el-tag>
+										</template>
+									</el-table-column>
+									<el-table-column class="title_2" label="标题" width="280">
+										<template slot-scope="scope">
+											<el-tooltip :content="updateTitle(scope.row.title)" placement="top"
+												@click.native="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid)">
+												<div>{{updateTitle(scope.row.title)}}</div>
+											</el-tooltip>
+										</template>
+									</el-table-column>
+									<el-table-column label="发送人" prop="from"></el-table-column>
+									<el-table-column label="发送时间" width="180">
+										<template slot-scope="scope">
+											<i class="el-icon-time"></i>
+											<span style="margin-left: 10px">{{ scope.row.date }}</span>
+										</template>
+									</el-table-column>
+									<el-table-column label="操作" width="200">
+										<template slot-scope="scope">
+											<el-badge :is-dot="scope.row.isRead === 0" class="item">
+												<el-button size="mini" type="primary"
+													@click="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid);getHisId(scope.row.title)">
+													查看
+												</el-button>
+											</el-badge>
+										</template>
+									</el-table-column>
+								</el-table>
+							</el-tab-pane>
+						  </el-tabs>
 					</el-tab-pane>
 				</el-tabs>
 
@@ -417,6 +459,7 @@
 		margin-right: 1rem;
 		padding: 1rem;
 		box-shadow: var(--box-shadow2);
+		background-color: var(--bg);
 	}
 
 	.right {

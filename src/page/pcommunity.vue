@@ -268,6 +268,7 @@
 			width: 100%;
 			margin-top: 1rem;
 			box-shadow: var(--box-shadow2);
+			background-color: var(--bg);
 
 			.p_title {
 				padding: 0.5rem;
@@ -355,6 +356,7 @@
 			border-bottom-left-radius: 1rem;
 			border-bottom-right-radius: 1rem;
 			box-shadow: var(--box-shadow2);
+			background-color: var(--bg);
 
 			.publish {
 				padding: 2rem 1rem 0;
@@ -377,6 +379,12 @@
 						height: 4rem;
 						border-radius: 50%;
 						overflow: hidden;
+						cursor: pointer;
+						
+						img {
+							width: 100%;
+							height: 100%;
+						}
 					}
 
 					.right {
@@ -389,7 +397,9 @@
 						}
 
 						.name {
+							width: fit-content;
 							font-weight: bold;
+							cursor: pointer;
 						}
 
 						.content {

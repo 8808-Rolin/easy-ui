@@ -172,6 +172,7 @@
 		border-bottom-left-radius: 1rem;
 		border-bottom-right-radius: 1rem;
 		box-shadow: var(--box-shadow2);
+		background-color: var(--bg);
 	}
 
 	.main_box .club>div {
@@ -278,5 +279,6 @@
 		border-radius: 1rem;
 		margin-top: 3rem;
 		box-shadow: var(--box-shadow2);
+		background-color: var(--bg);
 	}
 </style>

@@ -102,6 +102,7 @@
 						width: fit-content;
 						max-width: 60%;
 						padding-top: 0.25rem;
+						cursor: pointer;
 					}
 	
 					.title {

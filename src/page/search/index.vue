@@ -97,6 +97,7 @@
 			.search_box {
 				padding: 1rem;
 				box-shadow: var(--box-shadow2);
+				background-color: var(--bg);
 
 				.logo {
 					width: 15rem;
@@ -124,6 +125,7 @@
 
 			.result_box {
 				margin-top: 2rem;
+				background-color: var(--bg);
 			}
 		}
 	}

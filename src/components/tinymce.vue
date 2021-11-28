@@ -1,6 +1,7 @@
 <template>
 	<div class="tinymce-editor">
-		<Editor :id="tinymceId" :init="init" :disabled="disabled" v-model="myValue" @onClick="onClick"></Editor>
+		<Editor :id="tinymceId" :init="init" :disabled="disabled" v-model="myValue" @onClick="onClick"
+			:key="tinymceFlag"></Editor>
 	</div>
 </template>
 
@@ -119,6 +120,7 @@
 		},
 		data(vm) {
 			return {
+				tinymceFlag: 1,
 				//初始化配置
 				//tinymceId: 'tinymceId',
 				myValue: this.value,
@@ -338,6 +340,11 @@
 			updateMyValue(val) {
 				this.$emit('update:updateContent', val)
 			}
-		}
+		},
+		activated() {
+			this.tinymceFlag++
+		},
+
+
 	}
 </script>

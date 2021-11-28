@@ -20,6 +20,10 @@ Vue.use(less)
 let homeScrollTop = 0;
 Vue.prototype.$homeScroll = homeScrollTop;
 
+ 
+import VueParticles from 'vue-particles'  
+Vue.use(VueParticles)  
+
 
 // fade/zoom 等
 import 'element-ui/lib/theme-chalk/base.css';

@@ -408,6 +408,7 @@
 	.info {
 		padding: 0.5rem;
 		box-shadow: var(--box-shadow2);
+		background-color: var(--bg);
 
 		.title {
 			padding: 0.5rem 0;
@@ -434,6 +435,7 @@
 		margin-top: 1rem;
 		padding: 0.5rem;
 		box-shadow: var(--box-shadow2);
+		background-color: var(--bg);
 
 		.title {
 			padding: 0.5rem 0;
