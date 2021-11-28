@@ -335,10 +335,10 @@
 			this.getPosts()
 			this.getZoneStatus()
 		},
-		created() {
+		/* created() {
 			clearInterval()
-			//setInterval(this.checkNewMail, 3000)
-		}
+			setInterval(this.checkNewMail, 3000)
+		} */
 	}
 </script>
 
