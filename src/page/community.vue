@@ -111,7 +111,6 @@
 					aid
 				}).then(
 					res => {
-						console.log(res.data.data)
 						this.permissionCode = res.data.data.permissionCode
 						this.ass = res.data.data.ass
 					}

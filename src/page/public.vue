@@ -40,7 +40,6 @@
 
 			<div class="notice_box">
 				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="paid" :notisSize="notSize"></MakesNotice>
-				</MakesNotice>
 			</div>
 
 			<!-- 废物div -->

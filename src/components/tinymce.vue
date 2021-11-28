@@ -1,11 +1,12 @@
 <template>
 	<div class="tinymce-editor">
-		<Editor :id="tinymceId" :init="init" :disabled="disabled" v-model="myValue" @onClick="onClick"></Editor>
+		<Editor :id="tinymceId" :init="init" :disabled="disabled" v-model="myValue" @onClick="onClick"
+			:key="tinymceFlag"></Editor>
 	</div>
 </template>
 
 <script>
-	import base from '../api/request/base.js'; 
+	import base from '../api/request/base.js';
 	import axios from "axios";
 	import tinymce from 'tinymce/tinymce' //tinymce默认hidden，不引入不显示
 	import Editor from '@tinymce/tinymce-vue' //编辑器引入
@@ -83,7 +84,7 @@
 			//工具栏
 			toolbar: {
 				type: [String, Array],
-				default:"undo redo|\
+				default: "undo redo|\
 						forecolor backcolor bold italic underline strikethrough|\
 						blockquote subscript superscript removeformat |\
 						alignleft aligncenter alignright alignjustify outdent indent lineheight formatpainter |\
@@ -95,6 +96,7 @@
 		},
 		data(vm) {
 			return {
+				tinymceFlag: 1,
 				//初始化配置
 				tinymceId: 'tinymce',
 				myValue: this.value,
@@ -128,8 +130,10 @@
 							failure('请选择1M以内的图片！')
 						} else {
 							reader.readAsDataURL(blobInfo.blob())
-							reader.onload = function(a,b) {
-								vm.$api.uploadImage({imageBASE64: this.result}).then(
+							reader.onload = function(a, b) {
+								vm.$api.uploadImage({
+									imageBASE64: this.result
+								}).then(
 									res => {
 										console.log(res)
 										success(`${base.sq}${res.data.data.msg}`)
@@ -222,6 +226,11 @@
 			updateMyValue(val) {
 				this.$emit('update:updateContent', val)
 			}
-		}
+		},
+		activated() {
+			this.tinymceFlag++
+		},
+
+
 	}
 </script>
