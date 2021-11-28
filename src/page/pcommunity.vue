@@ -24,7 +24,7 @@
 						<div class="user_photo" @click="toHisHomePage(master.muid)">
 							<img :src="headImage(master.image)">
 						</div>
-						<p @click="toHisHomePage(master.muid)"><big><strong>{{master.username}}</strong></big></p>
+						<p @click="toHisHomePage(master.muid)" style="cursor: pointer;"><big><strong>{{master.username}}</strong></big></p>
 						<p>UID: {{master.muid}}</p>
 						<p>院系：{{master.org}}</p>
 					</div>
@@ -310,6 +310,7 @@
 						border-radius: 50%;
 						margin: 1rem auto;
 						overflow: hidden;
+						cursor: pointer;
 						img {
 							width: 100%;
 							height: 100%;

@@ -230,7 +230,7 @@
 			// 上传文件之前的钩子，参数为上传的文件，若返回 false，则停止上传。
 			beforeAvatarUpload(file) {
 				const isJPGandPNG = file.type === 'image/jpeg' || file.type === 'image/png';
-				const isLt500k = file.size / 1024 / 1024 < 0.5;
+				const isLt500k = file.size / 1024 / 1024 < 2;
 				if (isJPGandPNG && isLt500k) {
 					let filereader = new FileReader();
 					filereader.readAsDataURL(file)
@@ -265,31 +265,37 @@
 
 			/* 修改头像 */
 			updateImage() {
+				if (this.message !== null)
+					this.message.close()
 				let uid = this.user.uid
 				let imageBASE64 = this.imageBASE64
-				this.$api.uploadImage({
-					imageBASE64
-				}).then(
-					res => {
-						if (res.data.data.code === 0) {
-							this.imageUrl = res.data.data.msg
-							let newProfile = this.imageUrl
-							this.$api.updateProfile({
-								uid,
-								newProfile
-							}).then(
-								res => {
-									this.$message.success(res.data.data.msg)
-									this.updateVuexUser(uid)
-									this.centerDialogVisibleImage = false
-									this.imageBASE64 = ''
-								}
-							)
-						} else {
-							this.$message.error(res.data.data.msg)
+				if (imageBASE64 !== '') {
+					this.$api.uploadImage({
+						imageBASE64
+					}).then(
+						res => {
+							if (res.data.data.code === 0) {
+								this.imageUrl = res.data.data.msg
+								let newProfile = this.imageUrl
+								this.$api.updateProfile({
+									uid,
+									newProfile
+								}).then(
+									res => {
+										this.$message.success(res.data.data.msg)
+										this.updateVuexUser(uid)
+										this.centerDialogVisibleImage = false
+										this.imageBASE64 = ''
+									}
+								)
+							} else {
+								this.$message.error(res.data.data.msg)
+							}
 						}
-					}
-				)
+					)
+				} else {
+					this.message = this.$message.error("请先选择图片")
+				}
 			},
 			/* 更改生日 */
 			updateBirth() {

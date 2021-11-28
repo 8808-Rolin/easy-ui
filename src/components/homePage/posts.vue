@@ -8,7 +8,7 @@
 					</div>
 					<div class="name">
 						<div @click="toPublicAndCommunity(item.aid)">{{item.aname}}</div>
-						<div class="title" @click="toP(item.aid, item.pid)">{{item.title}}</div>
+						<div class="title" @click="toP(item.aid, item.pid)"><strong>{{item.title}}</strong></div>
 					</div>
 				</div>
 				<div class="post_bottom">
@@ -30,10 +30,10 @@
 
 	export default {
 		name: 'Posts',
-		props:['posts'],
+		//props:['posts'],
 		data() {
 			return {
-
+				posts:[]
 			}
 		},
 		components: {
@@ -60,6 +60,28 @@
 					}
 				})
 			},
+			/* 获取我的帖子和收藏 **/
+			getPosts() {
+				let type = 0
+				let uid = this.$route.params.uid
+				//console.log(type, uid)
+				this.$api.getPosts({
+					type,
+					'zone-uid': uid
+				}).then(
+					res => {
+						this.posts = res.data.data.posts
+						console.log(res.data.data)
+					}
+				)
+			},
+		},
+		beforeMount() {
+			console.log("挂载posts")
+			this.getPosts()
+		},
+		destroyed() {
+			console.log("销毁posts")
 		}
 	}
 </script>

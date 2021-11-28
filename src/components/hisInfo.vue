@@ -75,6 +75,7 @@
 	
 	.info_photo img {
 		width: 100%;
+		height: 100%;
 	}
 	
 	.name_and_ID {

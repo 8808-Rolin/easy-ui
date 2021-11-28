@@ -30,25 +30,32 @@
 
 	export default {
 		name: 'Collection',
-		props:['myColl'],
+		//props: ['myColl'],
 		data() {
 			return {
-
+				myColl:[]
 			}
 		},
 		components: {
 			Pagination
 		},
-		methods:{
+		methods: {
 			postImage(image) {
 				return `${base.sq}${image}`
 			},
 			/* 前往论坛页面 */
 			toPublicAndCommunity(aid) {
 				if (aid > 0)
-					this.$router.push({name:'Community', params:{aid}})
+					this.$router.push({
+						name: 'Community',
+						params: {
+							aid
+						}
+					})
 				else
-					this.$router.push({path: '/public'})
+					this.$router.push({
+						path: '/public'
+					})
 			},
 			/* 前往贴子页面 */
 			toP(aid, pid) {
@@ -60,6 +67,29 @@
 					}
 				})
 			},
+			/* 获取我的帖子和收藏 **/
+			getPosts() {
+				let type = 1
+				let uid = this.$route.params.uid
+				//console.log(type, uid)
+				this.$api.getPosts({
+					type,
+					'zone-uid': uid
+				}).then(
+					res => {
+						this.myColl = res.data.data.posts
+						console.log(res.data.data)
+					}
+				)
+			},
+		},
+		beforeMount() {
+			console.log("挂载myColl")
+			this.getPosts()
+		},
+
+		destroyed() {
+			console.log("销毁collection")
 		}
 	}
 </script>
@@ -67,36 +97,36 @@
 <style lang="less" scoped="scoped">
 	.posts_box {
 		padding: 1rem;
-	
+
 		.post {
 			padding: 0.5rem;
 			border-bottom: 0.0625rem solid rgba(0, 0, 0, .3);
 			display: flex;
 			flex-direction: column;
-	
+
 			.post_top {
 				display: flex;
-	
+
 				.logo {
 					width: 4rem;
 					height: 4rem;
 					border-radius: 50%;
 					overflow: hidden;
 					cursor: pointer;
-					
+
 					img {
 						width: 100%;
 						height: 100%;
 					}
 				}
-	
+
 				.name {
 					flex: 1;
 					margin-left: 1rem;
 					display: flex;
 					flex-direction: column;
-					
-	
+
+
 					div {
 						width: fit-content;
 						max-width: 60%;
@@ -106,13 +136,13 @@
 						text-overflow: ellipsis;
 						cursor: pointer;
 					}
-	
+
 					strong {
 						font-size: 1.5rem;
 					}
 				}
 			}
-	
+
 			.post_bottom {
 				text-align: right;
 				color: #999;
@@ -120,4 +150,3 @@
 		}
 	}
 </style>
-
