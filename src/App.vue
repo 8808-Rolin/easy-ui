@@ -19,7 +19,9 @@
         class="lizi"
       >
       </vue-particles>
-    <router-view></router-view>
+	<transition :name="transitionName">
+		<router-view></router-view>
+	</transition>
   </div>
 </template>
 

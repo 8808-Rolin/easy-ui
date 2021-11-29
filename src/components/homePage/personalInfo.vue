@@ -3,7 +3,7 @@
 		<div v-show="status === 0">
 			<div class="info">
 				<div class="title">
-					<span v-show="status === 0">我的信息</span>
+					<span v-show="status === 0"><strong>我的信息</strong></span>
 					<el-button @click="updateUser('头像')" type="text" v-show="status === 0" icon="el-icon-camera">修改头像
 					</el-button>
 				</div>
@@ -18,7 +18,7 @@
 
 			<div class="notice">
 				<div class="title">
-					公告
+					<strong>公告</strong>
 				</div>
 				<div class="item_box">
 					<el-input :class="{notice_text:status===0}" :debounce="500" v-bind:readonly="status!==0"
@@ -406,7 +406,7 @@
 	}
 
 	.info {
-		padding: 0.5rem;
+		padding: 0.5rem 1rem;
 		box-shadow: var(--box-shadow2);
 		background-color: var(--bg);
 
@@ -424,6 +424,7 @@
 
 		p {
 			line-height: 2;
+			margin-top: 0.5rem;
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;
