@@ -30,6 +30,17 @@ li {
 	list-style: none;
 }
 
+<<<<<<< HEAD
 .el-dropdown-menu {
 	z-index: 9999!important;
 }
+=======
+.profile{
+	cursor: pointer;
+}
+
+.el-dropdown-menu {
+	z-index: 9999!important;
+}
+
+>>>>>>> origin/LPC

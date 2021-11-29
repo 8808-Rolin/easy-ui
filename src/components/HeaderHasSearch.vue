@@ -13,12 +13,12 @@
 			</div>
 
 			<div class="user" v-show="existUser">
-				<div class="profile">
+				<div class="profile" @click="toMyHomePage">
 					<img :src="headImage">
 				</div>
 				<el-dropdown>
 					<span class="el-dropdown-link">
-						<a>{{user.userName}}</a>
+						<a style="color: #000000;cursor: pointer;">{{user.userName}}</a>
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">

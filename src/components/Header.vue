@@ -5,12 +5,12 @@
 				<router-link :to="{path:'/'}" title="Easy社团">Easy社团</router-link>
 			</div>
 			<div class="user" v-show="existUser">
-				<div class="profile">
+				<div class="profile" @click="toMyHomePage">
 					<img :src="headImage">
 				</div>
-				<a>{{user.userName}}</a>
 				<el-dropdown>
 					<span class="el-dropdown-link">
+						<a style="color: #000000;cursor: pointer;">{{user.userName}}</a>
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
@@ -79,7 +79,7 @@
 			},
 			toMyHomePage() {
 				this.$router.push({name:'Me',params:{uid:this.uid}})
-			}
+			},
 		},
 		computed: {
 			...mapState({

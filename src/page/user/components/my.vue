@@ -9,14 +9,14 @@
 						<MyClub :ass="joinass"></MyClub>
 					</el-tab-pane>
 					<el-tab-pane label="我的邮箱" name="1">
-						<el-tabs tab-position="left">
-						    <el-tab-pane label="发件箱">
+						<el-tabs tab-position="left" v-model="mailType" @tab-click="getMaileClick">
+						    <el-tab-pane label="收件箱" name="1">
 								<div class="btn_box">
 									<el-button type="danger" @click.native="deleteMail" icon="el-icon-delete" size="mini">清空
 									</el-button>
 								</div>
 								
-								<el-table class="email_table" :data="mail" style="width: 100%" fit height="313">
+								<el-table class="email_table" :data="inboxData" style="width: 100%" fit height="313">
 									<el-table-column label="状态" width="50">
 										<template slot-scope="scope">
 											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
@@ -31,7 +31,7 @@
 											</el-tooltip>
 										</template>
 									</el-table-column>
-									<el-table-column label="发送人" prop="from"></el-table-column>
+									<el-table-column label="发送人" prop="name"></el-table-column>
 									<el-table-column label="发送时间" width="180">
 										<template slot-scope="scope">
 											<i class="el-icon-time"></i>
@@ -50,13 +50,13 @@
 									</el-table-column>
 								</el-table>
 							</el-tab-pane>
-						    <el-tab-pane label="收件箱">
+						    <el-tab-pane label="发件箱" name="0">
 								<div class="btn_box">
 									<el-button type="danger" @click.native="deleteMail" icon="el-icon-delete" size="mini">清空
 									</el-button>
 								</div>
 								
-								<el-table class="email_table" :data="mail" style="width: 100%" fit height="313">
+								<el-table class="email_table" :data="outboxData" style="width: 100%" fit height="313">
 									<el-table-column label="状态" width="50">
 										<template slot-scope="scope">
 											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
@@ -71,7 +71,7 @@
 											</el-tooltip>
 										</template>
 									</el-table-column>
-									<el-table-column label="发送人" prop="from"></el-table-column>
+									<el-table-column label="发送人" prop="name"></el-table-column>
 									<el-table-column label="发送时间" width="180">
 										<template slot-scope="scope">
 											<i class="el-icon-time"></i>
@@ -96,11 +96,14 @@
 
 				<el-tabs class="bottom_box" v-model="activeName" @tab-click="handleClick">
 					<el-tab-pane label="我的帖子" name="0">
-						<Posts :posts="post"></Posts>
+						<!-- <Posts :posts="post"></Posts> -->
 					</el-tab-pane>
 					<el-tab-pane label="我的收藏" name="1">
-						<Collection :myColl="post"></Collection>
+						<!-- <Collection :myColl="post"></Collection> -->
 					</el-tab-pane>
+					<keep-alive>
+						<component :is="current"></component>
+					</keep-alive>
 				</el-tabs>
 			</div>
 
@@ -116,7 +119,7 @@
 						placeholder="请输入私信内容" show-word-limit></el-input>
 					<span slot="footer" class="dialog-footer">
 						<el-button type="infor" @click="centerDialogVisible = false">关闭</el-button>
-						<el-button type="primary" @click="centerDialogVisible2 = true; close()">回复</el-button>
+						<el-button v-show="mailType === '1'" type="primary" @click="centerDialogVisible2 = true; close()">回复</el-button>
 					</span>
 				</el-dialog>
 			</transition>
@@ -161,10 +164,18 @@
 	export default {
 		name: 'MyHome',
 		props: ['user', 'ass', 'posts', 'myColl', 'status'],
+		components: {
+			MyClub,
+			Posts,
+			PersonalInfo,
+			Collection,
+			Info
+		},
 		data() {
 			return {
 				activeName: 0,
 				activeName2: 0,
+				mailType:'1',
 				userdata: {},
 				joinass: [],
 				post: [],
@@ -180,6 +191,10 @@
 				title: '',
 				hisId: -1,
 				dateList: [],
+				inboxData:[],
+				outboxData:[],
+				current:'Posts',
+				getMailTimeout:null,
 			}
 		},
 		methods: {
@@ -189,15 +204,23 @@
 				}, 500)
 			},
 			handleClick(tab, event) {
+				//this.post = []
 				//console.log(tab, event, "@@@@@@@@");
-				this.getPosts()
+				if (this.activeName === '0')
+					this.current = 'Posts'
+				else
+					this.current = 'Collection'
+				//this.getPosts()
 			},
 			handleClick2(tab, event) {
 				//console.log(tab, event, "@@@@@@@@");
-				if (tab.name === "1") {
-					this.$store.commit("addOlineTime", time.formatDate)
+			},
+			getMaileClick() {
+				if (this.getMailTimeout !== null)
+					clearTimeout(this.getMailTimeout)
+				this.getMailTimeout = setTimeout(() => {
 					this.getMails()
-				}
+				},1000)
 			},
 			handleEdit(index, row) {
 				console.log(index, row);
@@ -227,21 +250,6 @@
 					}
 				)
 			},
-			/* 获取我的帖子和收藏 **/
-			getPosts() {
-				let type = this.activeName
-				let uid = this.$route.params.uid
-				//console.log(type, uid)
-				this.$api.getPosts({
-					type,
-					'zone-uid': uid
-				}).then(
-					res => {
-						this.post = res.data.data.posts
-						console.log(res.data.data)
-					}
-				)
-			},
 			/* 获取邮箱概要数据 */
 			getMails() {
 				let uid = this.$route.params.uid
@@ -250,6 +258,15 @@
 				}).then(
 					res => {
 						this.mail = res.data.data.mail
+						this.inboxData = res.data.data.mail.reduce((item, next) => {
+							next.type === 0 && item.push(next);
+							return item;
+						}, []);
+						this.outboxData = res.data.data.mail.reduce((item, next) => {
+							next.type === 1 && item.push(next);
+							return item;
+						}, []);
+						console.log(this.inboxData, this.outboxData)
 						this.dateList = res.data.data.mail.reduce((item, next) => {
 							item.push(next.date);
 							return item;
@@ -259,10 +276,12 @@
 			},
 			/* 查看邮箱 */
 			getMailContent(mid) {
+				let status = this.mailType
 				if (this.message !== null)
 					this.message.close()
 				this.$api.getMailContent({
-					mid
+					mid,
+					status
 				}).then(
 					res => {
 						if (res.data.data.code === 1) {
@@ -365,22 +384,15 @@
 				olineTime: state => state.message.olineTime,
 			}),
 		},
-		components: {
-			MyClub,
-			Posts,
-			PersonalInfo,
-			Collection,
-			Info
-		},
 		beforeMount() {
+			this.getMails()
 			this.getInformation()
-			this.getPosts()
 			this.getZoneStatus()
 		},
-		created() {
+		/* created() {
 			clearInterval()
-			//setInterval(this.checkNewMail, 3000)
-		}
+			setInterval(this.checkNewMail, 3000)
+		} */
 	}
 </script>
 
