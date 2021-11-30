@@ -16,8 +16,7 @@
 
 <script>
 	import Header from '../components/Header.vue'
-	import { mapState } from 'vuex';
-	
+
 	export default {
 		name: 'error-404',
 		data() {
@@ -27,12 +26,6 @@
 		},
 		components: {
 			Header
-		},
-		computed: {
-			...mapState(['statusMes'])
-		},
-		beforeMount() {
-			console.log(this.$store.state)
 		}
 	}
 </script>
@@ -43,22 +36,22 @@
 		margin: auto;
 		margin-top: 2rem;
 	}
-	
+
 	.error_404 .error .photo {
 		width: 50rem;
 		margin: auto;
 	}
-	
+
 	.error_404 .error .photo img {
 		width: 100%;
 		height: 100%;
 	}
-	
+
 	.go_back {
 		margin-top: 2rem;
 		text-align: center;
 	}
-	
+
 	.go_back .el-link {
 		color: #1DA0FB;
 		font-size: 1.2rem;

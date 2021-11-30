@@ -74,7 +74,7 @@
 
 	export default {
 		name: 'Community',
-		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'notisSize', 'permission','tinymceId'],
+		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'notisSize', 'permission', 'tinymceId'],
 		data() {
 			return {
 				user: {},
@@ -185,7 +185,7 @@
 				let status = this.dialogData.status
 				if (status === 0) {
 					this.participate()
-				} else if(status === 1){
+				} else if (status === 1) {
 					this.$message.error("你没有权限参加活动")
 					this.centerDialogVisible = false
 				}
@@ -193,7 +193,10 @@
 			participate() {
 				let uid = this.uid
 				let actid = this.dialogData.actid
-				this.$api.participate({uid,actid}).then(
+				this.$api.participate({
+					uid,
+					actid
+				}).then(
 					res => {
 						this.$message.success(res.data.data.msg)
 						this.centerDialogVisible = false

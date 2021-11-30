@@ -23,7 +23,9 @@
 
 <script>
 	import Header from '../components/Header.vue'
-	import { mapState } from 'vuex';
+	import {
+		mapState
+	} from 'vuex';
 
 	export default {
 		name: 'error-500',
@@ -110,7 +112,7 @@
 		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 		border-radius: 0.25rem;
 	}
-	
+
 	.go_back {
 		width: 100%;
 		height: 2rem;

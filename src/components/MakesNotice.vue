@@ -95,7 +95,7 @@
 		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'PageSize', 'notisSize', 'permission', 'tinymceId'],
 		data() {
 			return {
-				view:'TEditor',
+				view: 'TEditor',
 				message: null,
 				posts: [],
 				options: [],
@@ -176,7 +176,18 @@
 			getPostType() {
 				this.$api.getPostType().then(
 					res => {
-						this.options = res.data.data
+						if (this.$route.name === 'Public' && this.user.level === 2) {
+							this.options = res.data.data
+						} else if (this.$route.name === 'Community' && this.permission === 2) {
+							this.options = res.data.data
+						} else {
+							let options = res.data.data.reduce((item, next) => {
+								if (next !== '系统公告') item.push(next);
+								return item;
+							}, []);
+							console.log(options)
+							this.options = options;
+						}
 					}
 				)
 			},
@@ -194,6 +205,7 @@
 		computed: {
 			...mapState({
 				uid: state => state.request.uid,
+				user: state => state.message.user,
 			}),
 		},
 		watch: {
