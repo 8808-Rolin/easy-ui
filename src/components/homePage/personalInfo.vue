@@ -7,13 +7,13 @@
 					<el-button @click="updateUser('头像')" type="text" v-show="status === 0" icon="el-icon-camera">修改头像
 					</el-button>
 				</div>
-				<p style="cursor: default;">手机号码：<span>{{user.phone}}</span></p>
+				<p style="cursor: default;">手机号码&emsp;<span>{{user.phone}}</span></p>
 				<el-tooltip :content="user.email" placement="top" :open-delay="500">
-					<p @click="updateUser('电子邮箱')">电子邮箱：<span>{{user.email}}</span></p>
+					<p @click="updateUser('电子邮箱')">电子邮箱&emsp;<span>{{user.email}}</span></p>
 				</el-tooltip>
-				<p style="cursor: default;">所属院系：<span>{{user.college}}</span></p>
-				<p @click="updateUser('生日')">生&emsp;&emsp;日：<span>{{user.birth}}</span></p>
-				<p style="cursor: default;">发帖数量：<span>{{user.numpost}}</span></p>
+				<p style="cursor: default;">所属院系&emsp;<span>{{user.college}}</span></p>
+				<p @click="updateUser('生日')">生&emsp;&emsp;日&emsp;<span>{{user.birth}}</span></p>
+				<p style="cursor: default;">发帖数量&emsp;<span>{{user.numpost}}</span></p>
 			</div>
 
 			<div class="notice">
@@ -418,7 +418,7 @@
 
 		.title {
 			padding: 0.5rem 0;
-			border-bottom: solid 0.0625rem #999;
+			border-bottom: solid 0.125rem #ddddee;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
@@ -435,6 +435,7 @@
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			cursor: pointer;
+			color: #777;
 		}
 	}
 
@@ -446,7 +447,7 @@
 
 		.title {
 			padding: 0.5rem 0;
-			border-bottom: solid 0.0625rem #999;
+			border-bottom: solid 0.125rem #ddddee;
 		}
 
 		.item_box {
