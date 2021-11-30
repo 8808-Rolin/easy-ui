@@ -30,11 +30,6 @@ li {
 	list-style: none;
 }
 
-<<<<<<< HEAD
-.el-dropdown-menu {
-	z-index: 9999!important;
-}
-=======
 .profile{
 	cursor: pointer;
 }
@@ -43,4 +38,6 @@ li {
 	z-index: 9999!important;
 }
 
->>>>>>> origin/LPC
+.el-message {
+	z-index: 9999 !important;
+}

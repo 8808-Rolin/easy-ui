@@ -57,10 +57,8 @@
 								<el-table class="email_table" :data="outboxData" style="width: 100%" fit height="313">
 									<el-table-column label="状态" width="50">
 										<template slot-scope="scope">
-											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读
-											</el-tag>
-											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读
-											</el-tag>
+											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
+											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读</el-tag>
 										</template>
 									</el-table-column>
 									<el-table-column class="title_2" label="标题" width="280">
@@ -150,8 +148,8 @@
 		<!-- 空间是否开放 -->
 		<div id="isOpen">
 			<el-button :class="{isOpenG : isOpenShow === 0}" icon="iconfont icon-yanjing_guanbi"
-				@click="isOpenShow = 0"></el-button>
-			<el-button :class="{isOpenD : isOpenShow === 0}" icon="iconfont icon-yanjing_dakai" @click="isOpenShow = 1">
+				@click="isOpenShow = 0;updateSwitchState()"></el-button>
+			<el-button :class="{isOpenD : isOpenShow === 0}" icon="iconfont icon-yanjing_dakai" @click="isOpenShow = 1;updateSwitchState()">
 			</el-button>
 		</div>
 
@@ -387,6 +385,18 @@
 				if (count > 0) {
 					console.log(count)
 				}
+			},
+			// 切换空间可见状态
+			updateSwitchState() {
+				if (this.message !== null)
+					this.message.close()
+				let uid = this.$route.params.uid
+				this.$api.updateSwitchState({uid}).then(
+					res => {
+						this.message = this.$message.success(res.data.data.msg)
+						console.log(res.data)
+					}
+				)
 			}
 		},
 		computed: {
@@ -399,10 +409,6 @@
 			this.getInformation()
 			this.getZoneStatus()
 		},
-		/* created() {
-			clearInterval()
-			setInterval(this.checkNewMail, 3000)
-		} */
 	}
 </script>
 
@@ -531,8 +537,14 @@
 		margin-left: 0;
 	}
 
-	#isOpen .el-button {
+	#isOpen>>> .el-button {
+		font-weight: 200;
+		padding: 0.25rem 1rem;
 		transition: all .3s;
+	}
+	
+	#isOpen >>>.iconfont {
+		font-size: 2rem;
 	}
 
 	.isOpenG {

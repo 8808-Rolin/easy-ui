@@ -239,6 +239,11 @@ const user = {
 	updateBirth(params) {
 		return axios.post(`${base.sq}/api/zone/update-birth`, qs.stringify(params));
 	}, 
+	
+	// 更改个人空间可见状态
+	updateSwitchState(params) {
+		return axios.post(`${base.sq}/api/zone/switch-state`, qs.stringify(params));
+	}, 
 }
 
 export default user;

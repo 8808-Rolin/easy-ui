@@ -113,7 +113,7 @@
 		align-items: center;
 		box-shadow: var(--box-shadow2);
 		background-color: var(--bg);
-		z-index: 9999;
+		z-index: 9000;
 	}
 
 	header .warp {
