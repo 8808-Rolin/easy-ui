@@ -10,17 +10,20 @@
 					</el-tab-pane>
 					<el-tab-pane label="我的邮箱" name="1">
 						<el-tabs tab-position="left" v-model="mailType" @tab-click="getMaileClick">
-						    <el-tab-pane label="收件箱" name="1">
+							<el-tab-pane label="收件箱" name="1">
 								<div class="btn_box">
-									<el-button type="danger" @click.native="deleteMail" icon="el-icon-delete" size="mini">清空
+									<el-button type="danger" @click.native="deleteMail" icon="el-icon-delete"
+										size="mini">清空
 									</el-button>
 								</div>
-								
+
 								<el-table class="email_table" :data="inboxData" style="width: 100%" fit height="313">
 									<el-table-column label="状态" width="50">
 										<template slot-scope="scope">
-											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
-											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读</el-tag>
+											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读
+											</el-tag>
+											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读
+											</el-tag>
 										</template>
 									</el-table-column>
 									<el-table-column class="title_2" label="标题" width="280">
@@ -50,17 +53,14 @@
 									</el-table-column>
 								</el-table>
 							</el-tab-pane>
-						    <el-tab-pane label="发件箱" name="0">
-								<div class="btn_box">
-									<el-button type="danger" @click.native="deleteMail" icon="el-icon-delete" size="mini">清空
-									</el-button>
-								</div>
-								
+							<el-tab-pane label="发件箱" name="0">
 								<el-table class="email_table" :data="outboxData" style="width: 100%" fit height="313">
 									<el-table-column label="状态" width="50">
 										<template slot-scope="scope">
-											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
-											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读</el-tag>
+											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读
+											</el-tag>
+											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读
+											</el-tag>
 										</template>
 									</el-table-column>
 									<el-table-column class="title_2" label="标题" width="280">
@@ -90,7 +90,7 @@
 									</el-table-column>
 								</el-table>
 							</el-tab-pane>
-						  </el-tabs>
+						</el-tabs>
 					</el-tab-pane>
 				</el-tabs>
 
@@ -119,7 +119,8 @@
 						placeholder="请输入私信内容" show-word-limit></el-input>
 					<span slot="footer" class="dialog-footer">
 						<el-button type="infor" @click="centerDialogVisible = false">关闭</el-button>
-						<el-button v-show="mailType === '1'" type="primary" @click="centerDialogVisible2 = true; close()">回复</el-button>
+						<el-button v-show="mailType === '1'" type="primary"
+							@click="centerDialogVisible2 = true; close()">回复</el-button>
 					</span>
 				</el-dialog>
 			</transition>
@@ -144,6 +145,14 @@
 					</span>
 				</el-dialog>
 			</transition>
+		</div>
+
+		<!-- 空间是否开放 -->
+		<div id="isOpen">
+			<el-button :class="{isOpenG : isOpenShow === 0}" icon="iconfont icon-yanjing_guanbi"
+				@click="isOpenShow = 0"></el-button>
+			<el-button :class="{isOpenD : isOpenShow === 0}" icon="iconfont icon-yanjing_dakai" @click="isOpenShow = 1">
+			</el-button>
 		</div>
 
 	</div>
@@ -175,7 +184,7 @@
 			return {
 				activeName: 0,
 				activeName2: 0,
-				mailType:'1',
+				mailType: '1',
 				userdata: {},
 				joinass: [],
 				post: [],
@@ -191,10 +200,11 @@
 				title: '',
 				hisId: -1,
 				dateList: [],
-				inboxData:[],
-				outboxData:[],
-				current:'Posts',
-				getMailTimeout:null,
+				inboxData: [],
+				outboxData: [],
+				current: 'Posts',
+				getMailTimeout: null,
+				isOpenShow: 0
 			}
 		},
 		methods: {
@@ -220,7 +230,7 @@
 					clearTimeout(this.getMailTimeout)
 				this.getMailTimeout = setTimeout(() => {
 					this.getMails()
-				},1000)
+				}, 1000)
 			},
 			handleEdit(index, row) {
 				console.log(index, row);
@@ -370,7 +380,7 @@
 					if (item > this.olineTime) {
 						count++
 					} else {
-						console.log(item,this.olineTime)
+						console.log(item, this.olineTime)
 						console.log(item > this.olineTime)
 					}
 				})
@@ -409,7 +419,6 @@
 
 	.top_box {
 		padding-bottom: 1rem;
-		border-bottom: #999 0.0625rem solid;
 	}
 
 	.btn_box {
@@ -507,5 +516,30 @@
 	/deep/.form textarea {
 		resize: none;
 		border: 0.0625rem solid #dcdfe6;
+	}
+
+	#isOpen {
+		position: fixed;
+		top: 4.75rem;
+		right: 0;
+		z-index: 9999;
+		display: flex;
+		transform: translateX(50%);
+	}
+
+	#isOpen .el-button+.el-button {
+		margin-left: 0;
+	}
+
+	#isOpen .el-button {
+		transition: all .3s;
+	}
+
+	.isOpenG {
+		transform: translateX(100%);
+	}
+
+	.isOpenD {
+		transform: translateX(-100%);
 	}
 </style>

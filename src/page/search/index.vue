@@ -6,18 +6,18 @@
 			<div class="search_box">
 				<div class="logo"></div>
 				<div class="search">
-						<el-input placeholder="请输入内容" v-model="input" @keyup.enter.native="toChild()">
-							<el-switch slot="prepend" v-model="value" active-text="用户" :active-value="1"
-								:inactive-value="0" inactive-text="帖子"></el-switch>
-							<el-button slot="append" icon="el-icon-search" @click="toChild"></el-button>
-						</el-input>
+					<el-input placeholder="请输入内容" v-model="input" @keyup.enter.native="toChild()">
+						<el-switch slot="prepend" v-model="value" active-text="用户" :active-value="1" :inactive-value="0"
+							inactive-text="帖子"></el-switch>
+						<el-button slot="append" icon="el-icon-search" @click="toChild"></el-button>
+					</el-input>
 				</div>
 			</div>
 
 			<div class="result_box">
 				<transition class="result_box" name="transitionName" mode="out-in">
 					<router-view class="router" :type="value"></router-view>
-					</transition>
+				</transition>
 			</div>
 
 			<!-- 废物div -->

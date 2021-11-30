@@ -1,16 +1,67 @@
 <template>
 	<div>
-		404
+		<Header></Header>
+		<div class="error_404">
+			<div class="error">
+				<div class="photo">
+					<img src="../assets/404.png" />
+				</div>
+				<div class="go_back">
+					<el-link type="primary" icon="el-icon-warning-outline">返回首页</el-link>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
-
-export default {
-  name: 'Page404',
-}
+	import Header from '../components/Header.vue'
+	import { mapState } from 'vuex';
+	
+	export default {
+		name: 'error-404',
+		data() {
+			return {
+				message: ''
+			}
+		},
+		components: {
+			Header
+		},
+		computed: {
+			...mapState(['statusMes'])
+		},
+		beforeMount() {
+			console.log(this.$store.state)
+		}
+	}
 </script>
 
-<style>
-
+<style scoped="scoped">
+	.error_404 {
+		width: 75rem;
+		margin: auto;
+		margin-top: 2rem;
+	}
+	
+	.error_404 .error .photo {
+		width: 50rem;
+		margin: auto;
+	}
+	
+	.error_404 .error .photo img {
+		width: 100%;
+		height: 100%;
+	}
+	
+	.go_back {
+		margin-top: 2rem;
+		text-align: center;
+	}
+	
+	.go_back .el-link {
+		color: #1DA0FB;
+		font-size: 1.2rem;
+		font-style: italic;
+	}
 </style>

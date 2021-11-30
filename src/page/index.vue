@@ -29,16 +29,20 @@
 				<span>进入</span>
 			</div>
 			<div class="community" @click="toPublic">
-				交流社区&emsp;
-				<div class="point_box">
-					<div class="points">
-						<i class="el-icon-arrow-right el-icon--right" style="--i:0.1"></i>
-						<i class="el-icon-arrow-right el-icon--right" style="--i:0.4"></i>
-						<i class="el-icon-arrow-right el-icon--right" style="--i:0.7"></i>
-						<i class="el-icon-arrow-right el-icon--right" style="--i:0.4"></i>
-						<i class="el-icon-arrow-right el-icon--right" style="--i:0.1"></i>
-					</div>
+				<div style="width: 100% ;display: flex;align-items: center;line-height: 2.2;justify-content: center;">
+					交流社区&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+					<span style="width:35px;display: block;display: flex;">
+						<!-- <i class="move animated delay-7s iconfont icon-arrow-right"></i>
+						<i class="move animated delay-6s iconfont icon-arrow-right"></i>
+						<i class="move animated delay-5s iconfont icon-arrow-right"></i> -->
+						<i class="move ar-animated ar-delay-4s el-icon-arrow-right"></i>
+						<i class="move ar-animated ar-delay-3s el-icon-arrow-right"></i>
+						<i class="move ar-animated ar-delay-2s el-icon-arrow-right"></i>
+						<i class="move ar-animated ar-delay-1s el-icon-arrow-right"></i>
+						<i class="move ar-animated el-icon-arrow-right"></i>
+					</span>
 				</div>
+
 			</div>
 		</div>
 	</div>
@@ -96,7 +100,7 @@
 	.index_left {
 		width: 50%;
 		background: url(../assets/logo-imgalpha-nologo-600px.png) no-repeat;
-		background-size: cover cover;
+		background-size: 100% auto;
 	}
 
 	.index_right {
@@ -153,29 +157,30 @@
 		border: #1DA0FB 0.0625rem solid;
 		color: #fff;
 		font-style: italic;
-		text-align: center;
 	}
 
 	.button_box:hover {
 		transform: translateX(-70%);
 		transition: all 300ms linear;
-		will-change: all;
 	}
 
 	.button_box:hover .enter {
 		left: -30%;
 		transition: all 300ms linear;
-		will-change: all;
 	}
 
 	.button_box:hover .community {
 		width: 100%;
 		right: 0;
 		transition: all 300ms linear;
-		will-change: all;
 	}
 
-	.community .point_box {
+	.button_box .community>div {
+		position: relative;
+		top: -100%;
+	}
+
+	/* .community .point_box {
 		width: 9rem;
 		height: 100%;
 		position: absolute;
@@ -200,7 +205,7 @@
 		--t: calc((var(--r) + var(--i)));
 		color: rgb(255, 255, 255);
 		opacity: var(--t);
-	}
+	} */
 
 	/* 公告 */
 	.text {
@@ -218,7 +223,7 @@
 		z-index: 999;
 		transition: all .5s;
 	}
-	
+
 	.item:hover {
 		transform: scale(1.048);
 	}
@@ -327,5 +332,88 @@
 
 	a {
 		color: #000000;
+	}
+
+	/* 箭头动画 */
+	@keyframes move {
+		0% {
+			left: 0%;
+			opacity: 0;
+		}
+
+		70% {
+			left: 70%;
+			opacity: 1
+		}
+
+		100% {
+			left: 100%;
+			opacity: 0;
+		}
+	}
+
+	.move {
+		-webkit-animation-name: move;
+		animation-name: move;
+		position: relative;
+		margin-left: -16px;
+	}
+	
+	/* .move{
+		width: 1rem;
+		height: 1rem;
+		color: #000000;
+	} */
+
+	.ar-animated {
+		-webkit-animation-duration: 1.5s;
+		animation-duration: 1.5s;
+		-webkit-animation-fill-mode: both;
+		animation-fill-mode: both;
+		animation-iteration-count: infinite;
+		-webkit-animation-iteration-count: infinite;
+		font-style: inherit;
+		-webkit-animation-timing-function: linear;
+		animation-timing-function: linear;
+	}
+
+	.ar-delay-1s {
+		animation-delay: 0.1s;
+	}
+
+	.ar-delay-2s {
+		animation-delay: 0.2s;
+	}
+
+	.ar-delay-3s {
+		animation-delay: 0.3s;
+	}
+
+	.ar-delay-4s {
+		animation-delay: 0.4s;
+	}
+
+	.ar-delay-5s {
+		animation-delay: 0.5s;
+	}
+
+	.ar-delay-6s {
+		animation-delay: 0.6s;
+	}
+
+	.ar-delay-7s {
+		animation-delay: 0.7s;
+	}
+
+	.ar-delay-8s {
+		animation-delay: 0.8s;
+	}
+
+	.ar-delay-9s {
+		animation-delay: 0.9s;
+	}
+
+	.ar-delay-10s {
+		animation-delay: 0.10s;
 	}
 </style>

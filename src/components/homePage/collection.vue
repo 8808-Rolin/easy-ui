@@ -99,8 +99,8 @@
 		padding: 1rem;
 
 		.post {
-			padding: 0.5rem;
-			border-bottom: 0.0625rem solid rgba(0, 0, 0, .3);
+			padding: 1rem;
+			border-bottom: 0.0625rem solid rgba(23, 25, 30, .1);
 			display: flex;
 			flex-direction: column;
 
@@ -125,7 +125,6 @@
 					margin-left: 1rem;
 					display: flex;
 					flex-direction: column;
-
 
 					div {
 						width: fit-content;

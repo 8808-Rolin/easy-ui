@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
 	<div id="app">
 		<vue-particles color="#f5f8f9" :particleOpacity="0.7" :particlesNumber="120" shapeType="circle"
 			:particleSize="3" linesColor="#8eaed0" :linesWidth="1" :lineLinked="true" :lineOpacity="0.4"
@@ -10,6 +11,32 @@
 		</transition>
 
 	</div>
+=======
+  <div id="app">
+    <vue-particles
+        color="#f5f8f9"
+        :particleOpacity="0.7"
+        :particlesNumber="120"
+        shapeType="circle"
+        :particleSize="3"
+        linesColor="#8eaed0"
+        :linesWidth="1"
+        :lineLinked="true"
+        :lineOpacity="0.4"
+        :linesDistance="150"
+        :moveSpeed="2"
+        :hoverEffect="true"
+        hoverMode="grab"
+        :clickEffect="true"
+        clickMode="push"
+        class="lizi"
+      >
+      </vue-particles>
+	<transition :name="transitionName">
+		<router-view></router-view>
+	</transition>
+  </div>
+>>>>>>> origin/lch
 </template>
 
 <script>
