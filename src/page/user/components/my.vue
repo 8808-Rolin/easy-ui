@@ -150,8 +150,8 @@
 		<!-- 空间是否开放 -->
 		<div id="isOpen">
 			<el-button :class="{isOpenG : isOpenShow === 0}" icon="iconfont icon-yanjing_guanbi"
-				@click="isOpenShow = 0"></el-button>
-			<el-button :class="{isOpenD : isOpenShow === 0}" icon="iconfont icon-yanjing_dakai" @click="isOpenShow = 1">
+				@click="isOpenShow = 0;updateSwitchState()"></el-button>
+			<el-button :class="{isOpenD : isOpenShow === 0}" icon="iconfont icon-yanjing_dakai" @click="isOpenShow = 1;updateSwitchState()">
 			</el-button>
 		</div>
 
@@ -387,6 +387,18 @@
 				if (count > 0) {
 					console.log(count)
 				}
+			},
+			// 切换空间可见状态
+			updateSwitchState() {
+				if (this.message !== null)
+					this.message.close()
+				let uid = this.$route.params.uid
+				this.$api.updateSwitchState({uid}).then(
+					res => {
+						this.message = this.$message.success(res.data.data.msg)
+						console.log(res.data)
+					}
+				)
 			}
 		},
 		computed: {
@@ -399,10 +411,6 @@
 			this.getInformation()
 			this.getZoneStatus()
 		},
-		/* created() {
-			clearInterval()
-			setInterval(this.checkNewMail, 3000)
-		} */
 	}
 </script>
 

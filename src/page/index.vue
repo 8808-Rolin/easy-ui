@@ -83,6 +83,7 @@
 <style scoped="scoped">
 	.index_box {
 		width: 80%;
+		max-width: 75rem;
 		height: 37.5rem;
 		position: absolute;
 		top: 50%;
@@ -100,7 +101,7 @@
 	.index_left {
 		width: 50%;
 		background: url(../assets/logo-imgalpha-nologo-600px.png) no-repeat;
-		background-size: 100% auto;
+		background-size: auto 100%; 
 	}
 
 	.index_right {

@@ -3,8 +3,8 @@
 		<Info :user="userdata"></Info>
 		
 		<div class="homepage">
-		<div v-show="code === 2" style="line-height: 100px;">
-			<h1>当前空间用户未开放，无法访问！！</h1>
+		<div v-show="code === 2" style="width: 100%;line-height: 100px;text-align: center;">
+			<h1 style="margin-top: 3rem;">当前空间用户未开放，无法访问！！</h1>
 		</div>
 		<div class="left" v-show="code !== 2">
 			<el-tabs class="top_box" v-model="activeName2" @tab-click="handleClick">
