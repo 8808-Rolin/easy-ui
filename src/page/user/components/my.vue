@@ -57,10 +57,8 @@
 								<el-table class="email_table" :data="outboxData" style="width: 100%" fit height="313">
 									<el-table-column label="状态" width="50">
 										<template slot-scope="scope">
-											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读
-											</el-tag>
-											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读
-											</el-tag>
+											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
+											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读</el-tag>
 										</template>
 									</el-table-column>
 									<el-table-column class="title_2" label="标题" width="280">
@@ -539,8 +537,14 @@
 		margin-left: 0;
 	}
 
-	#isOpen .el-button {
+	#isOpen>>> .el-button {
+		font-weight: 200;
+		padding: 0.25rem 1rem;
 		transition: all .3s;
+	}
+	
+	#isOpen >>>.iconfont {
+		font-size: 2rem;
 	}
 
 	.isOpenG {
