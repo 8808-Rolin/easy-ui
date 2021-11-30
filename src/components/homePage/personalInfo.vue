@@ -3,7 +3,7 @@
 		<div v-show="status === 0">
 			<div class="info">
 				<div class="title">
-					<span v-show="status === 0">我的信息</span>
+					<span v-show="status === 0"><strong>我的信息</strong></span>
 					<el-button @click="updateUser('头像')" type="text" v-show="status === 0" icon="el-icon-camera">修改头像
 					</el-button>
 				</div>
@@ -18,7 +18,7 @@
 
 			<div class="notice">
 				<div class="title">
-					公告
+					<strong>公告</strong>
 				</div>
 				<div class="item_box">
 					<el-input :class="{notice_text:status===0}" :debounce="500" v-bind:readonly="status!==0"
@@ -58,7 +58,7 @@
 		<div v-show="status !== 0">
 			<div class="info">
 				<div class="title">
-					<span v-show="status !== 0">他的信息</span>
+					<span v-show="status !== 0"><strong>他的信息</strong></span>
 					<el-button type="text" v-show="status !== 0" icon="el-icon-message"
 						@click="centerDialogVisible2 = true">发送私信</el-button>
 				</div>
@@ -73,7 +73,7 @@
 
 			<div class="notice">
 				<div class="title">
-					公告
+					<strong>公告</strong>
 				</div>
 				<div class="item_box">
 					<el-input :class="{notice_text:status===0}" :debounce="500" v-bind:readonly="status!==0"

@@ -189,7 +189,6 @@
 				}
 				
 			},
-			
 			/* 收藏贴子 **/
 			favoriteProcess() {
 				let pid = this.$route.params.pid

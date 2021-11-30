@@ -100,7 +100,11 @@ const router = new Router({
 				return {content:$route.params.uid}
 			}
 		}]
-	}]
+	},{
+	  path: '*',
+	  redirect: '/404',
+	  hidden: true
+	}],
 })
 
 /* 前置路由守卫：
