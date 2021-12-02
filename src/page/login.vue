@@ -18,9 +18,9 @@
 					</div>
 
 					<div class="login_form">
-						<el-input type="text" placeholder="学   号" prefix-icon="el-icon-user" v-show="!user.loginType"
+						<el-input type="text" autofocus @keyup.enter.native="Commit" placeholder="学   号" prefix-icon="el-icon-user" v-show="!user.loginType"
 							v-model="user.account"></el-input>
-						<el-input type="text" placeholder="手机号" prefix-icon="el-icon-mobile-phone"
+						<el-input type="text" autofocus @keyup.enter.native="Commit" placeholder="手机号" prefix-icon="el-icon-mobile-phone"
 							v-show="user.loginType" v-model="user.account"></el-input>
 						<el-input type="password" @keyup.enter.native="Commit" placeholder="密   码"
 							prefix-icon="el-icon-key" v-model="password">

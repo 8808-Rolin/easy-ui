@@ -348,7 +348,11 @@
 									message: `${response.data.data.msg}`
 								});
 								this.$router.push({
-									path: '/login'
+									path: '/login',
+									params:{
+										studentID:this.studentID,
+										password:this.password
+									}
 								})
 							} else {
 								this.$message.success({

@@ -12,17 +12,17 @@ const request = {
 		uid:'',
 	},
 	mutations: {
-		updateToken(state, val) {
-			state.token = val
+		updateToken(state, token) {
+			state.token = token
 		},
-		changeNetwork(state, val) {
-			state.Network = val
+		changeNetwork(state, Network) {
+			state.Network = Network
 		},
-		changeStatusMes(state, val) {
-			state.statusMes = val
+		changeStatusMes(state, statusMes) {
+			state.statusMes = statusMes
 		},
-		updateUid(state, val) {
-			state.uid = val
+		updateUid(state, uid) {
+			state.uid = uid
 		},
 	}
 	
@@ -35,17 +35,17 @@ const message = {
 		olineTime:'',
 	},
 	mutations:{
-		addUser(state, val) {
-			state.user = val
+		addUser(state, user) {
+			state.user = user
 		},
-		removeUser(state, val) {
-			state.user = val
+		removeUser(state, user) {
+			state.user = user
 		},
-		updateExistUser(state, val){
-			state.existUser = val
+		updateExistUser(state, existUser){
+			state.existUser = existUser
 		},
-		addOlineTime(state, val) {
-			state.olineTime = val
+		addOlineTime(state, olineTime) {
+			state.olineTime = olineTime
 		}
 	}
 }

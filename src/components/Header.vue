@@ -10,7 +10,7 @@
 				</div>
 				<el-dropdown>
 					<span class="el-dropdown-link">
-						<a style="color: #000000;cursor: pointer;">{{user.userName}}</a>
+						<span style="color: #000000;cursor: pointer">{{user.userName}}</span>
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
@@ -58,7 +58,7 @@
 					this.$store.commit('updateToken', ls.token)
 					this.$store.commit('updateUid', ls.uid)
 					let user = this.$store.state.message.user
-					if (user.headImage === '' || user.headImage === undefined || user.headImage === null) {
+					if (user === '' || user === undefined || user === null) {
 						this.$api.getCommonPersonInformation({
 							uid: ls.uid
 						}).then(
@@ -157,9 +157,17 @@
 		overflow: hidden;
 	}
 
-	.el-dropdown-link {
+	>>>.el-dropdown-link {
+		width: 6.25rem;
 		cursor: pointer;
 		color: #409eff;
+	}
+	
+	.el-dropdown-link span {
+		width: 5rem;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	.el-icon-arrow-down {

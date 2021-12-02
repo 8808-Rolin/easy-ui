@@ -147,9 +147,9 @@
 
 		<!-- 空间是否开放 -->
 		<div id="isOpen">
-			<el-button :class="{isOpenG : isOpenShow === 0}" icon="iconfont icon-yanjing_guanbi"
+			<el-button :class="{isOpenG : isOpenShow === 1}" icon="iconfont icon-yanjing_guanbi"
 				@click="isOpenShow = 0;updateSwitchState()"></el-button>
-			<el-button :class="{isOpenD : isOpenShow === 0}" icon="iconfont icon-yanjing_dakai" @click="isOpenShow = 1;updateSwitchState()">
+			<el-button :class="{isOpenD : isOpenShow === 1}" icon="iconfont icon-yanjing_dakai" @click="isOpenShow = 1;updateSwitchState()">
 			</el-button>
 		</div>
 

@@ -237,20 +237,21 @@
 					/* word导入 **/
 					importword_handler: function(editor, files, next) {
 						let file_name = null
-						if (files[0] !== undefined)
+						if (files[0] !== undefined) {
 							file_name = files[0].name
-						if (file_name.substr(file_name.lastIndexOf(".") + 1) == 'docx') {
-							editor.notificationManager.open({
-								text: '正在转换中...',
-								type: 'info',
-								closeButton: false,
-							});
-							next(files);
-						} else {
-							editor.notificationManager.open({
-								text: '目前仅支持docx文件格式，若为doc111，请将扩展名改为docx',
-								type: 'warning',
-							});
+							if (file_name.substr(file_name.lastIndexOf(".") + 1) == 'docx') {
+								editor.notificationManager.open({
+									text: '正在转换中...',
+									type: 'info',
+									closeButton: false,
+								});
+								next(files);
+							} else {
+								editor.notificationManager.open({
+									text: '目前仅支持docx文件格式，若为doc111，请将扩展名改为docx',
+									type: 'warning',
+								});
+							}
 						}
 						// next(files);
 					},
