@@ -69,6 +69,8 @@
 					</div>
 				</div>
 			</div>
+			
+			<GoToLable></GoToLable>
 			<!-- 废物div -->
 			<div style="height: 1rem;"></div>
 		</div>
@@ -80,6 +82,7 @@
 	import Info from '../components/info.vue'
 	import EmojiInput from '../components/EmojiInput.vue'
 	import Pagination from '../components/Pagination.vue'
+	import GoToLable from '../components/goToLable.vue'
 	import analysisEmoji from '../utils/analysisEmoji.js'
 	import base from '../api/request/base.js'
 	import time from '../utils/time.js'
@@ -108,7 +111,8 @@
 			Header,
 			Info,
 			EmojiInput,
-			Pagination
+			Pagination,
+			GoToLable
 		},
 		methods: {
 			getPostPageInfo() {

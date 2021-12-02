@@ -337,4 +337,10 @@
 	.el-table .cell {
 		background-color: transparent;
 	}
+	
+	@media screen and (max-width: 480px) {
+		.meal_wrap {
+			display: none;
+		}
+	}
 </style>

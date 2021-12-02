@@ -29,9 +29,9 @@
 				<span>进入</span>
 			</div>
 			<div class="community" @click="toPublic">
-				<div style="width: 100% ;display: flex;align-items: center;line-height: 2.2;justify-content: center;">
-					交流社区&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-					<span style="width:35px;display: block;display: flex;">
+				<div style="width: 100% ;display: flex;align-items: center;line-height: 2.2;justify-content: space-around;">
+					<span>交流社区</span>
+					<span style="width:105px;display: block;display: flex;overflow: hidden;">
 						<!-- <i class="move animated delay-7s iconfont icon-arrow-right"></i>
 						<i class="move animated delay-6s iconfont icon-arrow-right"></i>
 						<i class="move animated delay-5s iconfont icon-arrow-right"></i> -->
@@ -181,33 +181,6 @@
 		top: -100%;
 	}
 
-	/* .community .point_box {
-		width: 9rem;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		right: 1rem;
-		overflow: hidden;
-	}
-
-	.community .point_box .points {
-		width: 100%;
-		height: 100%;
-		position: relative;
-		left: -6.25rem;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		animation: changeColor 3s infinite;
-	}
-
-	.community .point_box .points i {
-		--r: 0.3;
-		--t: calc((var(--r) + var(--i)));
-		color: rgb(255, 255, 255);
-		opacity: var(--t);
-	} */
-
 	/* 公告 */
 	.text {
 		font-size: 14px;
@@ -310,7 +283,7 @@
 		}
 
 		.button_box {
-			width: 80%;
+			width: 110%;
 			height: 6rem;
 			right: 50%;
 			transform: translateX(50%);
@@ -328,6 +301,7 @@
 
 		.community {
 			right: 0;
+			
 		}
 	}
 

@@ -10,7 +10,7 @@
 				</div>
 				<el-dropdown>
 					<span class="el-dropdown-link">
-						<a style="color: #000000;cursor: pointer;">{{user.userName}}</a>
+						<div style="color: #000000;cursor: pointer;">{{user.userName}}</div>
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
@@ -142,7 +142,7 @@
 	}
 
 	header .warp .user {
-		width: 8rem;
+		max-width: 8rem;
 		height: 2.25rem;
 		display: flex;
 		flex-direction: row;
@@ -153,6 +153,7 @@
 	header .warp .user .profile {
 		width: 2.25rem;
 		height: 2.25rem;
+		margin-right: 0.5rem;
 		border-radius: 50%;
 		overflow: hidden;
 	}
@@ -160,6 +161,16 @@
 	.el-dropdown-link {
 		cursor: pointer;
 		color: #409eff;
+		display: flex;
+		align-items: center;
+	}
+	
+	.el-dropdown-link>div {
+		width: fit-content;
+		max-width: 4rem;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	.el-icon-arrow-down {

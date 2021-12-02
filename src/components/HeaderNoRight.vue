@@ -22,12 +22,14 @@
 	header {
 		width: 100%;
 		height: 4rem;
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		box-shadow: var(--box-shadow2);
 		background-color: var(--bg);
+		z-index: 9000;
 	}
 
 	header .warp {

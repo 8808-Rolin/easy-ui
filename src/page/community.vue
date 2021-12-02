@@ -15,8 +15,9 @@
 							<div class="club_name">
 								<strong>{{ass.assName}}</strong>
 							</div>
-							<div class="join_club" v-show="permissionCode === 0">
-								<el-button>加入社团</el-button>
+							<div class="join_club">
+								<el-button v-show="permissionCode === 0">加入社团</el-button>
+								<el-button v-show="permissionCode === 2">社团管理</el-button>
 							</div>
 						</div>
 						<div class="club_superior">
@@ -257,8 +258,8 @@
 
 	/* 左边信息框 */
 	.club_mes {
-		width: 70%;
-		left: 0;
+		width: 65%;
+		left: 1rem;
 		padding: 0.3125rem;
 		display: flex;
 		align-items: center;
@@ -316,7 +317,7 @@
 	/* 右边活动框 */
 	.club_action {
 		width: 30%;
-		right: 0;
+		right: 1rem;
 		padding: 0.3125rem;
 	}
 

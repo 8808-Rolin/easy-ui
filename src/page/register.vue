@@ -7,27 +7,48 @@
 				<div class="">
 					<h3>注册</h3>
 					<div class="register_form">
-						<el-input :class="{mistaken:!isTrueSNo}" type="text" placeholder="学  号"
-							prefix-icon="el-icon-user" @change="checkSNo" v-model="loginMessage.studentID"
-							v-show="percentage == 25">
-						</el-input>
-						<el-input :class="{mistaken:!isTruePhone}" type="text" placeholder="手机号"
-							prefix-icon="el-icon-mobile-phone" @change="checkPhone" v-model="loginMessage.phone"
-							v-show="percentage == 25"></el-input>
-						<el-input type="text" placeholder="昵  称" prefix-icon="el-icon-user-solid"
-							v-model="loginMessage.userName" v-show="percentage == 25"></el-input>
+						<div class="msg_input" v-show="percentage == 25">
+							<el-input :class="{mistaken:!isTrueSNo}" type="text" placeholder="学  号"
+								prefix-icon="el-icon-user" @change="checkSNo" v-model="loginMessage.studentID"
+								v-show="percentage == 25">
+							</el-input>
+							<span class="msg" v-show="!isTrueSNo">请输入合法学号</span>
+						</div>
 
-						<el-select class="college" v-model="loginMessage.college" placeholder="请选择院系"
-							prefix-icon="el-icon-location-outline" v-show="percentage == 50">
-							<el-option v-for="item in faculties" :key="item.coid" :label="item.name" :value="item.coid">
-							</el-option>
-						</el-select>
-						<el-input type="text" placeholder="真实姓名" prefix-icon="el-icon-user"
-							v-model="loginMessage.realName" v-show="percentage == 50">
-						</el-input>
-						<el-input :class="{mistaken:!isTrueMail}" type="text" placeholder="电子邮箱"
-							prefix-icon="el-icon-message" @change="checkMail" v-model="loginMessage.email"
-							v-show="percentage == 50"></el-input>
+						<div class="msg_input" v-show="percentage == 25">
+							<el-input :class="{mistaken:!isTruePhone}" type="text" placeholder="手机号"
+								prefix-icon="el-icon-mobile-phone" @change="checkPhone" v-model="loginMessage.phone"
+								v-show="percentage == 25"></el-input>
+							<span class="msg" v-show="!isTruePhone">请输入合法手机号</span>
+						</div>
+
+						<div class="msg_input" v-show="percentage == 25">
+							<el-input type="text" placeholder="昵  称" prefix-icon="el-icon-user-solid"
+								v-model="loginMessage.userName" v-show="percentage == 25"></el-input>
+						</div>
+
+						<div class="msg_input" v-show="percentage == 50">
+							<el-select class="college" v-model="loginMessage.college" placeholder="请选择院系"
+								prefix-icon="el-icon-location-outline" v-show="percentage == 50">
+								<el-option v-for="item in faculties" :key="item.coid" :label="item.name"
+									:value="item.coid">
+								</el-option>
+							</el-select>
+						</div>
+
+
+						<div class="msg_input" v-show="percentage == 50">
+							<el-input type="text" placeholder="真实姓名" prefix-icon="el-icon-user"
+								v-model="loginMessage.realName" v-show="percentage == 50">
+							</el-input>
+						</div>
+
+						<div class="msg_input" v-show="percentage == 50">
+							<el-input :class="{mistaken:!isTrueMail}" type="text" placeholder="电子邮箱"
+								prefix-icon="el-icon-message" @change="checkMail" v-model="loginMessage.email"
+								v-show="percentage == 50"></el-input>
+							<span class="msg" v-show="!isTrueMail">请输入合法的电子邮箱</span>
+						</div>
 
 						<div class="register_3" v-show="percentage == 75">
 							<el-select class="sex" v-model="loginMessage.sex" placeholder="性别"
@@ -40,6 +61,7 @@
 								format="yyyy-MM-dd" value-format="yyyy-MM-dd">
 							</el-date-picker>
 						</div>
+
 						<el-upload class="avatar-uploader" action="#" :http-request="HttpRequest"
 							:show-file-list="false" :on-success="handleAvatarSuccess"
 							:before-upload="beforeAvatarUpload" v-show="percentage == 75">
@@ -48,24 +70,34 @@
 							<div slot="tip" class="el-upload__tip">上传jpg/png头像，且不超过500kb</div>
 						</el-upload>
 
-						<el-input :class="{mistaken: !passwordLen}" auto-complete="new-password" type="password"
-							placeholder="密码(至少8位)" prefix-icon="el-icon-key" @change="checkPasswordLen"
-							v-model="password" v-show="percentage == 100"></el-input>
-						<el-input :class="{mistaken:!isTruePassword}" type="password" placeholder="确认密码"
-							prefix-icon="el-icon-key" @input="checkPassword" v-model="isPassword"
-							v-show="percentage == 100"></el-input>
+						<div class="msg_input" v-show="percentage == 100">
+							<el-input :class="{mistaken: !passwordLen}" auto-complete="new-password" type="password"
+								placeholder="密码(至少8位)" prefix-icon="el-icon-key" @change="checkPasswordLen"
+								v-model="password" v-show="percentage == 100"></el-input>
+						</div>
+
+						<div class="msg_input" v-show="percentage == 100">
+							<el-input :class="{mistaken:!isTruePassword}" type="password" placeholder="确认密码"
+								prefix-icon="el-icon-key" @input="checkPassword" v-model="isPassword"
+								v-show="percentage == 100"></el-input>
+							<span class="msg" v-show="!isTruePassword">与第一次密码不一致，请重新输入</span>
+						</div>
+
 						<div v-show="percentage == 100">
 							<PuzzleVcode :onCode.sync="isVerify"></PuzzleVcode>
 						</div>
 
-						<el-button-group>
-							<el-button type="primary" icon="el-icon-arrow-left" @click="decrease"
-								v-if="percentage > 25">上一步</el-button>
-							<el-button type="primary" @click="increase" v-if="percentage <= 75">下一步<i
-									class="el-icon-arrow-right el-icon--right"></i></el-button>
-							<el-button type="primary" @click="submit" v-if="percentage == 100">立即注册<i
-									class="el-icon-arrow-right el-icon--right"></i></el-button>
-						</el-button-group>
+						<div class="form_btn">
+							<el-button-group>
+								<el-button type="primary" icon="el-icon-arrow-left" @click="decrease"
+									v-if="percentage > 25">上一步</el-button>
+								<el-button type="primary" @click="increase" v-if="percentage <= 75">下一步<i
+										class="el-icon-arrow-right el-icon--right"></i></el-button>
+								<el-button type="primary" @click="submit" v-if="percentage == 100">立即注册<i
+										class="el-icon-arrow-right el-icon--right"></i></el-button>
+							</el-button-group>
+						</div>
+
 					</div>
 
 					<div class="steps_box">
@@ -156,23 +188,25 @@
 						phone: this.loginMessage.phone
 					}
 					this.$api.uniVariable(params).then(
-							response => {
-								loadingInstance1.close()
-								if (response.data.data.code !== 0) {
-									this.percentage = 25
-									this.notify = this.$notify.error({
-										message: response.data.data.msg,
-									});
-								} else {
-									this.percentage += 25;
-								}
+						response => {
+							loadingInstance1.close()
+							if (response.data.data.code !== 0) {
+								this.percentage = 25
+								this.notify = this.$notify.error({
+									message: response.data.data.msg,
+								});
+							} else {
+								this.percentage += 25;
 							}
-						)
+						}
+					)
 				} else if (percentage === 75 && this.notNull && this.standart) {
 					let loadingInstance1 = Loading.service({
 						fullscreen: true
 					});
-					this.$api.uploadImage({imageBASE64: this.imageBASE64}).then(
+					this.$api.uploadImage({
+						imageBASE64: this.imageBASE64
+					}).then(
 						response => {
 							loadingInstance1.close()
 							if (response.data.data.code === 0) {
@@ -239,8 +273,8 @@
 
 			// 学号长度校验 
 			checkSNo() {
-				let reg=/^\d{1,}$/
-				let pattern=new RegExp(reg);
+				let reg = /^\d{1,}$/
+				let pattern = new RegExp(reg);
 				let len = this.loginMessage.studentID.length
 				let bool = pattern.test(this.loginMessage.studentID)
 				if (this.notify != null)
@@ -265,8 +299,7 @@
 							title: '输入信息有误',
 							message: '亲，学号只能包含数字！',
 						});
-					}
-					else
+					} else
 						this.isTrueSNo = true
 				}
 				if (this.loginMessage.studentID === '')
@@ -292,7 +325,8 @@
 			},
 			// 邮箱正则校验 
 			checkMail() {
-				const regEemail = /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/
+				const regEemail =
+					/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/
 				if (this.loginMessage.email != "" && !regEemail.test(this.loginMessage.email)) {
 					this.isTrueMail = false
 				} else {
@@ -423,7 +457,7 @@
 	}
 </script>
 
-<style>
+<style scoped="scoped">
 	.register_box {
 		width: 56.25rem;
 		height: 28.125rem;
@@ -436,6 +470,7 @@
 		flex-direction: row;
 		justify-content: space-around;
 		box-shadow: var(--box-shadow2);
+		background-color: var(--bg);
 	}
 
 	.register_box .box {
@@ -453,7 +488,8 @@
 	.register>div {
 		width: 21.875rem;
 		height: 25rem;
-		border: 0.0625rem solid rgba(0, 0, 0, .25);
+		/* border: 0.0625rem solid rgba(0, 0, 0, .25); */
+		box-shadow: var(--box-shadow2);
 		border-top: 0.75rem solid #f2a373;
 		border-radius: 1.5rem;
 		display: flex;
@@ -469,6 +505,16 @@
 		flex-direction: column;
 		justify-content: space-around;
 		align-items: center;
+	}
+
+	.register_form .msg_input {
+		width: 100%;
+		height: 3.75rem;
+	}
+
+	.register_form .msg {
+		font-size: 0.75rem;
+		color: #ec0000;
 	}
 
 	.register_form #register_btn {
@@ -513,7 +559,14 @@
 	}
 
 	/* 头像上传样式 */
-	.avatar-uploader .el-upload {
+	>>>.avatar-uploader {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	>>>.avatar-uploader .el-upload {
 		border: 1px dashed #d9d9d9;
 		border-radius: 2.5rem;
 		cursor: pointer;
@@ -521,11 +574,11 @@
 		overflow: hidden;
 	}
 
-	.avatar-uploader .el-upload:hover {
+	>>>.avatar-uploader .el-upload:hover {
 		border-color: #409EFF;
 	}
 
-	.avatar-uploader-icon {
+	>>>.avatar-uploader-icon {
 		font-size: 28px;
 		color: #8c939d;
 		width: 5rem;
@@ -534,7 +587,7 @@
 		text-align: center;
 	}
 
-	.avatar {
+	>>>.avatar {
 		width: 5rem;
 		height: 5rem;
 		display: block;
@@ -548,15 +601,32 @@
 		width: 60%;
 	}
 
-	.mistaken .el-input__inner:focus,
-	.mistaken .el-input__inner {
+	.mistaken >>>.el-input__inner:focus,
+	.mistaken >>>.el-input__inner {
 		outline-color: #ff0000;
 		border-color: #FF0000;
 	}
 
-	.el-button-group .el-button,
-	.el-button-group .el-button:hover {
+	.el-button-group >>>.el-button,
+	.el-button-group >>>.el-button:hover {
 		background-color: #f2a373;
 		border-color: #f2a373;
+	}
+	
+	@media screen and (max-width: 480px) {
+		.register_box {
+			box-shadow: none;
+			width: 100%;
+			background-color: transparent;
+		}
+		
+		.register_box .register>div {
+			background-color: var(--bg);
+		}
+		
+		.easy_photo {
+			display: none;
+		}
+		
 	}
 </style>
