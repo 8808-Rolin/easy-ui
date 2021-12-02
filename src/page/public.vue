@@ -52,6 +52,7 @@
 	import HeaderHasSearch from '../components/HeaderHasSearch.vue'
 	import Info from '../components/info.vue'
 	import MakesNotice from '../components/MakesNotice.vue'
+	import GoToLable from '../components/goToLable.vue'
 	import base from '../api/request/base.js'
 	import {
 		mapState
@@ -77,7 +78,8 @@
 		components: {
 			HeaderHasSearch,
 			Info,
-			MakesNotice
+			MakesNotice,
+			GoToLable
 		},
 		methods: {
 			getAssociationList() {
@@ -272,6 +274,7 @@
 		padding: 0.5rem;
 		background-color: #1DA0FB;
 		color: #FFFFFF;
+		text-align: center;
 	}
 
 	.main_box .notice_box {
@@ -280,5 +283,44 @@
 		margin-top: 3rem;
 		box-shadow: var(--box-shadow2);
 		background-color: var(--bg);
+	}
+	
+	@media screen and (max-width: 480px) {
+		.main_box {
+			width: 98%;
+			top: 1rem
+		}
+		
+		.main_box .info_box {
+			display: none;
+		}
+		
+		.main_box .club {
+			width: 100%;
+			height: 24rem;
+			display: flex;
+			flex-direction: column;
+			border-radius: 0;
+		}
+		
+		.main_box .club>div {
+			position: static;
+			width: 100%;
+		}
+		
+		.main_box .club .my_club {
+			border: none;
+			border-bottom: rgba(0,0,0,.1) 0.0625rem solid;
+		}
+		
+		.main_box .club .club_title {
+			margin: auto;
+		}
+		
+		.main_box .club .school_club .club_box >div{
+			width: 30%;
+			margin-top: 1rem;
+			margin-right: 3%;
+		}
 	}
 </style>

@@ -144,6 +144,7 @@
 		flex-direction: row;
 		justify-content: space-around;
 		box-shadow: var(--box-shadow2);
+		background-color: var(--bg);
 	}
 
 	.login_box .box {
@@ -229,5 +230,22 @@
 		pointer-events: none;
 		border-bottom: #1DA0FB solid 0.125rem;
 		color: #1DA0FB;
+	}
+	
+	@media screen and (max-width: 480px) {
+		.login_box {
+			box-shadow: none;
+			width: 100%;
+			background-color: transparent;
+		}
+		
+		.login_box .login>div {
+			background-color: var(--bg);
+		}
+		
+		.easy_photo {
+			display: none;
+		}
+		
 	}
 </style>

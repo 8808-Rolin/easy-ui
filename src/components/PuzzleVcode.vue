@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<Vcode :imgs="[imag1]" :show="isShow" @success="onSuccess" @close="onClose"/>
-		<el-button @click="submit">开始验证</el-button>
+		<el-button @click="submit">人工验证</el-button>
 	</div>
 </template>
 
