@@ -15,6 +15,8 @@
 body {
 	width: 100%;
 	min-height: 100vh;
+	margin: 0 auto;
+	padding: 0;
 	overflow: auto;
 	background-color: #f8fbf9;
 	/* background-color: #313131; */
@@ -40,4 +42,14 @@ li {
 
 .el-message {
 	z-index: 9999 !important;
+}
+
+@media screen and (max-width: 480px) {
+	ul.el-dropdown-menu {
+		z-index: 9999!important;
+	}
+	
+	.el-message {
+		z-index: 9999 !important;
+	}
 }

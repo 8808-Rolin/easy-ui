@@ -56,5 +56,11 @@
 		background-size: cover;
 		text-indent: -624.9375rem;
 	}
+	
+	@media screen and (max-width: 480px) {
+		header {
+			z-index: 2000!important;
+		}
+	}
 </style>
 

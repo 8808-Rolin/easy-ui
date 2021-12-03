@@ -194,4 +194,14 @@
 		color: #1DA0FB;
 		font-size: 14px;
 	}
+	
+	@media screen and (max-width: 480px) {
+		header {
+			width: 100%;
+			box-sizing: border-box;
+			background-color: #fff;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
+			z-index: 2000;
+		}
+	}
 </style>

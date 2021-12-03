@@ -301,7 +301,10 @@
 
 		.community {
 			right: 0;
-			
+		}
+		
+		.community > div {
+			justify-content: center !important;
 		}
 	}
 

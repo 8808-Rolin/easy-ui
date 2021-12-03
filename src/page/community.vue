@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div style="width: 100%;">
 		<HeaderHasSearch></HeaderHasSearch>
 		<div class="main_box">
 			<Info></Info>
@@ -35,6 +35,7 @@
 						<div slot="header" class="clearfix">
 							<span>社团活动</span>
 						</div>
+						<div v-show="actionOverview === null" style="text-align: center;">暂无数据</div>
 						<div v-for="item in actionOverview" :key="item.actid" class="text item"
 							@click="centerDialogVisible = true;getActionInfo(item.actid)">
 							<a class="notice_title"><strong>{{item.title}}</strong></a>
@@ -311,6 +312,7 @@
 
 	.club_mes .mes .club_intro {
 		height: 4.5rem;
+		overflow: auto;
 	}
 
 
@@ -382,15 +384,107 @@
 	}
 
 	/**滚动条的宽度*/
-	>>>.el-card__body::-webkit-scrollbar {
+	>>>.el-card__body::-webkit-scrollbar,.club_mes .mes .club_intro::-webkit-scrollbar {
 		width: 0.5rem;
 		height: 100%;
 	}
 
 	/* 滚动条的滑块 */
-	>>>.el-card__body::-webkit-scrollbar-thumb {
+	>>>.el-card__body::-webkit-scrollbar-thumb,.club_mes .mes .club_intro::-webkit-scrollbar  {
 		background: #1DA0FB;
 		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 		border-radius: 0.25rem;
+	}
+</style>
+
+<style scoped="scoped">
+	@media screen and (max-width: 480px) {
+		>>>.el-dialog {
+			width: 98%!important;
+		}
+		
+		.main_box {
+			width: 98%;
+			top: 1rem;
+		}
+		
+		.main_box .info_box {
+			display: none;
+		}
+		
+		.main_box .club {
+			box-sizing: border-box;
+			width: 100%;
+			height: fit-content;
+			padding: 0.5rem 0.25rem;
+			border-radius: 0;
+			display: flex;
+			flex-direction: column;
+			background-color: #fff;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
+		}
+		
+		.main_box .club>div {
+			position: static;
+			width: 96%;
+			flex: 1;
+		}
+		
+		.club_mes .club_logo  {
+			width: 4rem;
+			height: 4rem;
+		}
+		
+		.club_mes .mes {
+			width: calc(100% - 5rem);
+		}
+		
+		.club_mes .mes .name {
+			height: fit-content;
+			padding: 0.25rem 0;
+		}
+		
+		.club_mes .mes .name .club_name {
+			font-size: 1.5rem;
+		}
+		
+		.club_mes .mes .name .join_club {
+			display: none;
+		}
+		
+		.club_mes .mes .club_intro {
+			height: 4.5rem;
+		}
+		
+		.main_box .notice_box {
+			background-color: #fff;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
+		}
+		
+		.club_superior {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+		
+		.club_intro {
+			overflow: hidden;
+		}
+		
+		.club_action {
+			margin-top: 0.5rem;
+		}
+		
+		>>>.box-card {
+			border-radius: 0;
+		}
+		
+		.item {
+			box-sizing: border-box;
+		}
+		
+		>>>.el-card__body {
+			max-height: 7rem;
+		}
 	}
 </style>

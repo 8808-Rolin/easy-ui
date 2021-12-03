@@ -7,7 +7,7 @@
 
 			<div class="seach_box" :class="{'topSeach_box':topSeach_box}">
 				<el-input placeholder="请输入内容" @keyup.enter.native="toSearch" @focus="topSeach_box = true" @blur="topSeach_box = false" v-model="search.keyword" class="input-with-select">
-					<el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
+					<el-button slot="append" icon="el-icon-search" @click="toSearch"><span class="sousuo">搜索</span></el-button>
 				</el-input>
 
 			</div>
@@ -127,7 +127,7 @@
 		align-items: center;
 		box-shadow: var(--box-shadow2);
 		background-color: var(--bg);
-		z-index: 9000;
+		z-index: 2000;
 	}
 
 	header .warp {
@@ -231,7 +231,17 @@
 		transition: width .5s;
 	}
 	
+	.sousuo {
+		display: none;
+	}
+	
 	@media screen and (max-width: 480px) {
+		header {
+			width: 100%;
+			background-color: #fff;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
+		}
+		
 		.seach_box>>>.el-input__inner {
 			width: 0;
 			padding: 0;
@@ -245,7 +255,16 @@
 		
 		.seach_box>>>.el-input-group__append {
 			border: #1DA0FB 0.0625rem solid;
-			border-radius: 0;
+			border-radius: 0.375rem
+		}
+		
+		.sousuo {
+			display: inline-flex;
+		}
+		
+		header .warp .logo {
+			width: 8rem;
+			height: 3.2rem;
 		}
 	}
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div style="width: 100%;">
 		<HeaderHasSearch></HeaderHasSearch>
 
 		<div class="main_box">
@@ -39,6 +39,9 @@
 			</div>
 
 			<div class="notice_box">
+				<div class="club_title">
+					公共论坛
+				</div>
 				<MakesNotice :chaildPosts="posts" :chaildFirstPosts="firstposts" :total="code" :aid="paid" :notisSize="notSize" :tinymceId="'ptinymceId'"></MakesNotice>
 			</div>
 
@@ -291,6 +294,10 @@
 			top: 1rem
 		}
 		
+		.main_box * {
+			box-sizing: border-box;
+		}
+		
 		.main_box .info_box {
 			display: none;
 		}
@@ -301,6 +308,8 @@
 			display: flex;
 			flex-direction: column;
 			border-radius: 0;
+			background-color: #fff;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
 		}
 		
 		.main_box .club>div {
@@ -313,8 +322,14 @@
 			border-bottom: rgba(0,0,0,.1) 0.0625rem solid;
 		}
 		
-		.main_box .club .club_title {
+		.notice_box {
+			background-color: #fff!important;
+			box-shadow:  0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04)!important;
+		}
+		
+		.main_box .club .club_title, .notice_box .club_title{
 			margin: auto;
+			border-radius: 0.375rem;
 		}
 		
 		.main_box .club .school_club .club_box >div{

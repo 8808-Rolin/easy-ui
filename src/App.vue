@@ -55,6 +55,8 @@
 		-moz-osx-font-smoothing: grayscale;
 		/* text-align: center; */
 		color: #2c3e50;
+		padding: 0;
+		margin: 0;
 	}
 	
 	.slide-right-enter-active, .slide-right-leave-active, .slide-left-enter-active, .slide-left-leave-active {
@@ -87,6 +89,17 @@
 		    width: 100%;
 		    height: 100%;
 		    position: fixed;   /* //设置absolute,其他DIV设置为relative，这样这个例子效果就作为背景 */
-			z-index: 0;
+			z-index: -1;
+		}
+		
+		@media screen and (max-width: 480px) {
+			#particles-js {
+				z-index: -1;
+			}
+			
+			#app {
+				width: 100%!important;
+				
+			}
 		}
 </style>

@@ -153,7 +153,7 @@
 					email: '',
 					sex: '',
 					birth: '',
-					headImage: '',
+					headImage: 'http://172.20.216.24:11119/images/default.jpg',
 					password: '',
 				},
 

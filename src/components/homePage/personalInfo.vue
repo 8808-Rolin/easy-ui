@@ -523,3 +523,9 @@
 		border: 0.0625rem solid #dcdfe6;
 	}
 </style>
+
+<style scoped="scoped">
+	@media screen and (max-width: 480px) {
+		
+	}
+</style>

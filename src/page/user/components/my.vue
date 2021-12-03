@@ -6,6 +6,7 @@
 			<div class="left">
 				<el-tabs class="top_box" v-model="activeName2" @tab-click="handleClick2">
 					<el-tab-pane label="我的社团" name="0">
+						<div v-show="joinass === null" style="text-align: center;">尚未加入任何社团</div>
 						<MyClub :ass="joinass"></MyClub>
 					</el-tab-pane>
 					<el-tab-pane label="我的邮箱" name="1">
@@ -16,8 +17,9 @@
 										size="mini">清空
 									</el-button>
 								</div>
-
+								<div v-show=""></div>
 								<el-table class="email_table" :data="inboxData" style="width: 100%" fit height="313">
+									<div v-show="inboxData === null" style="text-align: center;">暂无邮件</div>
 									<el-table-column label="状态" width="50">
 										<template slot-scope="scope">
 											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读
@@ -26,7 +28,7 @@
 											</el-tag>
 										</template>
 									</el-table-column>
-									<el-table-column class="title_2" label="标题" width="280">
+									<el-table-column class="title_2" label="标题">
 										<template slot-scope="scope">
 											<el-tooltip :content="updateTitle(scope.row.title)" placement="top"
 												@click.native="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid)">
@@ -35,13 +37,13 @@
 										</template>
 									</el-table-column>
 									<el-table-column label="发送人" prop="name"></el-table-column>
-									<el-table-column label="发送时间" width="180">
+									<el-table-column label="发送时间" width="180" v-if="showTd">
 										<template slot-scope="scope">
 											<i class="el-icon-time"></i>
 											<span style="margin-left: 10px">{{ scope.row.date }}</span>
 										</template>
 									</el-table-column>
-									<el-table-column label="操作" width="200">
+									<el-table-column label="操作" width="100" v-if="showTd">
 										<template slot-scope="scope">
 											<el-badge :is-dot="scope.row.isRead === 0" class="item">
 												<el-button size="mini" type="primary"
@@ -55,13 +57,16 @@
 							</el-tab-pane>
 							<el-tab-pane label="发件箱" name="0">
 								<el-table class="email_table" :data="outboxData" style="width: 100%" fit height="313">
+									<div v-show="outboxData === null" style="text-align: center;">暂无邮件</div>
 									<el-table-column label="状态" width="50">
 										<template slot-scope="scope">
-											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读</el-tag>
-											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读</el-tag>
+											<el-tag type="success" size="mini" v-show="scope.row.isRead === 1">已读
+											</el-tag>
+											<el-tag type="danger" size="mini" v-show="scope.row.isRead === 0">未读
+											</el-tag>
 										</template>
 									</el-table-column>
-									<el-table-column class="title_2" label="标题" width="280">
+									<el-table-column class="title_2" label="标题">
 										<template slot-scope="scope">
 											<el-tooltip :content="updateTitle(scope.row.title)" placement="top"
 												@click.native="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid)">
@@ -70,13 +75,13 @@
 										</template>
 									</el-table-column>
 									<el-table-column label="发送人" prop="name"></el-table-column>
-									<el-table-column label="发送时间" width="180">
+									<el-table-column label="发送时间" width="180" v-if="showTd">
 										<template slot-scope="scope">
 											<i class="el-icon-time"></i>
 											<span style="margin-left: 10px">{{ scope.row.date }}</span>
 										</template>
 									</el-table-column>
-									<el-table-column label="操作" width="200">
+									<el-table-column label="操作" width="200" v-if="showTd">
 										<template slot-scope="scope">
 											<el-badge :is-dot="scope.row.isRead === 0" class="item">
 												<el-button size="mini" type="primary"
@@ -94,9 +99,11 @@
 
 				<el-tabs class="bottom_box" v-model="activeName" @tab-click="handleClick">
 					<el-tab-pane label="我的帖子" name="0">
+						<div v-show="post === null" style="text-align: center;">尚未发帖</div>
 						<!-- <Posts :posts="post"></Posts> -->
 					</el-tab-pane>
 					<el-tab-pane label="我的收藏" name="1">
+						<div v-show="post === null" style="text-align: center;">尚未收藏</div>
 						<!-- <Collection :myColl="post"></Collection> -->
 					</el-tab-pane>
 					<keep-alive>
@@ -117,14 +124,14 @@
 						placeholder="请输入私信内容" show-word-limit></el-input>
 					<span slot="footer" class="dialog-footer">
 						<el-button type="infor" @click="centerDialogVisible = false">关闭</el-button>
-						<el-button v-show="mailType === '1'" type="primary"
+						<el-button v-show="mailType === '1' && showTd" type="primary"
 							@click="centerDialogVisible2 = true; close()">回复</el-button>
 					</span>
 				</el-dialog>
 			</transition>
 
 			<!-- 对话框，发送邮件 -->
-			<transition name="el-zoom-in-center" :duration="5000">
+			<transition name="el-zoom-in-center" :duration="5000" v-show="showTd">
 				<el-dialog title="发送私信" v-show="centerDialogVisible2" :visible.sync="centerDialogVisible2" width="30%"
 					center>
 					<div class="form">
@@ -146,11 +153,14 @@
 		</div>
 
 		<!-- 空间是否开放 -->
-		<div id="isOpen">
-			<el-button :class="{isOpenG : isOpenShow === 0}" icon="iconfont icon-yanjing_guanbi"
+		<div id="isOpen" :class="{open:open_huojian}">
+			<el-button class="tou" icon="iconfont icon-huojian" @click="open_huojian = !open_huojian"></el-button>
+			<el-button v-show="isOpenShow === 1" class="isOpenG" icon="iconfont icon-yanjing_guanbi"
 				@click="isOpenShow = 0;updateSwitchState()"></el-button>
-			<el-button :class="{isOpenD : isOpenShow === 0}" icon="iconfont icon-yanjing_dakai" @click="isOpenShow = 1;updateSwitchState()">
+			<el-button v-show="isOpenShow === 0" class="isOpenD" icon="iconfont icon-yanjing_dakai"
+				@click="isOpenShow = 1;updateSwitchState()">
 			</el-button>
+			<el-button class="fanhui" icon="iconfont icon-fanhui" plain @click="returnPage"></el-button>
 		</div>
 
 	</div>
@@ -202,7 +212,8 @@
 				outboxData: [],
 				current: 'Posts',
 				getMailTimeout: null,
-				isOpenShow: 0
+				isOpenShow: 0,
+				open_huojian: false
 			}
 		},
 		methods: {
@@ -391,18 +402,38 @@
 				if (this.message !== null)
 					this.message.close()
 				let uid = this.$route.params.uid
-				this.$api.updateSwitchState({uid}).then(
+				this.$api.updateSwitchState({
+					uid
+				}).then(
 					res => {
 						this.message = this.$message.success(res.data.data.msg)
 						console.log(res.data)
 					}
 				)
-			}
+			},
+			// 返回上一级
+			returnPage() {
+				if (window.history.length <= 1) {
+					this.$router.push({
+						path: "/system/storageManagement"
+					});
+					return false;
+				} else {
+					this.$router.go(-1);
+				}
+			},
 		},
 		computed: {
 			...mapState({
 				olineTime: state => state.message.olineTime,
 			}),
+			showTd() {
+				let width = true
+				if (document.body.clientWidth < 480) {
+					width = false
+				}
+				return width
+			}
 		},
 		beforeMount() {
 			this.getMails()
@@ -479,10 +510,16 @@
 	>>>.el-table .cell {
 		background-color: transparent;
 	}
+	
+	>>>.cell .el-tooltip {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
 
 	.left {
 		flex: 1;
-		max-width: calc(100% - 19.75rem);
+		overflow: hidden;
 		margin-right: 1rem;
 		padding: 1rem;
 		box-shadow: var(--box-shadow2);
@@ -525,33 +562,81 @@
 	}
 
 	#isOpen {
+		width: 1.375rem;
+		overflow: hidden;
 		position: fixed;
 		top: 4.75rem;
 		right: 0;
 		z-index: 9999;
 		display: flex;
-		transform: translateX(50%);
+		align-items: center;
+		transition: width .3s;
+		/* transform: translateX(50%); */
 	}
 
 	#isOpen .el-button+.el-button {
 		margin-left: 0;
 	}
 
-	#isOpen>>> .el-button {
-		font-weight: 200;
-		padding: 0.25rem 1rem;
+	#isOpen>>>.el-button {
+		font-weight: lighter !important;
+		padding: 0.25rem;
 		transition: all .3s;
 	}
-	
-	#isOpen >>>.iconfont {
+
+	#isOpen>>>.tou {
+		transform: rotate(180deg);
+		border-top-right-radius: 50%;
+		border-bottom-right-radius: 50%;
+		border: none;
+	}
+
+	#isOpen>>>.tou i {
 		font-size: 2rem;
 	}
 
+	.open {
+		width: 50% !important;
+		transform: rotate(180deg) !important;
+		border-top-right-radius: 50%;
+		border-bottom-right-radius: 50%;
+	}
+
+	#isOpen>>>.iconfont {
+		font-size: 1.5rem;
+	}
+
+	#isOpen .fanhui {
+		transform: rotateY(180deg);
+	}
+
 	.isOpenG {
-		transform: translateX(100%);
+		/* transform: translateX(100%); */
+		color: #ff0000;
 	}
 
 	.isOpenD {
-		transform: translateX(-100%);
+		/* transform: translateX(-100%); */
+		color: #55aa00;
+	}
+
+	@media screen and (max-width: 480px) {
+		.info_box {
+			display: none;
+		}
+
+		.left {
+			margin: 0;
+			background-color: #fff;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
+		}
+
+		.right {
+			display: none;
+		}
+		
+		>>>.el-dialog {
+			width: 98%!important;
+		}
 	}
 </style>
