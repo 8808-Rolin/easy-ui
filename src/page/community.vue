@@ -95,10 +95,7 @@
 				// 对话框
 				dialogData: {},
 				centerDialogVisible: false,
-<<<<<<< HEAD
 				message:null,
-=======
->>>>>>> origin/lch
 			}
 		},
 		components: {
@@ -209,7 +206,6 @@
 					}
 				)
 			},
-<<<<<<< HEAD
 			/* 前往管理员界面 */
 			toAdmin() {
 				let aid = this.$route.params.aid

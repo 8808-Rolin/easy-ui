@@ -75,12 +75,6 @@
 		mapState
 	} from 'vuex'
 	import base from '../api/request/base.js'; // 导入接口域名列表
-<<<<<<< HEAD
-	
-=======
-
-
->>>>>>> origin/lch
 	export default {
 		name: 'Header',
 		data() {

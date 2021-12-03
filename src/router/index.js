@@ -15,11 +15,6 @@ Router.prototype.push = function push(location, onResolve, onReject) {
 
 
 const router = new Router({
-<<<<<<< HEAD
-	//mode: 'history',
-=======
-	// mode: 'history',
->>>>>>> origin/lch
 	routes: [{
 		name: '404',
 		path: '/404',

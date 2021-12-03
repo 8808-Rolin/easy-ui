@@ -6,17 +6,13 @@
 			</div>
 
 			<div class="seach_box" :class="{'topSeach_box':topSeach_box}">
-<<<<<<< HEAD
 				<el-input placeholder="请输入内容" @keyup.enter.native="toSearch" @focus="topSeach_box = true" @blur="topSeach_box = false" v-model="search.keyword" class="input-with-select">
 					<el-button slot="append" icon="el-icon-search" @click="toSearch"><span class="sousuo">搜索</span></el-button>
-=======
 				<el-input placeholder="请输入内容" @keyup.enter.native="toSearch" @focus="topSeach_box = true"
 					@blur="topSeach_box = false" v-model="search.keyword" class="input-with-select">
 					<el-button slot="append" icon="el-icon-search" @click="toSearch"><span class="sousuo">搜索</span>
 					</el-button>
->>>>>>> origin/lch
 				</el-input>
-
 			</div>
 
 			<div class="user" v-show="existUser">
@@ -246,12 +242,8 @@
 		border-radius: 50%;
 		overflow: hidden;
 	}
-<<<<<<< HEAD
-	.el-dropdown-link {
-=======
-
+	
 	>>>.el-dropdown-link {
->>>>>>> origin/lch
 		cursor: pointer;
 		color: #409eff;
 		display: flex;
@@ -308,12 +300,6 @@
 		display: none;
 	}
 	
-<<<<<<< HEAD
-	.sousuo {
-		display: none;
-	}
-	
-=======
 	.search_man .el-tag {
 		cursor: pointer;
 	}
@@ -371,18 +357,13 @@
 		resize: none;
 	}
 
->>>>>>> origin/lch
 	@media screen and (max-width: 480px) {
 		header {
 			width: 100%;
 			background-color: #fff;
 			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
 		}
-<<<<<<< HEAD
 		
-=======
-
->>>>>>> origin/lch
 		.seach_box>>>.el-input__inner {
 			width: 0;
 			padding: 0;
@@ -398,14 +379,11 @@
 			border: #1DA0FB 0.0625rem solid;
 			border-radius: 0.375rem
 		}
-<<<<<<< HEAD
 		
 		.sousuo {
 			display: inline-flex;
 		}
 		
-=======
-
 		.sousuo {
 			display: inline-flex;
 		}
@@ -414,7 +392,6 @@
 			padding: 0 0.25rem;
 		}
 
->>>>>>> origin/lch
 		header .warp .logo {
 			width: 8rem;
 			height: 3.2rem;
