@@ -28,9 +28,9 @@
 									</el-table-column>
 									<el-table-column class="title_2" label="标题" width="280">
 										<template slot-scope="scope">
-											<el-tooltip :content="updateTitle(scope.row.title)" placement="top"
+											<el-tooltip :content="scope.row.title" placement="top"
 												@click.native="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid)">
-												<div>{{updateTitle(scope.row.title)}}</div>
+												<div>{{scope.row.title}}</div>
 											</el-tooltip>
 										</template>
 									</el-table-column>
@@ -45,7 +45,7 @@
 										<template slot-scope="scope">
 											<el-badge :is-dot="scope.row.isRead === 0" class="item">
 												<el-button size="mini" type="primary"
-													@click="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid);getHisId(scope.row.title)">
+													@click="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid);getHisId(scope.row)">
 													查看
 												</el-button>
 											</el-badge>
@@ -63,9 +63,9 @@
 									</el-table-column>
 									<el-table-column class="title_2" label="标题" width="280">
 										<template slot-scope="scope">
-											<el-tooltip :content="updateTitle(scope.row.title)" placement="top"
+											<el-tooltip :content="scope.row.title" placement="top"
 												@click.native="handleEdit(scope.$index, scope.row);centerDialogVisible = true;getMailContent(scope.row.mid)">
-												<div>{{updateTitle(scope.row.title)}}</div>
+												<div>{{scope.row.title}}</div>
 											</el-tooltip>
 										</template>
 									</el-table-column>
@@ -117,7 +117,7 @@
 						placeholder="请输入私信内容" show-word-limit></el-input>
 					<span slot="footer" class="dialog-footer">
 						<el-button type="infor" @click="centerDialogVisible = false">关闭</el-button>
-						<el-button v-show="mailType === '1'" type="primary"
+						<el-button v-show="mailType === '1' && isSystem === 0" type="primary"
 							@click="centerDialogVisible2 = true; close()">回复</el-button>
 					</span>
 				</el-dialog>
@@ -202,7 +202,8 @@
 				outboxData: [],
 				current: 'Posts',
 				getMailTimeout: null,
-				isOpenShow: 0
+				isOpenShow: 0,
+				isSystem:0,
 			}
 		},
 		methods: {
@@ -334,22 +335,18 @@
 			updateNext(content) {
 				return content.replace(/\n/g, "<br/>").replace(/ /g, '&nbsp')
 			},
-			updateTitle(title) {
-				let arr = title.split('|=|')
-				return arr[0]
-			},
-			getHisId(mailTitle) {
+			getHisId(data) {
 				if (this.message !== null)
 					this.message.close()
-				console.log(mailTitle.split('|=|')[1])
-				this.hisId = mailTitle.split('|=|')[1]
+				this.hisId = data.name_id
+				this.isSystem = data.isSystem
 			},
 			sendEmail() {
 				let isSystem = 0
 				let mailType = 0
 				let fromuid = this.userdata.uid
 				let touid = this.hisId
-				let title = this.title + '|=|' + this.userdata.uid
+				let title = this.title
 				let content = this.input
 				this.$api.sendEmail({
 					isSystem,

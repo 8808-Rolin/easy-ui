@@ -36,7 +36,6 @@
 	} from 'vuex'
 	import base from '../api/request/base.js'; // 导入接口域名列表
 	
-
 	export default {
 		name: 'Header',
 		data() {
@@ -58,7 +57,7 @@
 					this.$store.commit('updateToken', ls.token)
 					this.$store.commit('updateUid', ls.uid)
 					let user = this.$store.state.message.user
-					if (user === '' || user === undefined || user === null) {
+					if (user.headImage === '' || user.headImage === undefined || user.headImage === null) {
 						this.$api.getCommonPersonInformation({
 							uid: ls.uid
 						}).then(
@@ -115,7 +114,6 @@
 		background-color: var(--bg);
 		z-index: 9000;
 	}
-
 	header .warp {
 		width: 100%;
 		max-width: 75rem;
@@ -126,12 +124,10 @@
 		justify-content: space-between;
 		align-items: center;
 	}
-
 	header .warp .logo {
 		width: 10rem;
 		height: 4rem;
 	}
-
 	header .warp .logo a {
 		display: block;
 		width: 100%;
@@ -140,7 +136,6 @@
 		background-size: cover;
 		text-indent: -624.9375rem;
 	}
-
 	header .warp .user {
 		max-width: 8rem;
 		height: 2.25rem;
@@ -149,7 +144,6 @@
 		justify-content: space-around;
 		align-items: center;
 	}
-
 	header .warp .user .profile {
 		width: 2.25rem;
 		height: 2.25rem;
@@ -157,9 +151,7 @@
 		border-radius: 50%;
 		overflow: hidden;
 	}
-
-	>>>.el-dropdown-link {
-		width: 6.25rem;
+	.el-dropdown-link {
 		cursor: pointer;
 		color: #409eff;
 		display: flex;
@@ -173,18 +165,9 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-	
-	.el-dropdown-link span {
-		width: 5rem;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
-
 	.el-icon-arrow-down {
 		font-size: 12px;
 	}
-
 	.login_and_register {
 		width: 6.25rem;
 		display: flex;
@@ -192,14 +175,22 @@
 		justify-content: space-around;
 		align-items: center;
 	}
-
 	.login_and_register a {
 		color: inherit;
 		font-size: 14px;
 	}
-
 	.login_and_register a:hover {
 		color: #1DA0FB;
 		font-size: 14px;
+	}
+	
+	@media screen and (max-width: 480px) {
+		header {
+			width: 100%;
+			box-sizing: border-box;
+			background-color: #fff;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
+			z-index: 2000;
+		}
 	}
 </style>

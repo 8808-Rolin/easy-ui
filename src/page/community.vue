@@ -16,7 +16,7 @@
 								<strong>{{ass.assName}}</strong>
 							</div>
 							<div class="join_club">
-								<el-button v-show="permissionCode === 0">加入社团</el-button>
+								<el-button v-show="permissionCode === 0" @click="joinAssociation">加入社团</el-button>
 								<el-button v-show="permissionCode === 2" @click="toAdmin">社团管理</el-button>
 							</div>
 						</div>
@@ -93,7 +93,8 @@
 				notSize: 0,
 				// 对话框
 				dialogData: {},
-				centerDialogVisible: false
+				centerDialogVisible: false,
+				message:null,
 			}
 		},
 		components: {
@@ -181,11 +182,13 @@
 				)
 			},
 			joinAction(centerDialogVisible) {
+				if (this.message !== null)
+					this.message.close()
 				let status = this.dialogData.status
 				if (status === 0) {
 					this.participate()
 				} else if (status === 1) {
-					this.$message.error("你没有权限参加活动")
+					this.message = this.$message.error("你没有权限参加活动")
 					this.centerDialogVisible = false
 				}
 			},
@@ -197,7 +200,7 @@
 					actid
 				}).then(
 					res => {
-						this.$message.success(res.data.data.msg)
+						this.message = this.$message.success(res.data.data.msg)
 						this.centerDialogVisible = false
 					}
 				)
@@ -207,12 +210,57 @@
 				let aid = this.$route.params.aid
 				let studentID = this.user.studentID
 				window.location.href = `${base.mq}/dashboard?aid=${aid}&studentID=${studentID}`
+			},
+			/* 加入社团 */
+			joinAssociation() {
+				if (this.message !== null)
+					this.message.close()
+				let aid = this.$route.params.aid
+				let uid = this.uid
+				this.$prompt('请输入备注', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					inputPattern: /^[a-zA-Z0-9_\u4e00-\u9fa5]{1,40}$/,
+					inputErrorMessage: '备注不能超过40个字且不能输入非法字符'
+				}).then(({
+					value
+				}) => {
+					console.log(value, value.trim())
+					if (value === null || value.trim() === '') {
+						this.message = this.$message({
+							type: 'error',
+							message: '备注不能为空'
+						});
+					} else {
+						this.$api.joinAssociation({aid,uid,note:value.trim()}).then(
+							res => {
+								this.message = this.$message({
+									type: 'success',
+									message: res.data.data.msg
+								});
+								//console.log(res.data)
+							}
+						)
+					}
+				}).catch(error => {
+					if (error === 'cancel') {
+						this.message = this.$message({
+							type: 'info',
+							message: '取消输入',
+						});
+					} else {
+						this.message = this.$message({
+							type: 'error',
+							message: error,
+						});
+					}
+				});
 			}
 		},
 		computed: {
 			...mapState({
 				uid: state => state.request.uid,
-				user: state => state.message.user,				
+				user: state => state.message.user,
 			}),
 		},
 		created() {

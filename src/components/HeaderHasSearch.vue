@@ -7,7 +7,7 @@
 
 			<div class="seach_box" :class="{'topSeach_box':topSeach_box}">
 				<el-input placeholder="请输入内容" @keyup.enter.native="toSearch" @focus="topSeach_box = true" @blur="topSeach_box = false" v-model="search.keyword" class="input-with-select">
-					<el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
+					<el-button slot="append" icon="el-icon-search" @click="toSearch"><span class="sousuo">搜索</span></el-button>
 				</el-input>
 
 			</div>
@@ -42,7 +42,6 @@
 		mapState
 	} from 'vuex'
 	import base from '../api/request/base.js'; // 导入接口域名列表
-
 	export default {
 		name: 'Header',
 		data() {
@@ -127,9 +126,8 @@
 		align-items: center;
 		box-shadow: var(--box-shadow2);
 		background-color: var(--bg);
-		z-index: 9000;
+		z-index: 2000;
 	}
-
 	header .warp {
 		width: 100%;
 		max-width: 75rem;
@@ -140,12 +138,10 @@
 		justify-content: space-between;
 		align-items: center;
 	}
-
 	header .warp .logo {
 		width: 10rem;
 		height: 4rem;
 	}
-
 	header .warp .logo a {
 		display: block;
 		width: 100%;
@@ -154,7 +150,6 @@
 		background-size: cover;
 		text-indent: -624.9375rem;
 	}
-
 	header .warp .user {
 		width: 8rem;
 		height: 2.25rem;
@@ -163,7 +158,6 @@
 		justify-content: space-around;
 		align-items: center;
 	}
-
 	header .warp .user .profile {
 		width: 2.25rem;
 		height: 2.25rem;
@@ -171,7 +165,6 @@
 		border-radius: 50%;
 		overflow: hidden;
 	}
-
 	.el-dropdown-link {
 		cursor: pointer;
 		color: #409eff;
@@ -190,7 +183,6 @@
 	.el-icon-arrow-down {
 		font-size: 12px;
 	}
-
 	.login_and_register {
 		width: 6.25rem;
 		display: flex;
@@ -198,28 +190,23 @@
 		justify-content: space-around;
 		align-items: center;
 	}
-
 	.login_and_register a {
 		color: inherit;
 		font-size: 14px;
 	}
-
 	.login_and_register a:hover {
 		color: #1DA0FB;
 		font-size: 14px;
 	}
-
 	/* 搜索框 */
 	.seach_box>>> .el-input__inner {
 		width: 12.5rem;
 		transition: width .5s;
 	}
-
 	.seach_box>>>.el-input__inner:hover {
 		width: 20rem;
 		transition: width .5s;
 	}
-
 	.seach_box>>>.el-input-group__append {
 		background-color: #1DA0FB;
 		color: #fff;
@@ -231,7 +218,17 @@
 		transition: width .5s;
 	}
 	
+	.sousuo {
+		display: none;
+	}
+	
 	@media screen and (max-width: 480px) {
+		header {
+			width: 100%;
+			background-color: #fff;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
+		}
+		
 		.seach_box>>>.el-input__inner {
 			width: 0;
 			padding: 0;
@@ -245,7 +242,16 @@
 		
 		.seach_box>>>.el-input-group__append {
 			border: #1DA0FB 0.0625rem solid;
-			border-radius: 0;
+			border-radius: 0.375rem
+		}
+		
+		.sousuo {
+			display: inline-flex;
+		}
+		
+		header .warp .logo {
+			width: 8rem;
+			height: 3.2rem;
 		}
 	}
 </style>

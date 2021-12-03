@@ -51,7 +51,7 @@
 					pageSize: _this.pageSize, // 每页显示条数
 					total: _this.total, // 数据总数
 					showTotal: (total, range) => {
-						return ('共' + total + '条aa')
+						return ('共' + total + '条')
 					},
 				}
 			}

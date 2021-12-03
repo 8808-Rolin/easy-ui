@@ -338,7 +338,7 @@
 				let mailType = 0
 				let fromuid = this.myUid
 				let touid = this.$route.params.uid
-				let title = this.title + '|=|' + this.myUid
+				let title = this.title
 				let content = this.input
 				this.$api.sendEmail({isSystem,mailType,fromuid,touid,title,content}).then(
 					res => {
