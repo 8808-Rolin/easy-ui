@@ -27,7 +27,7 @@
 				</div>
 			</div>
 			
-			<el-dialog title="修改我的信息" :visible.sync="centerDialogVisibleDate" width="30%">
+			<el-dialog title="修改我的信息" :visible.sync="centerDialogVisibleDate" width="30%" :append-to-body="true">
 				<div>
 					<el-date-picker v-model="date" type="date" placeholder="选择日期" style="width: 100%;"
 						format="yyyy-MM-dd" value-format="yyyy-MM-dd">
@@ -39,7 +39,7 @@
 				</span>
 			</el-dialog>
 
-			<el-dialog title="修改我的信息" :visible.sync="centerDialogVisibleImage" width="30%" center>
+			<el-dialog title="修改我的信息" :visible.sync="centerDialogVisibleImage" width="30%" center :append-to-body="true">
 				<div style="text-align: center;">
 					<el-upload class="avatar-uploader" action="#" :show-file-list="false"
 						:on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload"
@@ -84,7 +84,7 @@
 
 
 			<!-- 对话框，发送邮件 -->
-			<el-dialog title="发送私信" :visible.sync="centerDialogVisible2" width="30%" center>
+			<el-dialog title="发送私信" :visible.sync="centerDialogVisible2" width="30%" center :append-to-body="true">
 				<div class="form">
 					<div>
 						<label>私信标题：</label>
@@ -150,8 +150,6 @@
 								this.change = false
 							}
 						)
-					} else {
-						this.message = this.$message.info("请先修改参数！！")
 					}
 				}
 			},
@@ -418,7 +416,6 @@
 
 		.title {
 			padding: 0.5rem 0;
-			border-bottom: solid 0.125rem #ddddee;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
@@ -447,11 +444,11 @@
 
 		.title {
 			padding: 0.5rem 0;
-			border-bottom: solid 0.125rem #ddddee;
 		}
 
 		.item_box {
 			height: 12rem;
+			margin-top: 0.5rem;
 			overflow: auto;
 
 			/**滚动条的宽度*/
@@ -472,7 +469,6 @@
 	/deep/.el-textarea__inner {
 		height: 100% !important;
 		min-height: 100% !important;
-		// margin-top: 0.5rem;
 		resize: none;
 		background-color: transparent;
 		border: none;
@@ -486,7 +482,6 @@
 		/* 滚动条的滑块 */
 		&::-webkit-scrollbar-thumb {
 			background: #1DA0FB;
-			// -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 			border-radius: 0.25rem;
 		}
 	}
@@ -498,7 +493,7 @@
 	/deep/.notice_text textarea:focus {
 		font-size: 0.75rem;
 		background-color: #f1f4f2;
-		border-radius: 0.75rem;
+		border-radius: 0.25rem;
 	}
 
 	.form {

@@ -18,7 +18,9 @@
 		name: 'HomePage',
 		data() {
 			return {
-
+				centerDialogVisible3: false,
+				title: '',
+				input: ''
 			}
 		},
 		components: {

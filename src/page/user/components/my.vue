@@ -43,7 +43,7 @@
 											<span style="margin-left: 10px">{{ scope.row.date }}</span>
 										</template>
 									</el-table-column>
-									<el-table-column label="操作" width="100" v-if="showTd">
+									<el-table-column label="操作" width="100">
 										<template slot-scope="scope">
 											<el-badge :is-dot="scope.row.isRead === 0" class="item">
 												<el-button size="mini" type="primary"
@@ -99,11 +99,9 @@
 
 				<el-tabs class="bottom_box" v-model="activeName" @tab-click="handleClick">
 					<el-tab-pane label="我的帖子" name="0">
-						<div v-show="post === null" style="text-align: center;">尚未发帖</div>
 						<!-- <Posts :posts="post"></Posts> -->
 					</el-tab-pane>
 					<el-tab-pane label="我的收藏" name="1">
-						<div v-show="post === null" style="text-align: center;">尚未收藏</div>
 						<!-- <Collection :myColl="post"></Collection> -->
 					</el-tab-pane>
 					<keep-alive>
@@ -119,21 +117,21 @@
 			<!-- 对话框，邮件内容 -->
 			<transition name="el-zoom-in-center" :duration="5000">
 				<el-dialog title="私信内容" v-show="centerDialogVisible" :visible.sync="centerDialogVisible" width="30%"
-					center>
+					center :append-to-body="true" >
 					<el-input type="textarea" maxlength="255" :rows="10" :readonly="true" :value="mailContent"
 						placeholder="请输入私信内容" show-word-limit></el-input>
 					<span slot="footer" class="dialog-footer">
 						<el-button type="infor" @click="centerDialogVisible = false">关闭</el-button>
-						<el-button v-show="mailType === '1' && showTd" type="primary"
+						<el-button v-show="mailType === '1'" type="primary"
 							@click="centerDialogVisible2 = true; close()">回复</el-button>
 					</span>
 				</el-dialog>
 			</transition>
 
 			<!-- 对话框，发送邮件 -->
-			<transition name="el-zoom-in-center" :duration="5000" v-show="showTd">
+			<transition name="el-zoom-in-center" :duration="5000">
 				<el-dialog title="发送私信" v-show="centerDialogVisible2" :visible.sync="centerDialogVisible2" width="30%"
-					center>
+					center :append-to-body="true">
 					<div class="form">
 						<div>
 							<label>私信标题：</label>
@@ -494,11 +492,6 @@
 		text-align: center;
 	}
 
-	/* >>>.el-table td.el-table__cell .el-tooltip,
-	>>>.el-table_1_column_2 .cell {
-		text-align: left;
-	} */
-
 	>>>.el-table td.el-table__cell .el-tooltip {
 		cursor: pointer;
 	}
@@ -567,11 +560,9 @@
 		position: fixed;
 		top: 4.75rem;
 		right: 0;
-		z-index: 9999;
 		display: flex;
 		align-items: center;
 		transition: width .3s;
-		/* transform: translateX(50%); */
 	}
 
 	#isOpen .el-button+.el-button {
@@ -611,12 +602,10 @@
 	}
 
 	.isOpenG {
-		/* transform: translateX(100%); */
 		color: #ff0000;
 	}
 
 	.isOpenD {
-		/* transform: translateX(-100%); */
 		color: #55aa00;
 	}
 

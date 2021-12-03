@@ -11,9 +11,9 @@
 						<small v-html="item.content"></small>
 					</div>
 					<div class="other">
-						<div @click="toCommunityAndPublic(item.aid)"><small>{{item.aname}}</small></div>
+						<div @click="toCommunityAndPublic(item.aid)" style="max-width: 6rem;"><small>{{item.aname}}</small></div>
 						<div>
-							<div @click="toHisHomePage(item.authorUID)"><small>{{item.authorName}}</small></div>
+							<div @click="toHisHomePage(item.authorUID)" style="max-width: 4rem;"><small>{{item.authorName}}</small></div>
 							&emsp;
 							<div><small>{{item.releaseDate}}</small></div>
 						</div>
@@ -154,6 +154,9 @@
 				.title {
 					padding: 0.5rem 0;
 					font-size: 1.5rem;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
 				}
 
 				.content {
@@ -169,7 +172,7 @@
 					align-items: center;
 
 					div {
-						line-height: 1;
+						line-height: 1.3;
 						display: flex;
 						align-items: center;
 					}
@@ -193,6 +196,33 @@
 		to {
 			padding-top: 0px;
 			height: 100%;
+		}
+	}
+</style>
+
+<style scoped="scoped">
+	@media screen and (max-width: 480px) {
+		.result * {
+			box-sizing: border-box;
+		}
+		
+		.result .Posts_box {
+			width: 100%;
+		}
+		
+		.result .Posts_box> span{
+			width: 98%;
+		}
+		
+		.other div {
+			line-height: 1.3;
+		}
+		
+		.other >div small{
+			width: 100%;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 	}
 </style>

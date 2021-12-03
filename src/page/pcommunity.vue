@@ -252,7 +252,7 @@
 					myEmoji = 'EmojiInput2'
 				}
 				return myEmoji
-			}
+			},
 		},
 		beforeMount() {
 			this.getPostPageInfo()

@@ -80,7 +80,7 @@
 				this.value = 1
 			else
 				this.value = 0
-		}
+		},
 	}
 </script>
 
@@ -93,6 +93,8 @@
 			height: 100%;
 			max-width: 75rem;
 			margin: auto;
+			position: relative;
+			z-index: 1999;
 
 			.search_box {
 				padding: 1rem;

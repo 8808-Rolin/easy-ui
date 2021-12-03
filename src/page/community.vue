@@ -96,7 +96,7 @@
 				notSize: 0,
 				// 对话框
 				dialogData: {},
-				centerDialogVisible: false
+				centerDialogVisible: false,
 			}
 		},
 		components: {
@@ -201,7 +201,7 @@
 						this.centerDialogVisible = false
 					}
 				)
-			}
+			},
 		},
 		computed: {
 			...mapState({

@@ -89,7 +89,7 @@
 		    width: 100%;
 		    height: 100%;
 		    position: fixed;   /* //设置absolute,其他DIV设置为relative，这样这个例子效果就作为背景 */
-			z-index: -1;
+			z-index: 0;
 		}
 		
 		@media screen and (max-width: 480px) {

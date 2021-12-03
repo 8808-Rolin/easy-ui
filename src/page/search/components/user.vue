@@ -5,7 +5,8 @@
 		</div>
 		<div class="user_box">
 			<transition-group appear name="more" v-bind:css="false" v-on:before-enter="beforeEnter" v-on:enter="enter">
-				<div @click="toHisHomePage(item.uid)" class="user" v-for="(item, index) in users" :key="item.uid" :data-index="item">
+				<div @click="toHisHomePage(item.uid)" class="user" v-for="(item, index) in users" :key="item.uid"
+					:data-index="item">
 					<div class="left">
 						<div class="user_photo">
 							<img :src="headImage(item.image)">
@@ -69,9 +70,19 @@
 			/* 前往他的空间 */
 			toHisHomePage(uid) {
 				if (uid !== this.uid)
-					this.$router.push({name:'His',params:{uid}})
+					this.$router.push({
+						name: 'His',
+						params: {
+							uid
+						}
+					})
 				else
-					this.$router.push({name:'Me',params:{uid}})
+					this.$router.push({
+						name: 'Me',
+						params: {
+							uid
+						}
+					})
 			},
 			/* 重写头像路径 **/
 			headImage(image) {
@@ -138,10 +149,10 @@
 				display: flex;
 				justify-content: space-around;
 				flex-wrap: wrap;
-				
+
 				&::after {
 					width: 31.25rem;
-				    content: '';
+					content: '';
 				}
 			}
 
@@ -206,6 +217,20 @@
 
 		to {
 			padding-left: 0%;
+		}
+	}
+</style>
+
+<style scoped="scoped">
+	@media screen and (max-width: 480px) {
+		.result {
+			padding: 0.5rem;
+		}
+		
+		.result .user_box .user {
+			width: 100%;
+			background-color: #fff;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
 		}
 	}
 </style>
