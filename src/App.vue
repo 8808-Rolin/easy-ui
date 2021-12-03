@@ -55,7 +55,10 @@
 		-moz-osx-font-smoothing: grayscale;
 		/* text-align: center; */
 		color: #2c3e50;
+		padding: 0;
+		margin: 0;
 	}
+<<<<<<< HEAD
 
 	.slide-right-enter-active,
 	.slide-right-leave-active,
@@ -93,4 +96,50 @@
 		/* //设置absolute,其他DIV设置为relative，这样这个例子效果就作为背景 */
 		z-index: 0;
 	}
+=======
+	
+	.slide-right-enter-active, .slide-right-leave-active, .slide-left-enter-active, .slide-left-leave-active {
+	      will-change: transform;
+	      transition: all 500ms;
+	      /* position: absolute; */
+	    }
+	
+	    .slide-right-enter {
+	      opacity: 0;
+	      transform: translate3d(-100%, 0, 0);
+	    }
+	
+	    .slide-right-leave-active {
+	      opacity: 0;
+	      transform: translate3d(100%, 0, 0);
+	    }
+	
+	    .slide-left-enter {
+	      opacity: 0;
+	      transform: translate3d(100%, 0, 0);
+	    }
+	
+	    .slide-left-leave-active {
+	      opacity: 0;
+	      transform: translate3d(-100%, 0, 0);
+	    }
+		
+		 #particles-js{
+		    width: 100%;
+		    height: 100%;
+		    position: fixed;   /* //设置absolute,其他DIV设置为relative，这样这个例子效果就作为背景 */
+			z-index: 0;
+		}
+		
+		@media screen and (max-width: 480px) {
+			#particles-js {
+				z-index: -1;
+			}
+			
+			#app {
+				width: 100%!important;
+				
+			}
+		}
+>>>>>>> origin/lch
 </style>

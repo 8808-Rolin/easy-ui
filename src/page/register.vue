@@ -154,7 +154,7 @@
 					email: '',
 					sex: '',
 					birth: '',
-					headImage: '',
+					headImage: 'http://172.20.216.24:11119/images/default.jpg',
 					password: '',
 				},
 
@@ -555,7 +555,7 @@
 	}
 
 	.easy_photo {
-		background: url(../assets/logo-imgalpha-nologo-600px.png) no-repeat;
+		background: url(../assets/bg-1.png) no-repeat;
 		background-size: cover;
 	}
 

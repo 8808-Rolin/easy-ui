@@ -14,7 +14,7 @@
 					</div>
 					<div class="title">
 						<el-tooltip :content="post.title" placement="top" :open-delay="500">
-						<strong>&emsp;&emsp;{{post.title}}</strong>
+						<strong>{{post.title}}</strong>
 						</el-tooltip>
 					</div>
 				</div>
@@ -48,9 +48,11 @@
 			<div class="p_discuss">
 				<!-- 评论发表、他人评论 -->
 				<div class="publish">
-					<EmojiInput @analysisEmoji="releaseDiscuss" :aid="$route.params.aid" :permission="permissionCode"></EmojiInput>
+					<!-- <EmojiInput @analysisEmoji="releaseDiscuss" :aid="$route.params.aid" :permission="permissionCode"></EmojiInput> -->
+					<component :is="myEmoji" @analysisEmoji="releaseDiscuss" :aid="$route.params.aid" :permission="permissionCode"></component>
 				</div>
 				<div class="discuss_all">
+					<div v-show="discuss.length == 0" style="text-align: center;">尚未有人评论</div>
 					<div class="discuss" v-for="(item, index) in discuss" :key="index">
 						<div class="left" @click="toHisHomePage(item.author.cuid)">
 							<img :src="headImage(item.author.userImage)">
@@ -72,7 +74,7 @@
 			
 			<GoToLable></GoToLable>
 			<!-- 废物div -->
-			<div style="height: 1rem;"></div>
+			<div style="height: 3rem;"></div>
 		</div>
 	</div>
 </template>
@@ -81,6 +83,7 @@
 	import Header from '../components/Header.vue'
 	import Info from '../components/info.vue'
 	import EmojiInput from '../components/EmojiInput.vue'
+	import EmojiInput2 from '../components/EmojiInput2.vue'
 	import Pagination from '../components/Pagination.vue'
 	import GoToLable from '../components/goToLable.vue'
 	import analysisEmoji from '../utils/analysisEmoji.js'
@@ -112,7 +115,8 @@
 			Info,
 			EmojiInput,
 			Pagination,
-			GoToLable
+			GoToLable,
+			EmojiInput2
 		},
 		methods: {
 			getPostPageInfo() {
@@ -240,7 +244,14 @@
 				else {
 					return this.aname
 				}
-			}
+			},
+			myEmoji() {
+				let myEmoji = 'EmojiInput'
+				if(document.body.clientWidth < 480) {
+					myEmoji = 'EmojiInput2'
+				}
+				return myEmoji
+			},
 		},
 		beforeMount() {
 			this.getPostPageInfo()
@@ -293,6 +304,10 @@
 					overflow: hidden;
 					white-space: nowrap;
 					text-overflow: ellipsis;
+					
+					strong {
+						padding-left: 2rem;
+					}
 				}
 			}
 
@@ -334,8 +349,13 @@
 					justify-content: space-between;
 
 					.content {
+						max-width: 100vw;
 						min-height: calc(100% - 5rem);
 						padding: 1rem 1.5rem;
+						
+						* {
+							max-width: 100%;
+						}
 					}
 
 					.operation {
@@ -394,6 +414,7 @@
 					.right {
 						flex: 1;
 						margin-left: 1rem;
+						overflow: hidden;
 						border-bottom: rgba(0, 0, 0, .3) 0.0625rem solid;
 
 						div {
@@ -407,6 +428,7 @@
 						}
 
 						.content {
+							overflow: hidden;
 							color: #666;
 
 							img {
@@ -450,5 +472,62 @@
 	.attachment > span {
 	    vertical-align: middle;
 	    padding-right:4px;
+	}
+</style>
+
+<style type="text/css" scoped="scoped">
+	@media screen and (max-width: 480px) {
+		.main_box {
+			width: 98%;
+			top: 1rem;
+		}
+		
+		.main_box * {
+			box-sizing: border-box;
+		}
+		
+		.main_box .info_box {
+			display: none;
+		}
+		
+		.p_mes {
+			background-color: #FFF!important;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
+		}
+		
+		.time_super {
+			width: 100%;
+		}
+		
+		.p_user {
+			display: none;
+		}
+		
+		.main_box .p_mes .p_title .title {
+			font-size: 1.5rem;
+		}
+		
+		.main_box .p_mes .p_title .title strong {
+			padding: 0;
+		}
+		
+		.p_discuss {
+			background-color: #fff;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
+		}
+		
+		.discuss {
+			width: 100% !important;
+			padding: 0 0.5rem!important;
+		}
+		
+		.publish {
+			margin-top: 0.5rem;
+			padding: 0.25rem 0 !important;
+		}
+		
+		.main_box .p_discuss .discuss_all {
+			margin: 0;
+		}
 	}
 </style>

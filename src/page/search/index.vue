@@ -80,7 +80,7 @@
 				this.value = 1
 			else
 				this.value = 0
-		}
+		},
 	}
 </script>
 
@@ -93,6 +93,8 @@
 			height: 100%;
 			max-width: 75rem;
 			margin: auto;
+			position: relative;
+			z-index: 1999;
 
 			.search_box {
 				padding: 1rem;
@@ -127,6 +129,28 @@
 				margin-top: 2rem;
 				background-color: var(--bg);
 			}
+		}
+	}
+</style>
+
+<style scoped="scoped">
+	@media screen and (max-width: 480px) {
+		.main_box {
+			width: 98%;
+		}
+		
+		.main_box * {
+			box-sizing: border-box;
+		}
+		
+		.main_box .search_box, .main_box .result_box {
+			background-color: #fff!important;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04)!important;
+		}
+		
+		.main_box .result_box {
+			width: 98%;
+			margin: auto;
 		}
 	}
 </style>

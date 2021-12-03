@@ -222,7 +222,7 @@
 	}
 
 	.easy_photo {
-		background: url(../assets/logo-imgalpha-nologo-600px.png) no-repeat;
+		background: url(../assets/bg-1.png) no-repeat;
 		background-size: cover;
 	}
 

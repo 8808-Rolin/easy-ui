@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<div class="posts_box">
+			<div v-show="posts.length == 0" style="text-align: center;">尚未发帖</div>
 			<div class="post" v-for="(item, index) in posts" :key="item.pid">
 				<div class="post_top">
 					<div class="logo" @click="toPublicAndCommunity(item.aid)">
@@ -17,9 +18,6 @@
 					<small>发布日期：{{item.date}}</small>
 				</div>
 			</div>
-		</div>
-		<div class="">
-			<Pagination></Pagination>
 		</div>
 	</div>
 </template>
@@ -141,6 +139,32 @@
 				text-align: right;
 				color: #999;
 			}
+		}
+	}
+</style>
+
+<style scoped="scoped">
+	@media screen and (max-width: 480px) {
+		.posts_box {
+			padding: 0;
+		}
+		
+		.posts_box * {
+			box-sizing: border-box;
+		}
+		
+		.posts_box .post {
+			width: 98%;
+		}
+		
+		.posts_box .post .post_top .name> div {
+			max-width: 100%;
+		}
+		
+		.posts_box .post .post_bottom {
+			margin-top: 0.5rem;
+			display: flex;
+			justify-content: space-between;
 		}
 	}
 </style>

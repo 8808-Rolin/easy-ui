@@ -18,7 +18,9 @@
 		name: 'HomePage',
 		data() {
 			return {
-
+				centerDialogVisible3: false,
+				title: '',
+				input: ''
 			}
 		},
 		components: {
@@ -34,10 +36,24 @@
 		margin: auto;
 		position: relative;
 		top: 3rem;
+		z-index: 2000;
 
 		.mes_box {
 			width: 100%;
 			margin-top: 1rem;
+		}
+	}
+</style>
+
+<style type="text/css" scoped="scoped">
+	@media screen and (max-width: 480px) {
+		.main_box {
+			width: 98%;
+			box-sizing: border-box;
+		}
+		
+		.main_box * {
+			box-sizing: border-box;
 		}
 	}
 </style>

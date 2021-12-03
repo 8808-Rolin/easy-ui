@@ -1,35 +1,36 @@
 <template>
 	<div>
-		<el-table class="table" :data="posts" stripe style="width: 100%" @row-click="toP"
+		<el-table  class="table" :data="posts" stripe fit style="width: 100%" @row-click="toP"
 			:header-row-style="{height:'4rem'}" :row-style="{height:'4rem'}">
-			<el-table-column prop="postType" label="类型" width="150">
+			<div v-show="posts === null">帖子池为空，你来发帖吧！</div>
+			<el-table-column prop="postType" label="类型" width="150" v-if="showTd">
 				<template scope="scope">
 					<span class="blod" :class="{red: scope.row.postType == '系统公告'}">{{ scope.row.postType}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column prop="postTitle" label="标题" width="400">
+			<el-table-column prop="postTitle" label="标题" max-width="400">
 				<template scope="scope">
 					<el-tooltip :content="scope.row.postTitle" placement="top" :open-delay="500">
 						<span class="title" :class="{red: scope.row.postType == '系统公告'}">{{ scope.row.postTitle}}</span>
 					</el-tooltip>
 				</template>
 			</el-table-column>
-			<el-table-column prop="postAuthor" label="发帖用户" width="150">
+			<el-table-column prop="postAuthor" label="发帖用户" width="100">
 				<template scope="scope">
 					<span :class="{blod: scope.row.postType == '系统公告'}">{{ scope.row.postAuthor}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column prop="replies" label="回复数" width="120">
+			<el-table-column prop="replies" label="回复数" width="120" v-if="showTd">
 				<template scope="scope">
 					<span :class="{blod: scope.row.postType == '系统公告'}">{{ scope.row.replies}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column prop="replyTime" label="最后回复时间" width="160">
+			<el-table-column prop="replyTime" label="最后回复时间" width="160" v-if="showTd">
 				<template scope="scope">
 					<span :class="{blod: scope.row.postType == '系统公告'}">{{ scope.row.replyTime}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column prop="releaseTime" label="发布时间" width="150">
+			<el-table-column prop="releaseTime" label="发布时间" width="150" v-if="showTd">
 				<template scope="scope">
 					<span :class="{blod: scope.row.postType == '系统公告'}">{{ scope.row.releaseTime}}</span>
 				</template>
@@ -207,6 +208,13 @@
 				uid: state => state.request.uid,
 				user: state => state.message.user,
 			}),
+			showTd() {
+				let width = true
+				if (document.body.clientWidth < 480) {
+					width = false
+				}
+				return width
+			}
 		},
 		watch: {
 			chaildFirstPosts: {

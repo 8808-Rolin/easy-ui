@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<Header></Header>
 		<div class="error_500">
 			<div class="error">
 				<div class="mes_box">

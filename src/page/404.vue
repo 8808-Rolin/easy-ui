@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<Header></Header>
 		<div class="error_404">
 			<div class="error">
 				<div class="photo">

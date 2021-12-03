@@ -19,7 +19,6 @@
 							<a><small>{{notice.date}}</small></a>
 						</div>
 					</div>
-
 				</el-card>
 			</div>
 		</div>
@@ -67,7 +66,7 @@
 				this.$router.push({
 					path: '/public'
 				})
-			}
+			},
 		},
 		beforeMount() {
 			this.$api.getSimpleNotice().then(
@@ -76,7 +75,7 @@
 						this.notices = res.data.data.notice
 				}
 			)
-		}
+		},
 	}
 </script>
 
@@ -100,7 +99,7 @@
 
 	.index_left {
 		width: 50%;
-		background: url(../assets/logo-imgalpha-nologo-600px.png) no-repeat;
+		background: url(../assets/bg-2.png) no-repeat;
 		background-size: auto 100%; 
 	}
 
@@ -108,6 +107,7 @@
 		width: 50%;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
 		align-items: center;
 	}
 
@@ -119,7 +119,7 @@
 		border: #1DA0FB 0.0625rem solid;
 		position: fixed;
 		right: -35%;
-		bottom: 4.5rem;
+		bottom: 1.7rem;
 		overflow: hidden;
 		transition: 1.33s;
 	}
@@ -281,13 +281,22 @@
 		.index_right {
 			width: 100%;
 		}
+		
+		>>>.el-card__body {
+			padding: 0rem;
+		}
+		
+		>>>.box-card {
+			height: 50vh;
+			transform: translateY(-25%);
+		}
 
 		.button_box {
 			width: 110%;
 			height: 6rem;
 			right: 50%;
 			transform: translateX(50%);
-			bottom: 4.5rem;
+			bottom: 1.7rem;
 			border-radius: 0.375rem;
 		}
 
@@ -301,7 +310,10 @@
 
 		.community {
 			right: 0;
-			
+		}
+		
+		.community > div {
+			justify-content: center !important;
 		}
 	}
 
