@@ -338,5 +338,9 @@
 		header .warp {
 			padding: 0 0.25rem;
 		}
+		
+		.el-dialog {
+			width: 98%!important;
+		}
 	}
 </style>

@@ -403,5 +403,9 @@
 			width: 8rem;
 			height: 3.2rem;
 		}
+		
+		>>>.el-dialog {
+			width: 98%!important;
+		}
 	}
 </style>
