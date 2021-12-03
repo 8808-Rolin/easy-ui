@@ -172,7 +172,6 @@
 		width: 100%;
 		height: 100%;
 	}
-
 	header {
 		width: 100%;
 		height: 4rem;
@@ -222,18 +221,12 @@
 		border-radius: 50%;
 		overflow: hidden;
 	}
-<<<<<<< HEAD
-	.el-dropdown-link {
-=======
-
 	>>>.el-dropdown-link {
->>>>>>> origin/lch
 		cursor: pointer;
 		color: #409eff;
 		display: flex;
 		align-items: center;
 	}
-
 	>>>.el-dropdown-link>div {
 		width: fit-content;
 		max-width: 4rem;
@@ -260,8 +253,6 @@
 		font-size: 14px;
 	}
 	
-<<<<<<< HEAD
-=======
 	.search_man .el-tag {
 		margin-top: 0.5rem;
 		cursor: pointer;
@@ -320,8 +311,6 @@
 	.form .content>>> .el-textarea__inner {
 		resize: none;
 	}
-
->>>>>>> origin/lch
 	@media screen and (max-width: 480px) {
 		header {
 			width: 100%;
@@ -330,14 +319,12 @@
 			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
 			z-index: 2000;
 		}
-<<<<<<< HEAD
-	}
-</style>
-=======
-
 		header .warp {
 			padding: 0 0.25rem;
 		}
+		
+		.el-dialog {
+			width: 98%!important;
+		}
 	}
 </style>
->>>>>>> origin/lch

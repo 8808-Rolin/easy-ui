@@ -1,10 +1,6 @@
 <template>
 	<div>
 		<Info :user="userdata"></Info>
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/lch
 		<div class="homepage">
 			<div v-show="code === 2" style="width: 100%;line-height: 100px;text-align: center;">
 				<h1 style="margin-top: 3rem;">当前空间用户未开放，无法访问！！</h1>
@@ -25,10 +21,6 @@
 					</el-tab-pane>
 				</el-tabs>
 			</div>
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/lch
 			<div class="right" v-show="code !== 2">
 				<PersonalInfo :user="userdata" :status="code"></PersonalInfo>
 			</div>

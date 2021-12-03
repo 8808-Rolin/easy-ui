@@ -58,8 +58,6 @@
 		padding: 0;
 		margin: 0;
 	}
-<<<<<<< HEAD
-
 	.slide-right-enter-active,
 	.slide-right-leave-active,
 	.slide-left-enter-active,
@@ -95,9 +93,7 @@
 		position: fixed;
 		/* //设置absolute,其他DIV设置为relative，这样这个例子效果就作为背景 */
 		z-index: 0;
-	}
-=======
-	
+	}	
 	.slide-right-enter-active, .slide-right-leave-active, .slide-left-enter-active, .slide-left-leave-active {
 	      will-change: transform;
 	      transition: all 500ms;
@@ -141,5 +137,4 @@
 				
 			}
 		}
->>>>>>> origin/lch
 </style>

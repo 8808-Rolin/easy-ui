@@ -6,13 +6,12 @@
 			</div>
 
 			<div class="seach_box" :class="{'topSeach_box':topSeach_box}">
-				<el-input placeholder="请输入内容" @keyup.enter.native="toSearch" @focus="topSeach_box = true" @blur="topSeach_box = false" v-model="search.keyword" class="input-with-select">
-					<el-button slot="append" icon="el-icon-search" @click="toSearch"><span class="sousuo">搜索</span></el-button>
 				<el-input placeholder="请输入内容" @keyup.enter.native="toSearch" @focus="topSeach_box = true"
 					@blur="topSeach_box = false" v-model="search.keyword" class="input-with-select">
 					<el-button slot="append" icon="el-icon-search" @click="toSearch"><span class="sousuo">搜索</span>
 					</el-button>
 				</el-input>
+
 			</div>
 
 			<div class="user" v-show="existUser">
@@ -154,14 +153,12 @@
 			handleClose(tag) {
 				this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
 			},
-
 			showInput() {
 				this.inputVisible = true;
 				this.$nextTick(_ => {
 					this.$refs.saveTagInput.$refs.input.focus();
 				});
 			},
-
 			handleInputConfirm() {
 				let inputValue = this.inputValue;
 				if (inputValue) {
@@ -192,7 +189,6 @@
 		width: 100%;
 		height: 100%;
 	}
-
 	header {
 		width: 100%;
 		height: 4rem;
@@ -242,14 +238,12 @@
 		border-radius: 50%;
 		overflow: hidden;
 	}
-	
 	>>>.el-dropdown-link {
 		cursor: pointer;
 		color: #409eff;
 		display: flex;
 		align-items: center;
 	}
-
 	>>>.el-dropdown-link>div {
 		width: fit-content;
 		max-width: 4rem;
@@ -257,7 +251,6 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-
 	.el-icon-arrow-down {
 		font-size: 12px;
 	}
@@ -290,12 +283,10 @@
 		color: #fff;
 		border-color: #1DA0FB;
 	}
-
 	.topSeach_box>>>.el-input__inner {
 		width: 20rem;
 		transition: width .5s;
 	}
-
 	.sousuo {
 		display: none;
 	}
@@ -303,11 +294,9 @@
 	.search_man .el-tag {
 		cursor: pointer;
 	}
-
 	.el-tag+.el-tag {
 		margin-left: 10px;
 	}
-
 	.button-new-tag {
 		margin-left: 10px;
 		height: 32px;
@@ -315,7 +304,6 @@
 		padding-top: 0;
 		padding-bottom: 0;
 	}
-
 	.input-new-tag {
 		width: 90px;
 		margin-left: 10px;
@@ -356,45 +344,38 @@
 	.form .content>>> .el-textarea__inner {
 		resize: none;
 	}
-
 	@media screen and (max-width: 480px) {
 		header {
 			width: 100%;
 			background-color: #fff;
 			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
 		}
-		
 		.seach_box>>>.el-input__inner {
 			width: 0;
 			padding: 0;
 			border: 0;
 		}
-
 		.seach_box>>>.el-input__inner:hover {
 			width: 100vw - 8rem - 10rem;
 			transition: width .5s;
 		}
-
 		.seach_box>>>.el-input-group__append {
 			border: #1DA0FB 0.0625rem solid;
 			border-radius: 0.375rem
 		}
-		
 		.sousuo {
 			display: inline-flex;
 		}
-		
-		.sousuo {
-			display: inline-flex;
-		}
-
 		header .warp {
 			padding: 0 0.25rem;
 		}
-
 		header .warp .logo {
 			width: 8rem;
 			height: 3.2rem;
+		}
+		
+		>>>.el-dialog {
+			width: 98%!important;
 		}
 	}
 </style>

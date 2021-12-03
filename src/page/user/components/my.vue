@@ -151,19 +151,12 @@
 		</div>
 
 		<!-- 空间是否开放 -->
-<<<<<<< HEAD
-		<div id="isOpen">
-			<el-button :class="{isOpenG : isOpenShow === 1}" icon="iconfont icon-yanjing_guanbi"
-				@click="isOpenShow = 0;updateSwitchState()"></el-button>
-			<el-button :class="{isOpenD : isOpenShow === 1}" icon="iconfont icon-yanjing_dakai" @click="isOpenShow = 1;updateSwitchState()">
-=======
 		<div id="isOpen" :class="{open:open_huojian}">
 			<el-button class="tou" icon="iconfont icon-huojian" @click="open_huojian = !open_huojian"></el-button>
 			<el-button v-show="isOpenShow === 1" class="isOpenG" icon="iconfont icon-yanjing_guanbi"
 				@click="isOpenShow = 0;updateSwitchState()"></el-button>
 			<el-button v-show="isOpenShow === 0" class="isOpenD" icon="iconfont icon-yanjing_dakai"
 				@click="isOpenShow = 1;updateSwitchState()">
->>>>>>> origin/lch
 			</el-button>
 			<el-button class="fanhui" icon="iconfont icon-fanhui" plain @click="returnPage"></el-button>
 		</div>
@@ -218,11 +211,8 @@
 				current: 'Posts',
 				getMailTimeout: null,
 				isOpenShow: 0,
-<<<<<<< HEAD
 				isSystem:0,
-=======
 				open_huojian: false
->>>>>>> origin/lch
 			}
 		},
 		methods: {

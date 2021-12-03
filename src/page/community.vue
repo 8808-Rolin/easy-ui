@@ -257,8 +257,6 @@
 					}
 				});
 			}
-=======
->>>>>>> origin/lch
 		},
 		computed: {
 			...mapState({
