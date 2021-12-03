@@ -10,11 +10,7 @@
 				</div>
 				<el-dropdown>
 					<span class="el-dropdown-link">
-<<<<<<< HEAD
-						<span style="color: #000000;cursor: pointer">{{user.userName}}</span>
-=======
 						<div style="color: #000000;cursor: pointer;">{{user.userName}}</div>
->>>>>>> origin/lch
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">

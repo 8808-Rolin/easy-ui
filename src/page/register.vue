@@ -67,7 +67,7 @@
 							:before-upload="beforeAvatarUpload" v-show="percentage == 75">
 							<img v-if="imageBASE64" :src="imageBASE64" class="avatar">
 							<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							<div slot="tip" class="el-upload__tip">上传jpg/png头像，且不超过500kb</div>
+							<div slot="tip" class="el-upload__tip">上传jpg/png头像,上传图片不大于5M</div>
 						</el-upload>
 
 						<div class="msg_input" v-show="percentage == 100">
@@ -121,6 +121,7 @@
 	import {
 		Loading
 	} from 'element-ui';
+	const imageConversion = require("image-conversion");
 
 	export default {
 		userName: 'Register',
@@ -163,7 +164,7 @@
 				isTrueMail: true,
 				passwordLen: true,
 				isTruePassword: true,
-				isVerify: 0
+				isVerify: 0,
 			};
 		},
 		components: {
@@ -192,7 +193,7 @@
 							loadingInstance1.close()
 							if (response.data.data.code !== 0) {
 								this.percentage = 25
-								this.notify = this.$notify.error({
+								this.notify = this.$message.error({
 									message: response.data.data.msg,
 								});
 							} else {
@@ -242,20 +243,23 @@
 			// 上传文件之前的钩子，参数为上传的文件，若返回 false，则停止上传。
 			beforeAvatarUpload(file) {
 				const isJPGandPNG = file.type === 'image/jpeg' || file.type === 'image/png';
-				const isLt500k = file.size / 1024 / 1024 < 0.5;
-				if (isJPGandPNG && isLt500k) {
-					let filereader = new FileReader();
-					filereader.readAsDataURL(file)
-					filereader.onload = () => {
-						this.imageBASE64 = filereader.result
-						console.log(this.imageBASE64)
-					}
+				const isLt5M = file.size / 1024 / 1024 < 5;
+				let filereader = new FileReader();
+				if (isJPGandPNG && isLt5M) {
+					imageConversion.compressAccurately(file, {
+						size: 48
+					}).then(res => {
+						filereader.readAsDataURL(res)
+						filereader.onload = () => {
+							this.imageBASE64 = filereader.result
+							console.log(res)
+						}
+					});
 				} else {
 					if (!isJPGandPNG) {
 						this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
-					}
-					if (!isLt500k) {
-						this.$message.error('上传头像图片大小不能超过 2MB!');
+					} else if (!isLt5M) {
+						this.$message.error('上传头像图片不大于5M');
 					}
 				}
 				return false;
@@ -282,12 +286,12 @@
 				if ((len > 15 || len < 8) && bool) {
 					this.isTrueSNo = false
 					if (len > 15) {
-						this.notify = this.$notify.error({
+						this.notify = this.$message.error({
 							title: '输入信息有误',
 							message: '亲，输入的学号过长！',
 						});
 					} else {
-						this.notify = this.$notify.error({
+						this.notify = this.$message.error({
 							title: '输入信息有误',
 							message: '亲，输入的学号过短！',
 						});
@@ -295,7 +299,7 @@
 				} else {
 					if (!bool) {
 						this.isTrueSNo = false
-						this.notify = this.$notify.error({
+						this.notify = this.$message.error({
 							title: '输入信息有误',
 							message: '亲，学号只能包含数字！',
 						});
@@ -314,7 +318,7 @@
 				if (this.loginMessage.phone !== '' && (phone > 11 || phone < 11)) {
 					if (!regMobile.test(this.loginMessage.phone)) {
 						this.isTruePhone = false
-						this.notify = this.$notify.error({
+						this.notify = this.$message.error({
 							title: '输入信息有误',
 							message: '亲，请输入正确的手机号码！',
 						});
@@ -337,7 +341,7 @@
 			checkPasswordLen() {
 				if (this.password != "" && this.password.length < 8) {
 					this.passwordLen = false
-					this.notify = this.$notify.error({
+					this.notify = this.$message.error({
 						title: '密码格式错误',
 						message: '密码不少于8位字符！',
 					});
@@ -357,7 +361,7 @@
 					} else {
 						this.isTruePassword = false
 						if (this.isPassword.length == this.password.length) {
-							this.notify = this.$notify.error({
+							this.notify = this.$message.error({
 								title: '密码不一致',
 								message: '亲，请重新确认密码！',
 							});
@@ -383,9 +387,9 @@
 								});
 								this.$router.push({
 									path: '/login',
-									params:{
-										studentID:this.studentID,
-										password:this.password
+									params: {
+										studentID: this.studentID,
+										password: this.password
 									}
 								})
 							} else {
@@ -569,7 +573,7 @@
 		justify-content: center;
 		align-items: center;
 	}
-	
+
 	>>>.avatar-uploader .el-upload {
 		border: 1px dashed #d9d9d9;
 		border-radius: 2.5rem;
@@ -605,32 +609,32 @@
 		width: 60%;
 	}
 
-	.mistaken >>>.el-input__inner:focus,
-	.mistaken >>>.el-input__inner {
+	.mistaken>>>.el-input__inner:focus,
+	.mistaken>>>.el-input__inner {
 		outline-color: #ff0000;
 		border-color: #FF0000;
 	}
 
-	.el-button-group >>>.el-button,
-	.el-button-group >>>.el-button:hover {
+	.el-button-group>>>.el-button,
+	.el-button-group>>>.el-button:hover {
 		background-color: #f2a373;
 		border-color: #f2a373;
 	}
-	
+
 	@media screen and (max-width: 480px) {
 		.register_box {
 			box-shadow: none;
 			width: 100%;
 			background-color: transparent;
 		}
-		
+
 		.register_box .register>div {
 			background-color: var(--bg);
 		}
-		
+
 		.easy_photo {
 			display: none;
 		}
-		
+
 	}
 </style>

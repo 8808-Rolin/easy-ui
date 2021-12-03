@@ -17,7 +17,7 @@
 							</div>
 							<div class="join_club">
 								<el-button v-show="permissionCode === 0">加入社团</el-button>
-								<el-button v-show="permissionCode === 2">社团管理</el-button>
+								<el-button v-show="permissionCode === 2" @click="toAdmin">社团管理</el-button>
 							</div>
 						</div>
 						<div class="club_superior">
@@ -78,7 +78,6 @@
 		props: ['chaildPosts', 'chaildFirstPosts', 'total', 'aid', 'notisSize', 'permission', 'tinymceId'],
 		data() {
 			return {
-				user: {},
 				permissionCode: 0,
 				ass: [],
 				options: [{
@@ -88,7 +87,6 @@
 				actionOverview: [],
 				posts: [],
 				firstposts: [],
-				user: {},
 				code: 0,
 				page: 1,
 				limit: 10,
@@ -203,11 +201,18 @@
 						this.centerDialogVisible = false
 					}
 				)
+			},
+			/* 前往管理员界面 */
+			toAdmin() {
+				let aid = this.$route.params.aid
+				let studentID = this.user.studentID
+				window.location.href = `${base.mq}/dashboard?aid=${aid}&studentID=${studentID}`
 			}
 		},
 		computed: {
 			...mapState({
 				uid: state => state.request.uid,
+				user: state => state.message.user,				
 			}),
 		},
 		created() {
