@@ -30,6 +30,10 @@
 				</div>
 			</div>
 		</div>
+		
+		<div id="go_back">
+			<router-link :to="{path: '/'}">返回首页</router-link>
+		</div>
 	</div>
 </template>
 
@@ -202,7 +206,7 @@
 	}
 </script>
 
-<style>
+<style scoped="scoped">
 	.forget_box {
 		width: 56.25rem;
 		height: 28.125rem;
@@ -215,6 +219,7 @@
 		flex-direction: row;
 		justify-content: space-around;
 		box-shadow: var(--box-shadow2);
+		background-color: var(--bg);
 	}
 
 	.forget_box .box {
@@ -282,5 +287,31 @@
 	.mistaken .el-input__inner {
 		outline-color: #ff0000;
 		border-color: #FF0000;
+	}
+	
+	@media screen and (max-width: 480px) {
+		.forget_box {
+			width: 100%;
+			background-color: transparent;
+			box-shadow: none;
+		}
+		
+		.forget>div {
+			background-color: var(--bg);
+		}
+		
+		.easy_photo {
+			display: none;
+		}
+		
+		#go_back {
+			display: block;
+			width: 100%;
+			height: 3rem;
+			line-height: 3rem;
+			position: fixed;
+			bottom: 0;
+			text-align: center;
+		}
 	}
 </style>

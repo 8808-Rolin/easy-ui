@@ -44,6 +44,9 @@
 
 			</div>
 		</div>
+		<div style="width: 100%;height: 1.7rem;line-height: 1.7rem;margin-top: 2rem;text-align: center;position: fixed;bottom: 0;">
+			<a href="https://beian.miit.gov.cn/#/Integrated/index" style="color: #999;">粤ICP备2020103045号</a>
+		</div>
 	</div>
 </template>
 

@@ -235,7 +235,7 @@
 		align-items: center;
 		box-shadow: var(--box-shadow2);
 		background-color: var(--bg);
-		z-index: 2000;
+		z-index: 1100;
 	}
 	header .warp {
 		width: 100%;

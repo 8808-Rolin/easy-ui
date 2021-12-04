@@ -48,6 +48,9 @@
 			<!-- 废物div -->
 			<div style="height: 1rem;"></div>
 		</div>
+		<div style="height: 3rem;line-height: 3rem;margin-top: 2rem;text-align: center;">
+			<a href="https://beian.miit.gov.cn/#/Integrated/index" style="color: #999;">粤ICP备2020103045号</a>
+		</div>
 	</div>
 </template>
 
