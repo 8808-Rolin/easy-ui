@@ -27,6 +27,7 @@
 						<el-dropdown-item @click.native="centerDialogVisible = true">发送邮件</el-dropdown-item>
 						<el-dropdown-item @click.native="toMyHomePage">个人空间</el-dropdown-item>
 						<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
+						<el-dropdown-item divided @click.native="centerDialogVisibleClub = true">新建社团</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
@@ -50,12 +51,14 @@
 					<div class="to_man">
 						<div class="to_man_tag">
 							<label>收件人：</label>
-							<el-tag v-show="toManTag != ''" closable :disable-transitions="false" size="small" @close="removeToManTag(toManTag)">
+							<el-tag v-show="toManTag != ''" closable :disable-transitions="false" size="small"
+								@close="removeToManTag(toManTag)">
 								{{toManTag.tag}}
 							</el-tag>
 						</div>
 						<div class="search_man">
-							<el-input @input="findUser" placeholder="请输入收件人的名称/昵称/电话号码/学号..." v-model="keyword"></el-input>
+							<el-input @input="findUser" placeholder="请输入收件人的名称/昵称/电话号码/学号..." v-model="keyword">
+							</el-input>
 							<div>
 								<el-tag :key="index" v-for="(tag, index) in dynamicTags" :disable-transitions="false"
 									size="medium" @click="handleClose(tag)">
@@ -71,6 +74,42 @@
 				<el-button type="primary" @click="sendMail">确 定</el-button>
 			</span>
 		</el-dialog>
+
+		<!-- 新建社团 -->
+		<el-dialog title="提示" :visible.sync="centerDialogVisibleClub" width="45%" center :append-to-body="true">
+			<span>
+				<div id="newAClub">
+					<div><label>logo：</label>
+						<el-upload class="avatar-uploader" action="#" :show-file-list="false"
+							:before-upload="beforeAvatarUpload">
+							<img v-if="imageBASE64" :src="imageBASE64" class="avatar">
+							<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+						</el-upload>
+					</div>
+					<div><label>社团名称：</label>
+						<el-input placeholder="请输入论坛名称" show-word-limit maxlength="25" v-model="assmes.assname">
+						</el-input>
+					</div>
+					<div><label>社团简介：</label>
+						<el-input class="intro" v-model="assmes.assintro" show-word-limit maxlength="255"
+							type="textarea" :rows="6" placeholder="请输入社团简介">
+						</el-input>
+					</div>
+					<div><label>申请备注：</label>
+						<el-input class="intro" v-model="assmes.note" show-word-limit maxlength="255" type="textarea"
+							:rows="6" placeholder="请输入申请备注">
+						</el-input>
+					</div>
+					<div><label>社团所属组织：</label>
+						<el-input placeholder="请输入组织名称" show-word-limit maxlength="50" v-model="assmes.org"></el-input>
+					</div>
+				</div>
+			</span>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="centerDialogVisibleClub = false">取 消</el-button>
+				<el-button type="primary" @click="createAss">确 定</el-button>
+			</span>
+		</el-dialog>
 	</header>
 </template>
 
@@ -80,25 +119,38 @@
 		mapState
 	} from 'vuex'
 	import base from '../api/request/base.js'; // 导入接口域名列表
+	const imageConversion = require("image-conversion");
+	
 	export default {
 		name: 'Header',
 		data() {
 			return {
 				search: {
 					type: 0,
-					keyword: 'vue'
+					keyword: '社团'
 				},
 				topSeach_box: false,
 				centerDialogVisible: false,
 				title: '',
 				input: '',
-				keyword:'',
+				keyword: '',
 				dynamicTags: [],
 				inputVisible: false,
 				inputValue: '',
 				toManTag: '',
-				timeout:null,
-				message:null,
+				timeout: null,
+				message: null,
+				centerDialogVisibleClub: false,
+				// 新建社团信息
+				imageBASE64: '',
+				assmes: {
+					assname: '',
+					assintro: '',
+					note: '',
+					assprofile: '',
+					uid: 0,
+					org: '',
+				},
 			}
 		},
 		methods: {
@@ -181,21 +233,26 @@
 				let keyword = this.keyword
 				clearTimeout(this.timeout)
 				this.timeout = setTimeout(() => {
-					console.log(keyword,"=====")
+					console.log(keyword, "=====")
 					if (keyword != '') {
-						this.$api.findUser({keyword}).then(
+						this.$api.findUser({
+							keyword
+						}).then(
 							res => {
 								let list = res.data.data.msg.reduce((item, next) => {
-									let arr = {uid:next.uid, tag: `${next.name}(${next.student_number})`}
+									let arr = {
+										uid: next.uid,
+										tag: `${next.name}(${next.student_number})`
+									}
 									item.push(arr)
 									return item
-								},[])
+								}, [])
 								this.dynamicTags = list
 								//console.log(list)
 							}
 						)
 					}
-				},500)
+				}, 500)
 				//console.log(keyword)
 				/* this.$api.findUser({keyword}).then(
 					res => {
@@ -215,7 +272,14 @@
 				//console.log(isSystem,mailType,fromuid,touid,title,content)
 				let bool = touid === undefined || title === '' || content === '' ? false : true
 				if (bool) {
-					this.$api.sendEmail({isSystem,mailType,fromuid,touid,title,content}).then(
+					this.$api.sendEmail({
+						isSystem,
+						mailType,
+						fromuid,
+						touid,
+						title,
+						content
+					}).then(
 						res => {
 							if (res.data.data.code > -1) {
 								this.input = ''
@@ -228,13 +292,78 @@
 							} else {
 								this.message = this.$message.error(res.data.data.msg)
 							}
-							
+
 						}
 					)
 				} else {
 					this.message = this.$message.error("请完善数据")
 				}
-			}
+			},
+
+			/* 创建社团审批 */
+			createAss() {
+				if (this.message !== null) this.message.close()
+				this.assmes.uid = this.uid
+				let arr = Object.values(this.assmes).filter(item => {
+					if (item !== '') {
+						return true
+					}
+				})
+				if (arr.length >= 5 && this.imageBASE64 !== '') {
+					console.log(this.imageBASE64)
+					this.$api.uploadImage({
+						imageBASE64:this.imageBASE64
+					}).then(
+						res => {
+							if (res.data.data.code === 0) {
+								this.assmes.assprofile = res.data.data.msg
+								this.$api.createAss({...this.assmes}).then(
+									res => {
+										this.assmes = {
+											assname: '',
+											assintro: '',
+											note: '',
+											assprofile: '',
+											uid: 0,
+											org: '',
+										}
+										this.imageBASE64 = ''
+										this.message = this.$message.success(res.data.data.msg)
+										this.centerDialogVisibleClub = false
+									}
+								)
+							} else {
+								this.message = this.$message.error(res.data.data.msg)
+							}
+						}
+					)
+				} else {
+					this.message = this.$message.error("请完善数据")
+				}
+			},
+
+			/* 上传头像 **/
+
+			// 上传文件之前的钩子，参数为上传的文件，若返回 false，则停止上传。
+			beforeAvatarUpload(file) {
+				const isJPGandPNG = file.type === 'image/jpeg' || file.type === 'image/png';
+				const isLt500k = file.size / 1024 / 1024 < 2;
+				if (isJPGandPNG && isLt500k) {
+					let filereader = new FileReader();
+					filereader.readAsDataURL(file)
+					filereader.onload = () => {
+						this.imageBASE64 = filereader.result
+					}
+				} else {
+					if (!isJPGandPNG) {
+						this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+					}
+					if (!isLt500k) {
+						this.$message.error('上传头像图片大小不能超过 2MB!');
+					}
+				}
+				return false
+			},
 		},
 		computed: {
 			...mapState({
@@ -257,6 +386,7 @@
 		width: 100%;
 		height: 100%;
 	}
+
 	header {
 		width: 100%;
 		height: 4rem;
@@ -269,6 +399,7 @@
 		background-color: var(--bg);
 		z-index: 2000;
 	}
+
 	header .warp {
 		width: 100%;
 		max-width: 75rem;
@@ -279,10 +410,12 @@
 		justify-content: space-between;
 		align-items: center;
 	}
+
 	header .warp .logo {
 		width: 10rem;
 		height: 4rem;
 	}
+
 	header .warp .logo a {
 		display: block;
 		width: 100%;
@@ -291,6 +424,7 @@
 		background-size: cover;
 		text-indent: -624.9375rem;
 	}
+
 	header .warp .user {
 		width: 8rem;
 		height: 2.25rem;
@@ -299,6 +433,7 @@
 		justify-content: flex-end;
 		align-items: center;
 	}
+
 	header .warp .user .profile {
 		width: 2.25rem;
 		height: 2.25rem;
@@ -306,12 +441,14 @@
 		border-radius: 50%;
 		overflow: hidden;
 	}
+
 	>>>.el-dropdown-link {
 		cursor: pointer;
 		color: #409eff;
 		display: flex;
 		align-items: center;
 	}
+
 	>>>.el-dropdown-link>div {
 		width: fit-content;
 		max-width: 4rem;
@@ -319,9 +456,11 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
+
 	.el-icon-arrow-down {
 		font-size: 12px;
 	}
+
 	.login_and_register {
 		width: 6.25rem;
 		display: flex;
@@ -329,42 +468,51 @@
 		justify-content: space-around;
 		align-items: center;
 	}
+
 	.login_and_register a {
 		color: inherit;
 		font-size: 14px;
 	}
+
 	.login_and_register a:hover {
 		color: #1DA0FB;
 		font-size: 14px;
 	}
+
 	/* 搜索框 */
 	.seach_box>>>.el-input__inner {
 		width: 12.5rem;
 		transition: width .5s;
 	}
+
 	.seach_box>>>.el-input__inner:hover {
 		width: 20rem;
 		transition: width .5s;
 	}
+
 	.seach_box>>>.el-input-group__append {
 		background-color: #1DA0FB;
 		color: #fff;
 		border-color: #1DA0FB;
 	}
+
 	.topSeach_box>>>.el-input__inner {
 		width: 20rem;
 		transition: width .5s;
 	}
+
 	.sousuo {
 		display: none;
 	}
-	
+
 	.search_man .el-tag {
 		cursor: pointer;
 	}
+
 	.el-tag+.el-tag {
 		margin-left: 10px;
 	}
+
 	.button-new-tag {
 		margin-left: 10px;
 		height: 32px;
@@ -372,78 +520,144 @@
 		padding-top: 0;
 		padding-bottom: 0;
 	}
+
 	.input-new-tag {
 		width: 90px;
 		margin-left: 10px;
 		vertical-align: bottom;
 	}
-	
+
 	.to_man {
 		margin-top: 0.5rem;
 	}
-	
+
 	.to_man .to_man_tag {
 		padding: 0.25rem 0;
 	}
-	
+
 	.to_man .search_man {
 		padding: 0.25rem 0;
 	}
-	
-	.to_man .search_man > div {
+
+	.to_man .search_man>div {
 		padding: 0.25rem 0;
 	}
-	
+
 	.form .title {
 		width: 100%;
 		padding: 0.25rem 0;
 		display: flex;
 		align-items: center;
 	}
-	
+
 	.form .title label {
 		white-space: nowrap;
 	}
-	
+
 	.form .content {
 		margin-top: 0.5rem;
 	}
-	
-	.form .content>>> .el-textarea__inner {
+
+	.form .content>>>.el-textarea__inner {
 		resize: none;
 	}
+
 	@media screen and (max-width: 480px) {
 		header {
 			width: 100%;
 			background-color: #fff;
 			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
 		}
+
 		.seach_box>>>.el-input__inner {
 			width: 0;
 			padding: 0;
 			border: 0;
 		}
+
 		.seach_box>>>.el-input__inner:hover {
 			width: 100vw - 8rem - 10rem;
 			transition: width .5s;
 		}
+
 		.seach_box>>>.el-input-group__append {
 			border: #1DA0FB 0.0625rem solid;
 			border-radius: 0.375rem
 		}
+
 		.sousuo {
 			display: inline-flex;
 		}
+
 		header .warp {
 			padding: 0 0.25rem;
 		}
+
 		header .warp .logo {
 			width: 8rem;
 			height: 3.2rem;
 		}
-		
+
 		>>>.el-dialog {
-			width: 98%!important;
+			width: 98% !important;
 		}
+
+		#newAClub label {
+			display: none;
+		}
+
+		#newAClub>>>.avatar-uploader {
+			margin: auto;
+		}
+	}
+</style>
+
+<style scoped="scoped">
+	#newAClub {
+		height: 40rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+
+	#newAClub label {
+		width: 9rem;
+		margin-top: 0.75rem;
+		white-space: nowrap;
+	}
+
+	#newAClub>div {
+		display: flex;
+		align-items: flex-start;
+	}
+
+	>>>.avatar-uploader .el-upload {
+		border: 1px dashed #d9d9d9;
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+	}
+
+	>>>.avatar-uploader .el-upload:hover {
+		border-color: #409EFF;
+	}
+
+	>>>.avatar-uploader-icon {
+		font-size: 28px;
+		color: #8c939d;
+		width: 8rem;
+		height: 8rem;
+		line-height: 8rem;
+		text-align: center;
+	}
+
+	>>>.avatar {
+		width: 8rem;
+		height: 8rem;
+		display: block;
+	}
+
+	>>>textarea {
+		resize: none;
 	}
 </style>

@@ -14,7 +14,7 @@
 					</div>
 					<div class="title">
 						<el-tooltip :content="post.title" placement="top" :open-delay="500">
-						<strong>{{post.title}}</strong>
+							<strong>{{post.title}}</strong>
 						</el-tooltip>
 					</div>
 				</div>
@@ -24,7 +24,8 @@
 						<div class="user_photo" @click="toHisHomePage(master.muid)">
 							<img :src="headImage(master.image)">
 						</div>
-						<p @click="toHisHomePage(master.muid)" style="cursor: pointer;"><big><strong>{{master.username}}</strong></big></p>
+						<p @click="toHisHomePage(master.muid)" style="cursor: pointer;">
+							<big><strong>{{master.username}}</strong></big></p>
 						<p>UID: {{master.muid}}</p>
 						<p>院系：{{master.org}}</p>
 					</div>
@@ -32,7 +33,7 @@
 						<div class="content" v-html="post.content"></div>
 						<div class="operation">
 							<div>
-								<el-tag :key="tag" v-for="tag in dynamicTags">
+								<el-tag @click="toSearch(tag)" :key="tag" v-for="tag in dynamicTags" style="cursor: pointer;">
 									{{tag}}
 								</el-tag>
 							</div>
@@ -49,7 +50,8 @@
 				<!-- 评论发表、他人评论 -->
 				<div class="publish">
 					<!-- <EmojiInput @analysisEmoji="releaseDiscuss" :aid="$route.params.aid" :permission="permissionCode"></EmojiInput> -->
-					<component :is="myEmoji" @analysisEmoji="releaseDiscuss" :aid="$route.params.aid" :permission="permissionCode"></component>
+					<component :is="myEmoji" @analysisEmoji="releaseDiscuss" :aid="$route.params.aid"
+						:permission="permissionCode"></component>
 				</div>
 				<div class="discuss_all">
 					<div v-show="discuss.length == 0" style="text-align: center;">尚未有人评论</div>
@@ -71,7 +73,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<GoToLable></GoToLable>
 			<!-- 废物div -->
 			<div style="height: 3rem;"></div>
@@ -95,7 +97,7 @@
 
 	export default {
 		name: 'CommunityP',
-		props:['total', 'PageSize', 'PageSizes', 'permission', 'aid'],
+		props: ['total', 'PageSize', 'PageSizes', 'permission', 'aid'],
 		data() {
 			return {
 				user: {},
@@ -106,8 +108,8 @@
 				permissionCode: 0,
 				post: [],
 				master: [],
-				code:0,
-				aname:'',
+				code: 0,
+				aname: '',
 			}
 		},
 		components: {
@@ -136,7 +138,10 @@
 			getMassOrganization() {
 				let uid = this.uid
 				let aid = this.$route.params.aid
-				this.$api.getAssInformation({uid,aid}).then(
+				this.$api.getAssInformation({
+					uid,
+					aid
+				}).then(
 					res => {
 						this.permissionCode = res.data.data.permissionCode
 					}
@@ -153,7 +158,7 @@
 							this.discuss = res.data.data.discuss
 							if (res.data.data.code > 2)
 								this.code = 12 * (res.data.data.code - 1)
-							else 
+							else
 								this.code = 12 * res.data.data.code
 						}
 						document.documentElement.scrollTop = 10
@@ -186,7 +191,11 @@
 				let pid = this.$route.params.pid
 				let uid = this.uid
 				if (this.permissionCode !== 0 || this.$route.params.aid === 0) {
-					this.$api.releaseDiscuss({pid,uid,content}).then(
+					this.$api.releaseDiscuss({
+						pid,
+						uid,
+						content
+					}).then(
 						res => {
 							this.addMyDiscuss(content)
 							this.$message.success(res.data.data.msg)
@@ -195,13 +204,16 @@
 				} else {
 					this.$message.info('请先加入社团')
 				}
-				
+
 			},
 			/* 收藏贴子 **/
 			favoriteProcess() {
 				let pid = this.$route.params.pid
 				let uid = this.uid
-				this.$api.favoriteProcess({pid,uid}).then(
+				this.$api.favoriteProcess({
+					pid,
+					uid
+				}).then(
 					res => {
 						console.log(res.data)
 						let code = res.data.data.code
@@ -212,26 +224,47 @@
 					}
 				)
 			},
-			
+
 			/* 前往他的空间 */
 			toHisHomePage(uid) {
 				if (uid !== this.uid)
-					this.$router.push({name:'His',params:{uid}})
+					this.$router.push({
+						name: 'His',
+						params: {
+							uid
+						}
+					})
 				else
-					this.$router.push({name:'Me',params:{uid}})
+					this.$router.push({
+						name: 'Me',
+						params: {
+							uid
+						}
+					})
 			},
 			/* 获取社团名称 */
 			getAssociationInfo() {
 				let aid = this.$route.params.aid
-				this.$api.getAssociationInfo({aid}).then(
+				this.$api.getAssociationInfo({
+					aid
+				}).then(
 					res => {
 						if (res.data.data.name !== undefined)
 							this.aname = res.data.data.name
-						else 
+						else
 							this.aname = '文学社'
 					}
 				)
-			}		
+			},
+			/* 前往搜索 */
+			toSearch(val) {
+				this.$router.push({
+					name: 'Posts',
+					params: {
+						content: val
+					}
+				})
+			},
 		},
 		computed: {
 			...mapState({
@@ -247,7 +280,7 @@
 			},
 			myEmoji() {
 				let myEmoji = 'EmojiInput'
-				if(document.body.clientWidth < 480) {
+				if (document.body.clientWidth < 480) {
 					myEmoji = 'EmojiInput2'
 				}
 				return myEmoji
@@ -260,8 +293,8 @@
 			this.getAssociationInfo()
 			document.documentElement.scrollTop = 10
 		},
-		mounted(){
-			this.$bus.$on('getDiscussList',this.getDiscussList)
+		mounted() {
+			this.$bus.$on('getDiscussList', this.getDiscussList)
 		},
 		beforeDestroy() {
 			this.$bus.$off('getDiscussList')
@@ -304,7 +337,7 @@
 					overflow: hidden;
 					white-space: nowrap;
 					text-overflow: ellipsis;
-					
+
 					strong {
 						padding-left: 2rem;
 					}
@@ -329,6 +362,7 @@
 						margin: 1rem auto;
 						overflow: hidden;
 						cursor: pointer;
+
 						img {
 							width: 100%;
 							height: 100%;
@@ -352,7 +386,7 @@
 						max-width: 100vw;
 						min-height: calc(100% - 5rem);
 						padding: 1rem 1.5rem;
-						
+
 						* {
 							max-width: 100%;
 						}
@@ -404,7 +438,7 @@
 						border-radius: 50%;
 						overflow: hidden;
 						cursor: pointer;
-						
+
 						img {
 							width: 100%;
 							height: 100%;
@@ -452,26 +486,30 @@
 			}
 		}
 	}
+
 	.attachment {
-	    cursor: pointer !important;
+		cursor: pointer !important;
 	}
+
 	.upload_error {
-	    background: #FFE5E0;
-	    border: 1px solid #EA644A;
+		background: #FFE5E0;
+		border: 1px solid #EA644A;
 	}
-	.attachment > img {
-	    width: 16px;
-	    vertical-align: middle;
-	    padding-right:4px;
+
+	.attachment>img {
+		width: 16px;
+		vertical-align: middle;
+		padding-right: 4px;
 	}
-	.attachment > a {
-	    text-decoration: none;
-	    vertical-align: middle;
+
+	.attachment>a {
+		text-decoration: none;
+		vertical-align: middle;
 	}
-	
-	.attachment > span {
-	    vertical-align: middle;
-	    padding-right:4px;
+
+	.attachment>span {
+		vertical-align: middle;
+		padding-right: 4px;
 	}
 </style>
 
@@ -481,51 +519,51 @@
 			width: 98%;
 			top: 1rem;
 		}
-		
+
 		.main_box * {
 			box-sizing: border-box;
 		}
-		
+
 		.main_box .info_box {
 			display: none;
 		}
-		
+
 		.p_mes {
-			background-color: #FFF!important;
+			background-color: #FFF !important;
 			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
 		}
-		
+
 		.time_super {
 			width: 100%;
 		}
-		
+
 		.p_user {
 			display: none;
 		}
-		
+
 		.main_box .p_mes .p_title .title {
 			font-size: 1.5rem;
 		}
-		
+
 		.main_box .p_mes .p_title .title strong {
 			padding: 0;
 		}
-		
+
 		.p_discuss {
 			background-color: #fff;
 			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
 		}
-		
+
 		.discuss {
 			width: 100% !important;
-			padding: 0 0.5rem!important;
+			padding: 0 0.5rem !important;
 		}
-		
+
 		.publish {
 			margin-top: 0.5rem;
 			padding: 0.25rem 0 !important;
 		}
-		
+
 		.main_box .p_discuss .discuss_all {
 			margin: 0;
 		}

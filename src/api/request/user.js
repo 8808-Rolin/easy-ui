@@ -97,7 +97,7 @@ const user = {
 	
 	// 创建社团审批
 	createAss(params) {
-		return axios.post(`${base.sq}/api/bbs/create-ass`, qs.stringify(params));
+		return axios.post(`${base.sq}/api/apply/create-ass`, qs.stringify(params));
 	},
 	
 	/* 论坛页面相关接口 **/
