@@ -28,7 +28,7 @@
 		justify-content: center;
 		align-items: center;
 		box-shadow: var(--box-shadow2);
-		background-color: var(--bg);
+		background-color: #fff;
 		z-index: 9000;
 	}
 

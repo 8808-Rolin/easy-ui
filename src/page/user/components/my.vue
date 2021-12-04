@@ -10,7 +10,7 @@
 						<MyClub :ass="joinass"></MyClub>
 					</el-tab-pane>
 					<el-tab-pane label="我的邮箱" name="1">
-						<el-tabs tab-position="left" v-model="mailType" @tab-click="getMaileClick">
+						<el-tabs :tab-position="tabPosition" v-model="mailType" @tab-click="getMaileClick">
 							<el-tab-pane label="收件箱" name="1">
 								<div class="btn_box">
 									<el-button type="danger" @click.native="deleteMail" icon="el-icon-delete"
@@ -81,7 +81,7 @@
 											<span style="margin-left: 10px">{{ scope.row.date }}</span>
 										</template>
 									</el-table-column>
-									<el-table-column label="操作" width="200" v-if="showTd">
+									<el-table-column label="操作" width="100">
 										<template slot-scope="scope">
 											<el-badge :is-dot="scope.row.isRead === 0" class="item">
 												<el-button size="mini" type="primary"
@@ -426,8 +426,16 @@
 				let width = true
 				if (document.body.clientWidth < 480) {
 					width = false
+					
 				}
 				return width
+			},
+			tabPosition() {
+				let fangxiang = 'left'
+				if(document.body.clientWidth < 480) {
+					fangxiang = 'top'
+				}
+				return fangxiang
 			}
 		},
 		beforeMount() {

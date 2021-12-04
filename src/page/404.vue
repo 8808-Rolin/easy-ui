@@ -6,7 +6,7 @@
 					<img src="../assets/404.png" />
 				</div>
 				<div class="go_back">
-					<el-link type="primary" icon="el-icon-warning-outline">返回首页</el-link>
+					<el-link type="primary" @click.native="toIndex" icon="el-icon-warning-outline">返回首页</el-link>
 				</div>
 			</div>
 		</div>
@@ -22,6 +22,13 @@
 			return {
 				message: ''
 			}
+		},
+		methods: {
+			toIndex(param) {
+				this.$router.push({
+					name: 'Index',
+				})
+			},
 		},
 		components: {
 			Header

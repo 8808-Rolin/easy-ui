@@ -50,17 +50,16 @@
 					<div class="to_man">
 						<div class="to_man_tag">
 							<label>收件人：</label>
-							<el-tag v-show="toManTag != ''" closable :disable-transitions="false" size="small">
-								{{toManTag}}
+							<el-tag v-show="toManTag != ''" closable :disable-transitions="false" size="small" @close="removeToManTag(toManTag)">
+								{{toManTag.tag}}
 							</el-tag>
 						</div>
 						<div class="search_man">
-							<el-input placeholder="在此查找收件人" v-model="input" clearable @close="handleClose()">
-							</el-input>
+							<el-input @input="findUser" placeholder="请输入收件人的名称/昵称/电话号码/学号..." v-model="keyword"></el-input>
 							<div>
-								<el-tag :key="tag" v-for="tag in dynamicTags" :disable-transitions="false"
-									size="medium">
-									{{tag}}
+								<el-tag :key="index" v-for="(tag, index) in dynamicTags" :disable-transitions="false"
+									size="medium" @click="handleClose(tag)">
+									{{tag.tag}}
 								</el-tag>
 							</div>
 						</div>
@@ -69,10 +68,9 @@
 			</span>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="centerDialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+				<el-button type="primary" @click="sendMail">确 定</el-button>
 			</span>
 		</el-dialog>
-
 	</header>
 </template>
 
@@ -94,10 +92,13 @@
 				centerDialogVisible: false,
 				title: '',
 				input: '',
-				dynamicTags: ['标签一', '标签二', '标签三'],
+				keyword:'',
+				dynamicTags: [],
 				inputVisible: false,
 				inputValue: '',
-				toManTag: '灌灌灌灌'
+				toManTag: '',
+				timeout:null,
+				message:null,
 			}
 		},
 		methods: {
@@ -151,7 +152,11 @@
 				})
 			},
 			handleClose(tag) {
-				this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+				this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
+				if (this.toManTag != '') {
+					this.dynamicTags.push(this.toManTag)
+				}
+				this.toManTag = tag
 			},
 			showInput() {
 				this.inputVisible = true;
@@ -166,6 +171,69 @@
 				}
 				this.inputVisible = false;
 				this.inputValue = '';
+			},
+			removeToManTag(toManTag) {
+				this.toManTag = ''
+				this.dynamicTags.push(toManTag)
+			},
+			/* 模糊查询用户列表 */
+			findUser() {
+				let keyword = this.keyword
+				clearTimeout(this.timeout)
+				this.timeout = setTimeout(() => {
+					console.log(keyword,"=====")
+					if (keyword != '') {
+						this.$api.findUser({keyword}).then(
+							res => {
+								let list = res.data.data.msg.reduce((item, next) => {
+									let arr = {uid:next.uid, tag: `${next.name}(${next.student_number})`}
+									item.push(arr)
+									return item
+								},[])
+								this.dynamicTags = list
+								//console.log(list)
+							}
+						)
+					}
+				},500)
+				//console.log(keyword)
+				/* this.$api.findUser({keyword}).then(
+					res => {
+						console.log(res.data)
+					}
+				) */
+			},
+			/* 发送邮件 */
+			sendMail() {
+				if (this.message !== null) this.message.close()
+				let isSystem = 0
+				let mailType = 0
+				let fromuid = this.uid
+				let touid = this.toManTag.uid
+				let title = this.title
+				let content = this.input
+				//console.log(isSystem,mailType,fromuid,touid,title,content)
+				let bool = touid === undefined || title === '' || content === '' ? false : true
+				if (bool) {
+					this.$api.sendEmail({isSystem,mailType,fromuid,touid,title,content}).then(
+						res => {
+							if (res.data.data.code > -1) {
+								this.input = ''
+								this.title = ''
+								this.toManTag = ''
+								this.dynamicTags = []
+								this.keyword = ''
+								this.centerDialogVisible = false
+								this.message = this.$message.success(res.data.data.msg)
+							} else {
+								this.message = this.$message.error(res.data.data.msg)
+							}
+							
+						}
+					)
+				} else {
+					this.message = this.$message.error("请完善数据")
+				}
 			}
 		},
 		computed: {

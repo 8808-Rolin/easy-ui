@@ -39,11 +39,11 @@
 						<div v-for="item in actionOverview" :key="item.actid" class="text item"
 							@click="centerDialogVisible = true;getActionInfo(item.actid)">
 							<a class="notice_title"><strong>{{item.title}}</strong></a>
-							<a><small>{{item.date}}</small></a>
+							<a style="text-align: end;"><small style="width: fit-content;white-space: nowrap;">{{item.date}}</small></a>
 						</div>
 					</el-card>
 
-					<el-dialog :title="dialogData.title" :visible.sync="centerDialogVisible" width="30%" center>
+					<el-dialog :title="dialogData.title" :visible.sync="centerDialogVisible" width="30%" center :append-to-body="true">
 						<span v-html="dialogData.content"></span>
 						<span slot="footer" class="dialog-footer">
 							<el-button @click="centerDialogVisible = false">取&emsp;消</el-button>
@@ -401,6 +401,8 @@
 		max-height: 1.05rem;
 		overflow: hidden;
 		word-wrap: normal;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 		text-align: left;
 	}
 

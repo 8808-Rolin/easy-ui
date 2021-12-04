@@ -12,7 +12,7 @@
 				</div>
 
 				<div class="go_back">
-					<el-link type="primary" icon="el-icon-warning-outline">返回首页</el-link>
+					<el-link type="primary" @click.native="toIndex" icon="el-icon-warning-outline">返回首页</el-link>
 				</div>
 			</div>
 		</div>
@@ -35,6 +35,13 @@
 		},
 		components: {
 			Header
+		},
+		methods: {
+			toIndex(param) {
+				this.$router.push({
+					name: 'Index',
+				})
+			},
 		},
 		computed: {
 			...mapState(['statusMes'])

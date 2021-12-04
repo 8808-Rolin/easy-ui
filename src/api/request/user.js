@@ -64,7 +64,12 @@ const user = {
 	
 	// 获取所有学院列表
 	getCollegeList() {
-	     return axios.get(`${base.sq}/api/tool/get-college-list`);    
+	    return axios.get(`${base.sq}/api/tool/get-college-list`);    
+	},
+	
+	/* 通过关键词模糊搜索用户名称 */
+	findUser(params) {
+		return axios.get(`${base.sq}/api/tool/find-user`, {params});
 	},
 	
 	/* // 下载文件接口

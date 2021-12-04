@@ -25,7 +25,7 @@ const router = new Router({
 		component: () => import('@/page/500')
 	}, {
 		name: 'Index',
-		path: '',
+		path: '/',
 		component: () => import('@/page/index')
 	}, {
 		name: 'Login',
