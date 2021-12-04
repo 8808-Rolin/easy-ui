@@ -181,6 +181,7 @@
 		margin-right: 1rem;
 		padding: 1rem;
 		box-shadow: var(--box-shadow2);
+		background-color: var(--bg);
 		overflow: hidden;
 	}
 

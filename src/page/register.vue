@@ -110,6 +110,10 @@
 				</div>
 			</div>
 		</div>
+		
+		<div id="go_back">
+			<router-link :to="{path: '/'}">返回首页</router-link>
+		</div>
 	</div>
 </template>
 
@@ -613,6 +617,10 @@
 		border-color: #f2a373;
 	}
 	
+	#go_back {
+		display: none;
+	}
+	
 	@media screen and (max-width: 480px) {
 		.register_box {
 			box-shadow: none;
@@ -628,5 +636,14 @@
 			display: none;
 		}
 		
+		#go_back {
+			display: block;
+			width: 100%;
+			height: 3rem;
+			line-height: 3rem;
+			position: fixed;
+			bottom: 0;
+			text-align: center;
+		}
 	}
 </style>

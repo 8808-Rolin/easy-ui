@@ -27,7 +27,7 @@
 			</el-table-column>
 			<el-table-column prop="replyTime" label="最后回复时间" width="160" v-if="showTd">
 				<template scope="scope">
-					<span :class="{blod: scope.row.postType == '系统公告'}">{{ scope.row.replyTime}}</span>
+					<span class="text_too_loog" :class="{blod: scope.row.postType == '系统公告'}">{{ scope.row.replyTime}}</span>
 				</template>
 			</el-table-column>
 			<el-table-column prop="releaseTime" label="发布时间" width="150" v-if="showTd">
@@ -344,6 +344,12 @@
 	>>>.el-table--enable-row-transition .el-table__body td,
 	.el-table .cell {
 		background-color: transparent;
+	}
+	
+	.text_too_loog {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 	
 	@media screen and (max-width: 480px) {

@@ -59,6 +59,7 @@
 	
 	@media screen and (max-width: 480px) {
 		header {
+			display: none;
 			z-index: 2000!important;
 		}
 	}
