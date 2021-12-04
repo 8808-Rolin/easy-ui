@@ -240,7 +240,7 @@
 		}
 		
 		.login_box .login>div {
-			background-color: var(--bg);
+			background-color: #fff;
 		}
 		
 		.easy_photo {

@@ -295,7 +295,7 @@
 
 				.time_super {
 					small {
-						margin-right: 3rem;
+						margin-right: 2rem;
 					}
 				}
 

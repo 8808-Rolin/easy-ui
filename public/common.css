@@ -37,7 +37,7 @@ li {
 }
 
 .el-dropdown-menu {
-	z-index: 9999!important;
+	z-index: 2001!important;
 }
 
 .el-message {
@@ -46,7 +46,7 @@ li {
 
 @media screen and (max-width: 480px) {
 	ul.el-dropdown-menu {
-		z-index: 9999!important;
+		z-index: 2001!important;
 	}
 	
 	.el-message {

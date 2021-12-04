@@ -41,7 +41,7 @@
 					<div class="to_man">
 						<div class="to_man_tag">
 							<label>收件人：</label>
-							<el-tag v-show="toManTag != ''" closable :disable-transitions="false" size="small">
+							<el-tag v-show="toManTag != ''" closable :disable-transitions="false" size="small" @close="removeToManTag(toManTag)">
 								{{toManTag}}
 							</el-tag>
 						</div>
@@ -50,7 +50,7 @@
 							</el-input>
 							<div>
 								<el-tag :key="tag" v-for="tag in dynamicTags" :disable-transitions="false"
-									size="medium" @click="">
+									size="medium" @click="handleClose(tag)">
 									{{tag}}
 								</el-tag>
 							</div>
@@ -134,24 +134,16 @@
 				})
 			},
 			handleClose(tag) {
-				this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-			},
-			
-			showInput() {
-				this.inputVisible = true;
-				this.$nextTick(_ => {
-					this.$refs.saveTagInput.$refs.input.focus();
-				});
-			},
-			
-			handleInputConfirm() {
-				let inputValue = this.inputValue;
-				if (inputValue) {
-					this.dynamicTags.push(inputValue);
+				this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
+				if (this.toManTag != '') {
+					this.dynamicTags.push(this.toManTag)
 				}
-				this.inputVisible = false;
-				this.inputValue = '';
-			}
+				this.toManTag = tag
+			},
+			removeToManTag(toManTag) {
+				this.toManTag = ''
+				this.dynamicTags.push(toManTag)
+			},
 		},
 		computed: {
 			...mapState({
@@ -339,7 +331,7 @@
 			padding: 0 0.25rem;
 		}
 		
-		.el-dialog {
+		>>>.el-dialog {
 			width: 98%!important;
 		}
 	}

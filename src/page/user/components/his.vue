@@ -178,10 +178,10 @@
 
 	.left {
 		flex: 1;
-		max-width: calc(100% - 19.75rem);
 		margin-right: 1rem;
 		padding: 1rem;
 		box-shadow: var(--box-shadow2);
+		overflow: hidden;
 	}
 
 	.right {
@@ -194,16 +194,19 @@
 		.info_box {
 			display: none;
 		}
-
+		
 		.left {
-			width: 100%;
 			margin: 0;
-			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
 			background-color: #fff;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04);
 		}
-
+		
 		.right {
 			display: none;
+		}
+		
+		>>>.el-dialog {
+			width: 98%!important;
 		}
 	}
 </style>
