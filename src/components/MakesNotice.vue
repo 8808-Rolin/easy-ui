@@ -38,7 +38,7 @@
 		</el-table>
 
 		<div style="margin-top: 0.625rem;">
-			<Pagination :total="total" :PageSize="10" :notisSize="notisSize"></Pagination>
+			<Pagination :total="total" :PageSize="15" :notisSize="notisSize"></Pagination>
 		</div>
 
 		<el-divider></el-divider>

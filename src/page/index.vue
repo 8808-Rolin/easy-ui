@@ -75,7 +75,7 @@
 			this.$api.getSimpleNotice().then(
 				res => {
 					if (res.data.data.code > 0)
-						this.notices = res.data.data.notice
+						this.notices = res.data.data.notice.reverse()
 				}
 			)
 		},
