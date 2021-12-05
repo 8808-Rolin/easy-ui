@@ -36,7 +36,7 @@
 		margin: auto;
 		position: relative;
 		top: 3rem;
-		z-index: 2000;
+		z-index: 1000;
 
 		.mes_box {
 			width: 100%;

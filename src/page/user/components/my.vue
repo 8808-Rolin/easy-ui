@@ -275,7 +275,7 @@
 					uid
 				}).then(
 					res => {
-						this.mail = res.data.data.mail
+						this.mail = res.data.data.mail.reverse()
 						this.inboxData = res.data.data.mail.reduce((item, next) => {
 							next.type === 0 && item.push(next);
 							return item;

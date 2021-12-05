@@ -55,7 +55,7 @@
 				<div class="publish">
 					<!-- <EmojiInput @analysisEmoji="releaseDiscuss" :aid="$route.params.aid" :permission="permissionCode"></EmojiInput> -->
 					<component :is="myEmoji" @analysisEmoji="releaseDiscuss" :aid="$route.params.aid"
-						:permission="permissionCode"></component>
+						:permission="permissionCode" :getName="getName"></component>
 				</div>
 				<div class="discuss_all">
 					<div v-show="discuss.length == 0" style="text-align: center;">尚未有人评论</div>
@@ -68,7 +68,15 @@
 							<div class="content" v-html="Emoji(item.content.text)"></div>
 							<div class="time_other">
 								<div>发表时间：{{item.content.releaseDate}}</div>
-								<i class="el-icon-more"></i>
+								<el-dropdown>
+								  <span class="el-dropdown-link">
+								    <i class="el-icon-more"></i>
+								  </span>
+								  <el-dropdown-menu slot="dropdown">
+								    <el-dropdown-item @click.native="removeThisDiscuss(item.content.cid)" v-show="uid == item.author.cuid">删除</el-dropdown-item>
+								    <el-dropdown-item @click.native="getNameThisMan(item.author.username)">回复</el-dropdown-item>
+								  </el-dropdown-menu>
+								</el-dropdown>
 							</div>
 						</div>
 					</div>
@@ -114,6 +122,7 @@
 				master: [],
 				code: 0,
 				aname: '',
+				getName: '',
 			}
 		},
 		components: {
@@ -151,7 +160,7 @@
 					}
 				)
 			},
-			getDiscussList(page) {
+			getDiscussList(page, scrollTop = 10) {
 				let pid = this.$route.params.pid
 				this.$api.getDiscussList({
 					pid,
@@ -165,7 +174,7 @@
 							else
 								this.code = 12 * res.data.data.code
 						}
-						document.documentElement.scrollTop = 10
+						document.documentElement.scrollTop = scrollTop
 					}
 				)
 			},
@@ -194,14 +203,14 @@
 			releaseDiscuss(content) {
 				let pid = this.$route.params.pid
 				let uid = this.uid
-				if (this.permissionCode !== 0 || this.$route.params.aid === 0) {
+				if (this.permissionCode !== 0 || this.$route.params.aid === 0 || this.$route.params.aid === "0") {
 					this.$api.releaseDiscuss({
 						pid,
 						uid,
 						content
 					}).then(
 						res => {
-							this.addMyDiscuss(content)
+							this.getDiscussList(1, document.documentElement.scrollTop)
 							this.$message.success(res.data.data.msg)
 						}
 					)
@@ -269,6 +278,26 @@
 					}
 				})
 			},
+			// @一个人
+			getNameThisMan(name) {
+				this.getName = '@' + name
+			},
+			// 删除评论
+			removeThisDiscuss(cid) {
+				this.$api.deletePostDiscuss({
+					'requestType': 1,
+					'typeid' :cid
+				}).then(
+					res => {
+						if (res.data.data.code != 0) {
+							this.$message.error(res.data.data.msg)
+						}else {
+							this.getDiscussList(1, document.documentElement.scrollTop)
+							this.$message.success("删除回复成功！")
+						}
+					}
+				)
+			}
 		},
 		computed: {
 			...mapState({

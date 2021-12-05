@@ -10,7 +10,7 @@
 					<div class="club_title">
 						我的社团
 					</div>
-					<div class="club_box">
+					<div class="club_box" style="overflow-x: scroll;">
 						<!-- 社团logo和名称 -->
 						<div v-if="myMassOrganization.length == 0" style="width: 100%;text-align: center;margin-top: 2.5rem;">未加入任何社团</div>
 						<div class="club_img_name" v-for="item in myMassOrganization" :key="item.aid"
@@ -241,15 +241,28 @@
 		flex-wrap: wrap;
 		overflow: auto;
 	}
+	
+	/**滚动条的宽度*/
+	.my_club>>>.club_box::-webkit-scrollbar {
+		width: 100%;
+		height: 0.5rem;
+	}
+	
+	/* 滚动条的滑块 */
+	.my_club>>>.club_box::-webkit-scrollbar-thumb {
+		background: #1DA0FB;
+		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+		border-radius: 0.25rem;
+	}
 
 	/**滚动条的宽度*/
-	>>>.club_box::-webkit-scrollbar {
+	.school_club>>>.club_box::-webkit-scrollbar {
 		width: 0.5rem;
 		height: 100%;
 	}
 
 	/* 滚动条的滑块 */
-	>>>.club_box::-webkit-scrollbar-thumb {
+	.school_club>>>.club_box::-webkit-scrollbar-thumb {
 		background: #1DA0FB;
 		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 		border-radius: 0.25rem;

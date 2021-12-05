@@ -68,7 +68,7 @@
 					'zone-uid': uid
 				}).then(
 					res => {
-						this.posts = res.data.data.posts
+						this.posts = res.data.data.posts.reverse()
 						console.log(res.data.data)
 					}
 				)

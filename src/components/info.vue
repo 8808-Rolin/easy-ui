@@ -1,5 +1,5 @@
 <template>
-	<div class="info_box">
+	<div class="info_box" hidden-xs-only>
 		<div class="info_mes">
 			<div class="info_photo">
 				<img :src="userImage" >
@@ -114,5 +114,9 @@
 		height: 100%;
 	}
 	
-	
+	@media screen and (max-width: 480px) {
+		.info_box {
+			display: none;
+		}
+	}
 </style>

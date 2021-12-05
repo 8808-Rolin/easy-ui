@@ -4,7 +4,7 @@
 const base = {    
 	sq:'http://easy.30202.co:11119',
 	test:'http://test.30202.co:11119',
-	mq:'http://localhost:8082'
+	mq:'http://easy.ass.30202.co'
 
 }
 

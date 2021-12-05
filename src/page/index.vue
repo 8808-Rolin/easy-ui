@@ -5,7 +5,7 @@
 			<div class="index_left"></div>
 
 			<div class="index_right">
-				<el-card class="box-card">
+				<el-card class="box-card" shadow="always">
 					<div slot="header" class="clearfix">
 						<span>论坛公告</span>
 						<el-button style="float: right; padding: 0.1875rem 0" type="text" icon="el-icon-more-outline">
@@ -75,7 +75,7 @@
 			this.$api.getSimpleNotice().then(
 				res => {
 					if (res.data.data.code > 0)
-						this.notices = res.data.data.notice
+						this.notices = res.data.data.notice.reverse()
 				}
 			)
 		},
@@ -201,9 +201,9 @@
 		transition: all .5s;
 	}
 
-	.item:hover {
+	/* .item:hover {
 		transform: scale(1.048);
-	}
+	} */
 
 	.notice_title {
 		max-width: calc(100% - 5rem);
