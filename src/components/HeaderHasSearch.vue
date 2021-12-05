@@ -390,13 +390,14 @@
 	header {
 		width: 100%;
 		height: 4rem;
-		position: relative;
+		position: sticky;
+		top: 0;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		box-shadow: var(--box-shadow2);
-		background-color: var(--bg);
+		background-color: #fff;
 		z-index: 1100;
 	}
 

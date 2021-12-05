@@ -5,7 +5,9 @@
 			<div v-show="code === 2" style="width: 100%;line-height: 100px;text-align: center;">
 				<h1 style="margin-top: 3rem;">当前空间用户未开放，无法访问！！</h1>
 			</div>
+			
 			<div class="left" v-show="code !== 2">
+				<div><small style="color: #999;">空间主人：{{userdata.username}}</small></div>
 				<el-tabs class="top_box" v-model="activeName2" @tab-click="handleClick">
 					<el-tab-pane label="他的社团" name="first">
 						<MyClub :ass="joinass"></MyClub>
