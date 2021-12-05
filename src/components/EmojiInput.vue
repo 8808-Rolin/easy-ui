@@ -22,7 +22,7 @@
 
 	export default {
 		name: 'Emoji',
-		props:['permission', 'aid'],
+		props:['permission', 'aid', 'getName'],
 		data() {
 			return {
 				//聊天输入内容
@@ -51,6 +51,11 @@
 		components: {
 			EmojiBox
 		},
+		watch: {
+			getName(name) {
+				this.content = this.content + name + ' '
+			}
+		}
 	}
 </script>
 

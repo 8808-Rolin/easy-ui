@@ -39,6 +39,8 @@
 		padding: 1rem 0;
 		display: flex;
 		align-items: center;
+		overflow: auto;
+		
 		.club {
 			width: 6.25rem;
 			margin-right: 1rem;
@@ -68,5 +70,20 @@
 			}
 		}
 
+	}
+</style>
+
+<style scoped="scoped">
+	/**滚动条的宽度*/
+	>>>.clubs::-webkit-scrollbar {
+		width: 0.5rem;
+		height: 100%;
+	}
+	
+	/* 滚动条的滑块 */
+	>>>.clubs::-webkit-scrollbar-thumb {
+		background: #1DA0FB;
+		-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+		border-radius: 0.25rem;
 	}
 </style>

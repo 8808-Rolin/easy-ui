@@ -8,12 +8,12 @@
 			</el-tooltip>
 		</div>
 	
-		<!-- <el-popover placement="bottom" v-show="permission !== 0 || aid === '0' || aid === 0" width="500" trigger="click" v-model="emojiShow"> -->
+		<el-popover placement="bottom" v-show="permission !== 0 || aid === '0' || aid === 0" width="500" trigger="click" v-model="emojiShow">
 			<el-button v-show="showBrowBtn" slot="reference" @click="loadEmojis;showBrow = !showBrow" size="mini">表&emsp;情</el-button>
 			<div class="browBox" v-show="showBrow">
 				<EmojiBox ref="emojibox" @addEmoji="addEmoji"></EmojiBox>
 			</div>
-		<!-- </el-popover> -->
+		</el-popover>
 	</div>
 </template>
 

@@ -210,7 +210,7 @@
 			toAdmin() {
 				let aid = this.$route.params.aid
 				let studentID = this.user.studentID
-				window.location.href = `${base.mq}/dashboard?aid=${aid}&studentID=${studentID}`
+				window.location.href = `${base.mq}?aid=${aid}&studentID=${studentID}`
 			},
 			/* 加入社团 */
 			joinAssociation() {
