@@ -17,6 +17,7 @@
 							<strong>{{post.title}}</strong>
 						</el-tooltip>
 					</div>
+					<small v-show="isShowMes" style="color: #999;">&ensp;作者：{{master.username}}</small>
 				</div>
 
 				<div class="p_body">
@@ -25,19 +26,22 @@
 							<img :src="headImage(master.image)">
 						</div>
 						<p @click="toHisHomePage(master.muid)" style="cursor: pointer;">
-							<big><strong>{{master.username}}</strong></big></p>
+							<big><strong>{{master.username}}</strong></big>
+						</p>
 						<p>UID: {{master.muid}}</p>
 						<p>院系：{{master.org}}</p>
 					</div>
 					<div class="p_content">
 						<div class="content" v-html="post.content"></div>
 						<div class="operation">
-							<div>
-								<el-tag @click="toSearch(tag)" :key="tag" v-for="tag in dynamicTags" style="cursor: pointer;">
+							<div style="flex: 1;max-width: calc(100% - 3rem);overflow: auto;white-space: nowrap">
+								<el-tag @click="toSearch(tag)" :key="tag" v-for="tag in dynamicTags" size="small"
+									style="cursor: pointer;">
 									{{tag}}
 								</el-tag>
 							</div>
-							<div>
+							<div
+								style="width: 2rem;height: 2rem;display: flex;align-items: center;justify-content: center;">
 								<i class="el-icon-star-off" @click="favoriteProcess" v-show="post.isFavorite === 0"></i>
 								<i class="el-icon-star-on" @click="favoriteProcess" v-show="post.isFavorite === 1"></i>
 							</div>
@@ -285,6 +289,13 @@
 				}
 				return myEmoji
 			},
+			isShowMes() {
+				let width = false
+				if(document.body.clientWidth < 480) {
+					width = true
+				}
+				return width
+			}
 		},
 		beforeMount() {
 			this.getPostPageInfo()
@@ -389,18 +400,23 @@
 
 						* {
 							max-width: 100%;
+							height: fit-content;
+							object-fit: contain
 						}
 					}
 
 					.operation {
+						max-width: 98vw;
 						font-size: 1.5rem;
 						color: #ffaa00;
 						padding: 0.5rem;
 						display: flex;
 						justify-content: space-between;
+						overflow: hidden;
 
-						.el-tag+.el-tag {
-							margin-left: 10px;
+						.el-tag {
+							margin-bottom: 0.25rem;
+							margin-right: 0.5rem;
 						}
 					}
 				}

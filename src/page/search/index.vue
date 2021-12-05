@@ -6,24 +6,28 @@
 			<div class="search_box">
 				<div class="logo"></div>
 				<div class="search">
-					<el-input placeholder="请输入内容" v-model="input" @keyup.enter.native="toChild()">
+					<el-input class="big_screen" placeholder="请输入内容" v-model="input" @keyup.enter.native="toChild()">
 						<el-switch slot="prepend" v-model="value" active-text="用户" :active-value="1" :inactive-value="0"
 							inactive-text="帖子"></el-switch>
 						<el-button slot="append" icon="el-icon-search" @click="toChild"></el-button>
 					</el-input>
+					<el-input class="small_screen" :class="{blue_border: isInputFoucs}" placeholder="请输入内容" v-model="input" @keyup.enter.native="toChild()" @focus="isInputFoucs = true" @blur="isInputFoucs = false">
+						<i v-show="value == 0" slot="prepend" class="el-icon-s-promotion" @click="value = 1"></i>
+						<i v-show="value == 1" slot="prepend" class="el-icon-user-solid" @click="value = 0"></i>
+					</el-input>
+					</div>
 				</div>
-			</div>
 
-			<div class="result_box">
-				<transition class="result_box" name="transitionName" mode="out-in">
-					<router-view class="router" :type="value"></router-view>
-				</transition>
-			</div>
+				<div class="result_box">
+					<transition class="result_box" name="transitionName" mode="out-in">
+						<router-view class="router" :type="value"></router-view>
+					</transition>
+				</div>
 
-			<!-- 废物div -->
-			<div style="height: 1rem;"></div>
+				<!-- 废物div -->
+				<div style="height: 1rem;"></div>
+			</div>
 		</div>
-	</div>
 </template>
 
 <script>
@@ -37,6 +41,7 @@
 				value: 0,
 				input: '',
 				transitionName: 'slide-right',
+				isInputFoucs: false
 			}
 		},
 		components: {
@@ -94,7 +99,8 @@
 			max-width: 75rem;
 			margin: auto;
 			position: relative;
-			z-index: 1999;
+			top: 0;
+			z-index: 1099;
 
 			.search_box {
 				padding: 1rem;
@@ -134,23 +140,59 @@
 </style>
 
 <style scoped="scoped">
+	.small_screen {
+		display: none;
+	}
+	
 	@media screen and (max-width: 480px) {
 		.main_box {
 			width: 98%;
 		}
-		
+
 		.main_box * {
 			box-sizing: border-box;
 		}
-		
-		.main_box .search_box, .main_box .result_box {
-			background-color: #fff!important;
-			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04)!important;
+
+		.main_box .search_box,
+		.main_box .result_box {
+			background-color: #fff !important;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .12), 0 0 0.375rem rgba(0, 0, 0, .04) !important;
 		}
-		
+
 		.main_box .result_box {
 			width: 98%;
 			margin: auto;
+		}
+		
+		>>>.el-input-group__prepend {
+			background-color: transparent;
+			padding: 0.25rem 0.25rem;
+			font-size: 1.5rem;
+		}
+		
+		>>>.el-input-group--prepend .el-input__inner {
+			border-left: none;
+		}
+		
+		>>>.el-input__inner:focus {
+			border: none;
+		}
+		
+		.blue_border {
+			border: #409EFF 0.0625rem solid;
+			border-radius: 0.25rem;
+		}
+		
+		.blue_border >>> .el-input-group__prepend {
+			border: none;
+		}
+		
+		.big_screen {
+			display: none;
+		}
+		
+		.small_screen {
+			display: inline-table;
 		}
 	}
 </style>

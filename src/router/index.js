@@ -114,7 +114,7 @@ const router = new Router({
 router.beforeEach(async (to, from, next) => {
 	const localstorage = LocalStorage.getItem("token")
 	let path = ['/500', '/404', '/', '/register', '/forget', '/login']
-	let bool = path.indexOf(to.path)
+	let bool = path.indexOf(to.path.toLowerCase())
 	if (bool >= 0) {
 		if (bool > 2)
 			if (localstorage != null)

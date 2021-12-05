@@ -32,6 +32,7 @@
 		</div>
 		
 		<div id="go_back">
+			<i class="el-icon-warning-outline"></i>
 			<router-link :to="{path: '/'}">返回首页</router-link>
 		</div>
 	</div>
@@ -297,7 +298,7 @@
 		}
 		
 		.forget>div {
-			background-color: var(--bg);
+			background-color: #fff;
 		}
 		
 		.easy_photo {
@@ -312,6 +313,13 @@
 			position: fixed;
 			bottom: 0;
 			text-align: center;
+			color: #1DA0FB;
+		}
+		
+		#go_back a {
+			color: #1DA0FB;
+			font-size: 1.2rem;
+			font-style: italic;
 		}
 	}
 </style>
