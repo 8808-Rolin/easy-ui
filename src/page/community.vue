@@ -221,8 +221,8 @@
 				this.$prompt('请输入备注', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
-					inputPattern: /^[\S]{1,40}$/,
-					inputErrorMessage: '备注不能超过40个字'
+					inputPattern: /^[\S\s]{1,40}$/,
+					inputErrorMessage: '备注不能超过40个字,'
 				}).then(({
 					value
 				}) => {
