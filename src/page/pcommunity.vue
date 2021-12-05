@@ -194,7 +194,7 @@
 			releaseDiscuss(content) {
 				let pid = this.$route.params.pid
 				let uid = this.uid
-				if (this.permissionCode !== 0 || this.$route.params.aid === 0) {
+				if (this.permissionCode !== 0 || this.$route.params.aid === 0 || this.$route.params.aid === "0") {
 					this.$api.releaseDiscuss({
 						pid,
 						uid,
