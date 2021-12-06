@@ -30,7 +30,9 @@
 						</p>
 						<p>UID: {{master.muid}}</p>
 						<p>院系：{{master.org}}</p>
-						<p><el-button type="text" icon="el-icon-edit-outline" @click>修改</el-button></p>
+						<p>
+							<el-button type="text" icon="el-icon-edit-outline" @click="drawer = true">修改</el-button>
+						</p>
 					</div>
 					<div class="p_content">
 						<div class="content" v-html="post.content"></div>
@@ -70,13 +72,15 @@
 							<div class="time_other">
 								<div>发表时间：{{item.content.releaseDate}}</div>
 								<el-dropdown>
-								  <span class="el-dropdown-link">
-								    <i class="el-icon-more"></i>
-								  </span>
-								  <el-dropdown-menu slot="dropdown">
-								    <el-dropdown-item @click.native="removeThisDiscuss(item.content.cid)" v-show="uid == item.author.cuid">删除</el-dropdown-item>
-								    <el-dropdown-item @click.native="getNameThisMan(item.author.username)">回复</el-dropdown-item>
-								  </el-dropdown-menu>
+									<span class="el-dropdown-link">
+										<i class="el-icon-more"></i>
+									</span>
+									<el-dropdown-menu slot="dropdown">
+										<el-dropdown-item @click.native="removeThisDiscuss(item.content.cid)"
+											v-show="uid == item.author.cuid">删除</el-dropdown-item>
+										<el-dropdown-item @click.native="getNameThisMan(item.author.username)">回复
+										</el-dropdown-item>
+									</el-dropdown-menu>
 								</el-dropdown>
 							</div>
 						</div>
@@ -85,6 +89,18 @@
 						<Pagination :total="code" :PageSize="12"></Pagination>
 					</div>
 				</div>
+
+				<el-drawer title="帖子内容修改" :visible.sync="drawer" direction="btt" :before-close="handleClose" size="85%">
+					<span style="display: flex;flex-direction: column;align-items: center;">
+						<div class="tinymce-box" style="width: 80%">
+							<keep-alive :max="10">
+								<TEditor :is="view" ref="tinymceRef" :updateContent.sync="content"
+									:tinymceId="tinymceId"></TEditor>
+							</keep-alive>
+						</div>
+						<el-button type="primary" style="margin-top: 2rem;">修改内容</el-button>
+					</span>
+				</el-drawer>
 			</div>
 
 			<GoToLable></GoToLable>
@@ -104,13 +120,14 @@
 	import analysisEmoji from '../utils/analysisEmoji.js'
 	import base from '../api/request/base.js'
 	import time from '../utils/time.js'
+	import TEditor from '../components/tinymce.vue'
 	import {
 		mapState
 	} from 'vuex'
 
 	export default {
 		name: 'CommunityP',
-		props: ['total', 'PageSize', 'PageSizes', 'permission', 'aid'],
+		props: ['total', 'PageSize', 'PageSizes', 'permission', 'aid', 'tinymceId'],
 		data() {
 			return {
 				user: {},
@@ -124,6 +141,10 @@
 				code: 0,
 				aname: '',
 				getName: '',
+				drawer: false,
+				// 富文本
+				view: 'TEditor',
+				content: ""
 			}
 		},
 		components: {
@@ -132,7 +153,8 @@
 			EmojiInput,
 			Pagination,
 			GoToLable,
-			EmojiInput2
+			EmojiInput2,
+			TEditor
 		},
 		methods: {
 			getPostPageInfo() {
@@ -287,17 +309,24 @@
 			removeThisDiscuss(cid) {
 				this.$api.deletePostDiscuss({
 					'requestType': 1,
-					'typeid' :cid
+					'typeid': cid
 				}).then(
 					res => {
 						if (res.data.data.code != 0) {
 							this.$message.error(res.data.data.msg)
-						}else {
+						} else {
 							this.getDiscussList(1, document.documentElement.scrollTop)
 							this.$message.success("删除回复成功！")
 						}
 					}
 				)
+			},
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
 			}
 		},
 		computed: {
@@ -321,7 +350,7 @@
 			},
 			isShowMes() {
 				let width = false
-				if(document.body.clientWidth < 480) {
+				if (document.body.clientWidth < 480) {
 					width = true
 				}
 				return width
