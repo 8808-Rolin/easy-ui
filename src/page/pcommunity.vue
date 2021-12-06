@@ -30,6 +30,7 @@
 						</p>
 						<p>UID: {{master.muid}}</p>
 						<p>院系：{{master.org}}</p>
+						<p><el-button type="text" icon="el-icon-edit-outline" @click>修改</el-button></p>
 					</div>
 					<div class="p_content">
 						<div class="content" v-html="post.content"></div>

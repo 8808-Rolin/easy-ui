@@ -47,7 +47,8 @@
 			<div>
 				<div class="title_makes_notice"><i class="el-icon-s-promotion"></i>&ensp;发表新帖</div>
 				<div class="tinymce-btn">
-					<button type="primary" @click="releasePost">发&emsp;表</button>
+					<button type="primary" @click="releasePost" v-show="!changebtn">发&emsp;表</button>
+					<button type="primary" v-show="changebtn">修&emsp;改</button>
 				</div>
 			</div>
 			<div class="title">
@@ -107,6 +108,7 @@
 				inputVisible: false,
 				inputValue: '',
 				content: '',
+				changebtn:false,
 			}
 		},
 		methods: {
@@ -177,9 +179,10 @@
 			getPostType() {
 				this.$api.getPostType().then(
 					res => {
-						if (this.$route.name === 'Public' && this.user.level == 2) {
+						console.log(this.permission,this.user.level)
+						if (this.user.level == 2) {
 							this.options = res.data.data
-						} else if (this.$route.name === 'Community' && this.permission == 2) {
+						} else if (this.permission == 2) {
 							this.options = res.data.data
 						} else {
 							let options = res.data.data.reduce((item, next) => {
@@ -191,6 +194,9 @@
 						}
 					}
 				)
+			},
+			changeNote(row) {
+				console.log(row)
 			},
 			toP(row) {
 				let aid = this.aid
@@ -239,8 +245,12 @@
 						this.posts = this.chaildPosts
 				}
 			},
+			permission(newval, oldval) {
+				//console.log(newval, oldval)
+				this.getPostType(newval)
+			}
 		},
-		beforeMount() {
+		mounted() {
 			this.getPostType()
 		}
 	};
