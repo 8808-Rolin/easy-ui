@@ -47,7 +47,8 @@
 			<div>
 				<div class="title_makes_notice"><i class="el-icon-s-promotion"></i>&ensp;发表新帖</div>
 				<div class="tinymce-btn">
-					<button type="primary" @click="releasePost">发&emsp;表</button>
+					<button type="primary" @click="releasePost" v-show="!changebtn">发&emsp;表</button>
+					<button type="primary" v-show="changebtn">修&emsp;改</button>
 				</div>
 			</div>
 			<div class="title">
@@ -107,6 +108,7 @@
 				inputVisible: false,
 				inputValue: '',
 				content: '',
+				changebtn:false,
 			}
 		},
 		methods: {
@@ -192,6 +194,9 @@
 						}
 					}
 				)
+			},
+			changeNote(row) {
+				console.log(row)
 			},
 			toP(row) {
 				let aid = this.aid

@@ -44,6 +44,12 @@ li {
 	z-index: 9999 !important;
 }
 
+img {
+	width: auto !important;
+	background-position: center 0;
+	background-size: cover;
+}
+
 @media screen and (max-width: 480px) {
 	ul.el-dropdown-menu {
 		z-index: 2001!important;

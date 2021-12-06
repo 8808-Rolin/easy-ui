@@ -197,7 +197,7 @@
 							loadingInstance1.close()
 							if (response.data.data.code !== 0) {
 								this.percentage = 25
-								this.notify = this.$notify.error({
+								this.notify = this.$message.error({
 									message: response.data.data.msg,
 								});
 							} else {
@@ -287,12 +287,12 @@
 				if ((len > 15 || len < 8) && bool) {
 					this.isTrueSNo = false
 					if (len > 15) {
-						this.notify = this.$notify.error({
+						this.notify = this.$message.error({
 							title: '输入信息有误',
 							message: '亲，输入的学号过长！',
 						});
 					} else {
-						this.notify = this.$notify.error({
+						this.notify = this.$message.error({
 							title: '输入信息有误',
 							message: '亲，输入的学号过短！',
 						});
@@ -300,7 +300,7 @@
 				} else {
 					if (!bool) {
 						this.isTrueSNo = false
-						this.notify = this.$notify.error({
+						this.notify = this.$message.error({
 							title: '输入信息有误',
 							message: '亲，学号只能包含数字！',
 						});
@@ -319,7 +319,7 @@
 				if (this.loginMessage.phone !== '' && (phone > 11 || phone < 11)) {
 					if (!regMobile.test(this.loginMessage.phone)) {
 						this.isTruePhone = false
-						this.notify = this.$notify.error({
+						this.notify = this.$message.error({
 							title: '输入信息有误',
 							message: '亲，请输入正确的手机号码！',
 						});
@@ -342,7 +342,7 @@
 			checkPasswordLen() {
 				if (this.password != "" && this.password.length < 8) {
 					this.passwordLen = false
-					this.notify = this.$notify.error({
+					this.notify = this.$message.error({
 						title: '密码格式错误',
 						message: '密码不少于8位字符！',
 					});
@@ -362,7 +362,7 @@
 					} else {
 						this.isTruePassword = false
 						if (this.isPassword.length == this.password.length) {
-							this.notify = this.$notify.error({
+							this.notify = this.$message.error({
 								title: '密码不一致',
 								message: '亲，请重新确认密码！',
 							});

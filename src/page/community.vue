@@ -17,7 +17,7 @@
 							</div>
 							<div class="join_club">
 								<el-button v-show="permissionCode == 0" @click="joinAssociation">加入社团</el-button>
-								<el-button v-show="permissionCode == 2" @click="toAdmin">社团管理</el-button>
+								<el-button v-show="permissionCode == 2" @click="toAdmin" class="btn_no">社团管理</el-button>
 							</div>
 						</div>
 						<div class="club_superior">
@@ -506,10 +506,6 @@
 			font-size: 1.5rem;
 		}
 		
-		.club_mes .mes .name .join_club {
-			display: none;
-		}
-		
 		.club_mes .mes .club_intro {
 			height: 4.5rem;
 		}
@@ -543,6 +539,10 @@
 		
 		>>>.el-card__body {
 			max-height: 7rem;
+		}
+		
+		.btn_no {
+			display: none;
 		}
 	}
 </style>
