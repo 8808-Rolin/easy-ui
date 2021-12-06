@@ -16,8 +16,8 @@
 								<strong>{{ass.assName}}</strong>
 							</div>
 							<div class="join_club">
-								<el-button v-show="permissionCode === 0" @click="joinAssociation">加入社团</el-button>
-								<el-button v-show="permissionCode === 2" @click="toAdmin">社团管理</el-button>
+								<el-button v-show="permissionCode == 0" @click="joinAssociation">加入社团</el-button>
+								<el-button v-show="permissionCode == 2" @click="toAdmin">社团管理</el-button>
 							</div>
 						</div>
 						<div class="club_superior">

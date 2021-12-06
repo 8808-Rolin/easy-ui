@@ -177,9 +177,10 @@
 			getPostType() {
 				this.$api.getPostType().then(
 					res => {
-						if (this.$route.name === 'Public' && this.user.level == 2) {
+						console.log(this.permission,this.user.level)
+						if (this.user.level == 2) {
 							this.options = res.data.data
-						} else if (this.$route.name === 'Community' && this.permission == 2) {
+						} else if (this.permission == 2) {
 							this.options = res.data.data
 						} else {
 							let options = res.data.data.reduce((item, next) => {
@@ -239,8 +240,12 @@
 						this.posts = this.chaildPosts
 				}
 			},
+			permission(newval, oldval) {
+				//console.log(newval, oldval)
+				this.getPostType(newval)
+			}
 		},
-		beforeMount() {
+		mounted() {
 			this.getPostType()
 		}
 	};
