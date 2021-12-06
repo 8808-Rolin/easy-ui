@@ -26,7 +26,7 @@
 					</el-input>
 				</div>
 			</div>
-			
+
 			<el-dialog title="修改我的信息" :visible.sync="centerDialogVisibleDate" width="30%" :append-to-body="true">
 				<div>
 					<el-date-picker v-model="date" type="date" placeholder="选择日期" style="width: 100%;"
@@ -39,7 +39,8 @@
 				</span>
 			</el-dialog>
 
-			<el-dialog title="修改我的信息" :visible.sync="centerDialogVisibleImage" width="30%" center :append-to-body="true">
+			<el-dialog title="修改我的信息" :visible.sync="centerDialogVisibleImage" width="30%" center
+				:append-to-body="true">
 				<div style="text-align: center;">
 					<el-upload class="avatar-uploader" action="#" :show-file-list="false"
 						:on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload"
@@ -91,7 +92,8 @@
 						<el-input v-model="title" maxlength="120" show-word-limit placeholder="请输入内容"></el-input>
 					</div>
 					<div>
-						<el-input type="textarea" maxlength="255" :rows="10" v-model="input" placeholder="请输入私信内容" show-word-limit></el-input>
+						<el-input type="textarea" maxlength="255" :rows="10" v-model="input" placeholder="请输入私信内容"
+							show-word-limit></el-input>
 					</div>
 				</div>
 				<span slot="footer" class="dialog-footer">
@@ -161,9 +163,15 @@
 				let urlList = ['update-name', 'update-intro', 'update-profile', 'update-email', 'update-birth']
 				let list = ['name', 'intro', 'profile', 'email', 'birth']
 				let myPattern = ''
-				if (usermes === '电子邮箱')
+				let MyInfoMes = ''
+				if (usermes === '电子邮箱') {
 					myPattern =
-					/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/
+						/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/
+					MyInfoMes = '邮箱格式不正确'
+				} else  {
+					myPattern = /[^\s]/
+					MyInfoMes = '不能输入空字符串'
+				}
 				let index = nameList.indexOf(usermes)
 				let url = urlList[index]
 				let uid = this.user.uid
@@ -178,7 +186,7 @@
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
 						inputPattern: myPattern,
-						inputErrorMessage: '邮箱格式不正确',
+						inputErrorMessage: MyInfoMes,
 					}).then(({
 						value
 					}) => {
@@ -210,10 +218,11 @@
 					}).catch(val => {
 						console.log(val)
 						if (val === 'cancel') {
-							this.message = this.$message({
+							/* this.message = this.$message({
 								type: 'info',
 								message: '取消输入'
-							});
+							}); */
+							console.log('取消输入')
 						} else {
 							this.message = this.$message({
 								type: 'error',
@@ -327,7 +336,7 @@
 					}
 				)
 			},
-			
+
 			/* 发送私信 */
 			sendEmail() {
 				if (this.message !== null)
@@ -338,7 +347,14 @@
 				let touid = this.$route.params.uid
 				let title = this.title
 				let content = this.input
-				this.$api.sendEmail({isSystem,mailType,fromuid,touid,title,content}).then(
+				this.$api.sendEmail({
+					isSystem,
+					mailType,
+					fromuid,
+					touid,
+					title,
+					content
+				}).then(
 					res => {
 						if (res.data.data.code > -1) {
 							this.message = this.$message.success(res.data.data.msg)
@@ -520,7 +536,5 @@
 </style>
 
 <style scoped="scoped">
-	@media screen and (max-width: 480px) {
-		
-	}
+	@media screen and (max-width: 480px) {}
 </style>
